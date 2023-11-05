@@ -1,0 +1,33 @@
+{
+  "list": [
+    {
+      "id": "list1",
+      "name": "list1",
+      "quatity": 2
+    },
+    {
+      "name": "thử 1",
+      "id": "fdmsoV4"
+    },
+    {
+      "name": "thu",
+      "id": "CSZXGoP"
+    }
+  ],
+  "reminder": [
+    {
+      "id": "note1",
+      "title": "note1",
+      "description": "lam viec",
+      "idlist": "list1",
+      "status": false
+    },
+    {
+      "id": "note2",
+      "title": "note2",
+      "description": "lam viec",
+      "idlist": "list2",
+      "status": false
+    }
+  ]
+}
