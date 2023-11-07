@@ -1,33 +1,64 @@
 {
-  "list": [
+  "listNote": [
     {
       "id": "list1",
       "name": "list1",
-      "quatity": 2
+      "quantity": 1
     },
     {
-      "name": "thử 1",
-      "id": "fdmsoV4"
-    },
-    {
-      "name": "thu",
-      "id": "CSZXGoP"
+      "name": "aaa",
+      "quantity": 0,
+      "id": "um7kbLO"
     }
   ],
   "reminder": [
     {
-      "id": "note1",
-      "title": "note1",
-      "description": "lam viec",
+      "title": "fffff",
+      "status": false,
       "idlist": "list1",
-      "status": false
+      "id": "1"
+    }
+  ],
+  "color": [
+    {
+      "id": "mauvang",
+      "color": "#FF0000"
     },
     {
-      "id": "note2",
-      "title": "note2",
-      "description": "lam viec",
-      "idlist": "list2",
-      "status": false
+      "id": "mauxanh",
+      "color": "#00FF00"
+    },
+    {
+      "id": "mauden",
+      "color": "#0000FF"
+    },
+    {
+      "id": "mauvangvang",
+      "color": "#FFFF00"
+    },
+    {
+      "id": "maudennham",
+      "color": "#FF00FF"
+    },
+    {
+      "id": "mauxanhnuocbien",
+      "color": "#00FFFF"
+    },
+    {
+      "id": "maucam",
+      "color": "#FFA500"
+    },
+    {
+      "id": "maugray",
+      "color": "#808080"
+    },
+    {
+      "id": "mauviolet",
+      "color": "#800080"
+    },
+    {
+      "id": "maugreen",
+      "color": "#008000"
     }
   ]
 }

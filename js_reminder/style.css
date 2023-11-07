@@ -8,18 +8,31 @@
   .menu-list-notes{
     display: block;
   }
+  .listnote{
+    display: flex;
+    border-bottom: 1px solid black;
+  }
     .menu-list-note{
         margin-top: 15px;
         margin-right: 10px;
         margin-left: 10px;
+        /* background-color: cadetblue; */
     }
     .list-note{
-        width: 100%;
+        width: 350px;
         height: 50px;
-        background-color: cadetblue;
+        margin-bottom: 10px;
         display: flex;
         align-items: center;
         justify-content: space-between;
+    }
+    .delete-icon {
+        display: inline;
+      }
+      
+    .icon-home-list-del{
+        margin-top: 10px;
+        margin-left: 5px;
     }
     .item-list-none-left{
         display: flex;
@@ -42,9 +55,7 @@
     padding-left: 15px;
     padding-top: 5px;
    }
-   .list-note{
-    margin-bottom: 10px;
-   }
+  
    .button-home {
     position: fixed;
     bottom: 0;
@@ -64,7 +75,10 @@
     padding-top: 100px;
 }
 .form_add_list_name{
-    margin: 20px 0px;
+    margin: 20px 10px;
+    width: 95%;
+    height: 150px;
+    background-color: #ccc;
 }
 .form_add_list_name input {
     width: 300px;
@@ -94,7 +108,7 @@
     margin-left: 20px;
     margin-right: 10px;
 }
-.detail-list-note .form-check{
+.detail-list-note .items-list-reminder{
     border-bottom: 1px solid black;
 }
 .item-reminder{
@@ -125,4 +139,95 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.error-message{
+    display: none;
+    color: rgb(123, 123, 209);
+}
+.new-reminder{
+    display: none;
+    margin-left: 20px;
+    border-bottom: 1px solid black;
+}
+
+.text-note.hidden {
+    display: none;
+  }
+  .form--add__notes{
+    display: none;
+  }
+  .form--add__notes h1{
+    text-align: center;
+    margin-top: 50px;
+  }
+  .form--add__notes input{
+  padding-left: 10px;
+    width: 90%;
+    height: 50px;
+   margin: 20px 10px 0px 10px;
+   border-radius: 8px;
+  }
+  .input_add_note_description{
+    height:  100px !important;
+  }
+  .map-list{
+    background-color: antiquewhite;
+    margin: 20px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+    border-radius: 5px;
+    padding-left: 10px;
+  }
+.form--edit__notes{
+    display: none;
+}
+ .input_eidt_note{
+    width: 90%;
+    height: 30%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px; 
+    border: 1px solid #000; 
+    border-radius: 5px; 
+ }
+ .input_eidt_note input {
+    margin: 5px 0;
+    width: 100%;
+    padding-left: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  .input_edit_note_description{
+    height: 130px;
+  }
+  .color-list-icon{
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+   grid-gap: 1px 7px;
+    width: 100%;
+   background-color: rgb(63, 66, 66);
+   border-radius: 7px;
+ padding: 0px 10px;
+  }
+  .color-swatch{
+    margin: 10px 0px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+  }
+  .fill-icon-color{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+   margin: 0px 0px 20px 155px;
+
+  }
 }
