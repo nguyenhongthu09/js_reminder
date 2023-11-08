@@ -17,7 +17,6 @@
     <div class="menu-list-notes">
         <h1 class="text-center">Danh sách của tôi</h1>
         <div class="menu-list-note">
-            
         </div>
         <div class="button-home">
             <button type="button" class="btn btn-primary add-reminder">New Reminder</button>
@@ -26,14 +25,13 @@
     </div>
     <form id="form_add_list" action="" class="form-add-list">
         <div class="form__add__list">
-
             <button type="button" id="btn-cancel" class="btn btn-secondary button-cancel">Cancel</button>
             <button type="button" id="btnSubmit" class="btn btn-primary button-done">Done</button>
         </div>
         <h1>New List</h1>
            
         <div class="form_add_list_name">
-            <div class="fill-icon-color">
+            <div class="fill-icon-color" id="icon-color">
                 <span class="fill-color">
                     <svg width="40" height="40" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M5 11.5C5 11.2239 5.22386 11 5.5 11H14.5C14.7761 11 15 11.2239 15 11.5C15 11.7761 14.7761 12 14.5 12H5.5C5.22386 12 5 11.7761 5 11.5Z" fill="black"/>
@@ -49,10 +47,38 @@
             <input type="text" id="name_icon" placeholder="List Name ">
             <p id="name_error" class="error-message">Vui lòng nhập tên list.</p>
         </div>
-        <div class="color-list-icon">
-           
+        <div class="color-list-icon" id="color-list">
         </div>
     </form>
+
+    <form id="form_edit_list" action="" class="form-edit-list">
+        <div class="form__edit__list">
+            <button type="button" id="btn-xoa" class="btn btn-secondary button-cancel">Hủy</button>
+            <button type="button" id="btnsubedit" class="btn btn-primary button-done">Xong</button>
+        </div>
+        <h1>Edit List</h1>
+           
+        <div class="form_add_list_name">
+            <div class="fill-icon-color thuthu" id="icon-color-edit">
+                <span class="fill-color">
+                    <svg width="40" height="40" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5 11.5C5 11.2239 5.22386 11 5.5 11H14.5C14.7761 11 15 11.2239 15 11.5C15 11.7761 14.7761 12 14.5 12H5.5C5.22386 12 5 11.7761 5 11.5Z" fill="black"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5 7.5C5 7.22386 5.22386 7 5.5 7H14.5C14.7761 7 15 7.22386 15 7.5C15 7.77614 14.7761 8 14.5 8H5.5C5.22386 8 5 7.77614 5 7.5Z" fill="black"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5 3.5C5 3.22386 5.22386 3 5.5 3H14.5C14.7761 3 15 3.22386 15 3.5C15 3.77614 14.7761 4 14.5 4H5.5C5.22386 4 5 3.77614 5 3.5Z" fill="black"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M2 4.5C2.55228 4.5 3 4.05228 3 3.5C3 2.94772 2.55228 2.5 2 2.5C1.44772 2.5 1 2.94772 1 3.5C1 4.05228 1.44772 4.5 2 4.5Z" fill="black"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M2 8.5C2.55228 8.5 3 8.05228 3 7.5C3 6.94772 2.55228 6.5 2 6.5C1.44772 6.5 1 6.94772 1 7.5C1 8.05228 1.44772 8.5 2 8.5Z" fill="black"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M2 12.5C2.55228 12.5 3 12.0523 3 11.5C3 10.9477 2.55228 10.5 2 10.5C1.44772 10.5 1 10.9477 1 11.5C1 12.0523 1.44772 12.5 2 12.5Z" fill="black"/>
+                    </svg>
+                </span>
+            </div>       
+            <input type="text" id="name_edit-list" placeholder="Tên Danh Sách">
+            <p id="name_error" class="error-message">Vui lòng nhập tên danh sách.</p>
+        </div>
+        <div class="color-list-icon  thu" id="color-list-add-list">
+        </div>
+    </form>
+    
+
     <div class="detail-list-note">
         <div class="note">
         </div>

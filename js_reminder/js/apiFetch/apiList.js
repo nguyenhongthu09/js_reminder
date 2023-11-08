@@ -1,5 +1,5 @@
 import { API_URL } from "../contans/apiUrl.js";
-import { getListState , getListNoteById} from "../service/list_service.js";
+import { getListState , getListNoteById , findListByIndex} from "../service/list_service.js";
 import { calculateListNoteQuantity } from "../service/list_service.js";
 import { state } from "../global/state.js";
 export  const fetchList = async () =>{
@@ -20,6 +20,7 @@ export async function addNewList(list) {
   try {
     const newlist = {
       name: list.name,
+      isColor : list.isColor,
       quantity: 0
     };
     const listStates = getListState();
@@ -46,6 +47,12 @@ export async function addNewList(list) {
   }
 }
 
+export async function delList(idList) {
+  await fetch(`${API_URL}/listNote/${idList}`, {
+    method: "DELETE",
+  });
+  return idList;
+}
 
 
 export async function updateListNoteQuantity(idlist) {
@@ -82,4 +89,37 @@ export async function updateListNoteQuantity(idlist) {
   } catch (error) {
     console.error("Lỗi khi gửi PUT request:", error);
   }
+}
+
+export const updateListData = (id, newName , newColor , quantity) =>{
+  return fetch(`${API_URL}/listNote/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name: newName, isColor: newColor , quantity }),
+  })
+
+  .then((response) => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      console.error("Cập nhật list không thành công.");
+      throw new Error("Cập nhật không thành công");
+    }
+  })
+  .then(() => {
+    const listState = getListState();
+    const appIndex = findListByIndex(id);
+    if (appIndex !== -1) {
+      listState[appIndex].name = newName;
+      listState[appIndex].isColor = newColor;
+      listState[appIndex].quantity = quantity;
+    
+    }
+  })
+  .catch((error) => {
+    console.error("Lỗi kết nối đến API: " + error);
+  });
+
 }
