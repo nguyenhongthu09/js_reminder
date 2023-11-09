@@ -3,7 +3,8 @@ import { renderListOnUI } from "./list_controller.js";
 import { renderReminderonUI } from "./reminder_controller.js";
 import { renderColor } from "./showColor.js";
 import { getColorState } from "../service/list_service.js";
-import { hexToRgb } from "./common.js";
+import { hexToRgb ,rgbToHex} from "./common.js";
+import { updateListData } from "../apiFetch/apiList.js";
 export const formAddList = () => {
   const homeList = document.querySelector(".menu-list-notes");
   const formAddList = document.getElementById("form_add_list");
@@ -78,6 +79,13 @@ export const formAddList = () => {
     const listItem = event.target.closest(".list-note");
     if (listItem) {
         const listNoteId = listItem.getAttribute("data-listId");
+        const listNoteNameElement = document.querySelector(".tieu-de");
+        if (listNoteNameElement) {
+          const listNoteName = listItem.querySelector(".name-list").innerText;
+
+          // Gán giá trị của listNoteName vào div có class="tieu-de"
+          listNoteNameElement.innerText = listNoteName;
+      }
         renderReminderonUI(listNoteId);
         homeList.style.display = "none";
        detailList.style.display = "block";
@@ -85,6 +93,51 @@ export const formAddList = () => {
 });
 
 
-
-
 };
+
+export const updateList = () =>{
+  const btnSubEdit = document.getElementById("btnsubedit");
+btnSubEdit.addEventListener("click", async () => {
+  const editedName = document.getElementById("name_edit-list").value;
+  const editedColorElement = document.getElementById("icon-color-edit");
+  const editedColor =
+    window.getComputedStyle(editedColorElement).backgroundColor;
+  const formEditList = document.getElementById("form_edit_list");
+  const homeList = document.querySelector(".menu-list-notes");
+  const updatedData = window.newData;
+
+  const editColorHex = editedColor.startsWith("#")
+    ? editedColor
+    : rgbToHex(editedColor);
+
+  if (updatedData.id) {
+    await updateListData(updatedData.id, editedName, editColorHex, updatedData.quantity);
+    const listElement = updatedData.element;
+    const updatedListData = {
+      name: editedName,
+      color: editedColor,
+    };
+    Object.keys(updatedListData).forEach((property) => {
+      const selector = `.icon-list-note [data-${property}]`;
+      const elementToUpdate = listElement.querySelector(selector);
+      if (elementToUpdate) {
+        if (property === "color") {
+          elementToUpdate.style.backgroundColor = updatedListData[property];
+        } else if (property === "name") {
+          elementToUpdate.textContent = updatedListData[property];
+        }
+      }
+    });
+
+    renderListOnUI();
+
+    updatedData.id = "";
+    updatedData.name = "";
+    updatedData.isColor = "";
+    updatedData.quantity = null;
+    formEditList.style.display = "none";
+    homeList.style.display = "block";
+  }
+});
+
+}

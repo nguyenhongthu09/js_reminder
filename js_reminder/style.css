@@ -119,7 +119,7 @@
     margin-left: 20px;
     margin-right: 10px;
 }
-.detail-list-note .items-list-reminder{
+.reminder__detail {
     border-bottom: 1px solid black;
 }
 .item-reminder{
@@ -250,6 +250,13 @@
   ul.dropdown-menu.width {
     width: 50px !important;
   }
-  
-  
+  .thuthu{
+    border-radius: 50% !important;
+  }
+  .reminder__detail{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+ 
 }

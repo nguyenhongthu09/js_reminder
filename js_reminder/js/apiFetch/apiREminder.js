@@ -17,15 +17,13 @@ export  const fetchReminder = async () =>{
 export async function addNewReminder(reminder ,idlist) {
   try {
     const newreminder = {
-      id: reminder.id,
      title:reminder.title,
-     description:reminder.description,
      status: false,
      idlist: idlist,
 
     };
     const reminderData = getReminders();
-    reminderData.push(newreminder);
+ 
     console.log(reminderData, "push thanh cong");
     const response = await fetch(`${API_URL}/reminder`, {
       method: "POST",
@@ -37,6 +35,7 @@ export async function addNewReminder(reminder ,idlist) {
 
     if (response.status === 201) {
       const createdReminderData = await response.json();
+      reminderData.push(createdReminderData);
       updateListQuantity(idlist);
       console.log("Thêm note thành công:", createdReminderData);
     } else {
@@ -45,4 +44,42 @@ export async function addNewReminder(reminder ,idlist) {
   } catch (error) {
     console.error("Lỗi khi gửi POST request:", error);
   }
+}
+
+
+export const updateReminderStatus = (reminderId, newStatus) => {
+  const getReminder = getReminders();
+  const reminderToUpdate = getReminder.find(reminder => reminder.id === reminderId);
+
+  return fetch(`${API_URL}/reminder/${reminderId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({  title: reminderToUpdate.title,
+      status: newStatus,
+      idlist: reminderToUpdate.idlist, }),
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+    })
+
+    .then((updatedReminder) => {
+      const index = getReminder.findIndex((r) => r.id === reminderId);
+      getReminder[index] = updatedReminder;
+    })
+
+    .catch((error) => {
+      console.error("Lỗi kết nối đến API: " + error);
+    });
+};
+
+
+export async function delReminder(idReminder) {
+  await fetch(`${API_URL}/reminder/${idReminder}`, {
+    method: "DELETE",
+  });
+  return idReminder;
 }

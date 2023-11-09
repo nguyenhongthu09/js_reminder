@@ -43,7 +43,6 @@ const formEdit = document.getElementById("form__edit__note");
       await updateListNoteQuantity(listNoteId);
       renderReminderonUI(listNoteId);
       const listData = getListState();
-      console.log(listData, "danh sach sau khi them moi note");
       renderListOnUI(listData);
       updateListQuantity(listNoteId , updatedQuantity)
     }

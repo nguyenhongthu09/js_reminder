@@ -26,7 +26,7 @@ export function calculateListNoteQuantity(idlist) {
 
 export const removeList = (id) => {
   const listState = getListState();
-  const index = listState.findIndex((app) => app.id === id);
+  const index = listState.findIndex((list) => list.id === id);
   if (index !== -1) {
     listState.splice(index, 1);
   }

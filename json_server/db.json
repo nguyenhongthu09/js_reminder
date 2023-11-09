@@ -1,30 +1,42 @@
 {
   "listNote": [
     {
-      "id": "list1",
-      "name": "list1",
-      "quantity": 1,
-      "isColor": "#0000FF"
+      "name": "nguyễn",
+      "isColor": "#0000FF",
+      "quantity": 2,
+      "id": "XdlhMkJ"
     },
     {
-      "name": "thu",
-      "isColor": "#00FF00",
-      "quantity": 0,
-      "id": "tMpFzuL"
-    },
-    {
-      "name": "thuthuthuthu",
-      "isColor": "#00FFFF",
-      "quantity": 0,
-      "id": "B5vHTbw"
+      "name": "mệt mỏi",
+      "isColor": "#FFFF00",
+      "quantity": 3,
+      "id": "_AmROHC"
     }
   ],
   "reminder": [
     {
-      "title": "fffff",
+      "title": "zzzzz",
       "status": false,
-      "idlist": "list1",
-      "id": "1"
+      "idlist": "_AmROHC",
+      "id": "thuthuth"
+    },
+    {
+      "title": "zzdsrhgdfzzz",
+      "status": false,
+      "idlist": "_AmROHC",
+      "id": "ssss"
+    },
+    {
+      "title": "sfgsg",
+      "status": false,
+      "idlist": "XdlhMkJ",
+      "id": "eEnTwk9"
+    },
+    {
+      "title": "ưrgheh",
+      "status": false,
+      "idlist": "XdlhMkJ",
+      "id": "LCth_iI"
     }
   ],
   "color": [

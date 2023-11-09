@@ -8,9 +8,9 @@ import {
 import { renderReminderonUI } from "./reminder_controller.js";
 import { delList } from "../apiFetch/apiList.js";
 import { renderColor } from "./showColor.js";
-import { state } from "../global/state.js";
 import { updateListData } from "../apiFetch/apiList.js";
-import { rgbToHex} from "./common.js";
+import { rgbToHex, hexToRgb } from "./common.js";
+import { updateList } from "./list_form.js";
 export const renderListOnUI = () => {
   const listData = getListState();
   const colorData = getColorState();
@@ -19,8 +19,7 @@ export const renderListOnUI = () => {
   cart.innerHTML = listData
     .map((list, index) => {
       const listColor = colorData.find((color) => color.color === list.isColor);
-
-      const backgroundColor = listColor ? listColor.color : "#FF0000";
+      const backgroundColor = listColor ? listColor.color : "rgb(192,192,192)";
       return `
            <div class="listnote" id=${list.id}>
            <div class="list-note"  data-listId=${list.id} >
@@ -97,7 +96,7 @@ export const renderListOnUI = () => {
   getAttributeId();
   SearchParamsUrlId();
   initializeDeleteButtonsEvent();
-  edit();
+  editListEvent();
 };
 
 function getAttributeId() {
@@ -159,8 +158,8 @@ renderReminderBasedOnURL();
 
 const initializeDeleteButtonsEvent = () => {
   const deleteBtn = document.querySelectorAll(".delete-icon");
-  deleteBtn.forEach((delUngdung) => {
-    delUngdung.addEventListener("click", async (event) => {
+  deleteBtn.forEach((delLists) => {
+    delLists.addEventListener("click", async (event) => {
       console.log("del");
       const id = event.currentTarget.getAttribute("del-id");
       console.log(id, "id xoa");
@@ -173,81 +172,46 @@ const initializeDeleteButtonsEvent = () => {
   });
 };
 
-
- const edit = () =>{
+const editListEvent = () => {
   const editButtons = document.querySelectorAll(".edit-list");
-const formEditList = document.getElementById("form_edit_list");
-const homeList = document.querySelector(".menu-list-notes");
-
-editButtons.forEach((editButton) => {
-  editButton.addEventListener("click", (event) => {
-    event.preventDefault();
-    const id = event.currentTarget.getAttribute("edit-id");
-    formEditList.style.display = "block";
-    homeList.style.display = "none";
-      renderColor("color-list-add-list");
-  
-      handleEdit(id, event.currentTarget);
-  });
-});
-
-const handleEdit = (id, element) => {
-  const editInputName = document.getElementById("name_edit-list");
-  const editColor = document.getElementById("icon-color-edit");
-  const listToEdit = getListNoteById(id);
-
-  if (listToEdit) {
-    editInputName.value = listToEdit.name;
-    const isColor = listToEdit.isColor.startsWith("rgb(")
-        ? rgbToHex(listToEdit.isColor)
-        : listToEdit.isColor;
-      editColor.style.backgroundColor = isColor;
-   
-    
-    window.newData = {
-      id: id,
-      name: listToEdit.name,
-      isColor: isColor,
-      element: element,
-      quantity: listToEdit.quantity,
-    };
-  }
-};
-
- }
-
- const btnSubEdit = document.getElementById("btnsubedit");
-btnSubEdit.addEventListener("click", async () => {
-  console.log("edit chuaw duojc");
-  const editedName = document.getElementById("name_edit-list").value;
-  const editedColor = document.getElementById("icon-color-edit").style.backgroundColor;
-  console.log(editedColor, "ma mau");
   const formEditList = document.getElementById("form_edit_list");
-const homeList = document.querySelector(".menu-list-notes");
-  const updatedData = window.newData;
+  const homeList = document.querySelector(".menu-list-notes");
 
-  const editColorHex = editedColor.startsWith("rgb(")
-  ? rgbToHex(editedColor)
-  : editedColor;
+  editButtons.forEach((editButton) => {
+    editButton.addEventListener("click",  (event) => {
+      event.preventDefault();
+      const id = event.currentTarget.getAttribute("edit-id");
+      formEditList.style.display = "block";
+      homeList.style.display = "none";
+      renderColor("color-list-add-list");
 
-  console.log(editColorHex, "chuyen doi");
-  if (updatedData.id){
- 
-    // );
-  await  updateListData(updatedData.id, editedName, editColorHex);
-  const listElement = updatedData.element;
-  listElement.querySelector(".name-list").textContent = editedName;
-  listElement.querySelector(".icon-list-note").style.backgroundColor = editColorHex;
+       handleEditList(id, event.currentTarget);
+    });
+  });
 
-  
-    updatedData.id = "";
-    updatedData.name = "";
-    updatedData.isColor = "";
-    updatedData.quantity = null;
-    formEditList.style.display = "none";
-  homeList.style.display = "block";
+  const handleEditList = (id, element) => {
+    const editInputName = document.getElementById("name_edit-list");
+    const editColor = document.getElementById("icon-color-edit");
+    const listToEdit = getListNoteById(id);
 
-  }
- 
-});
+    if (listToEdit) {
+      editInputName.value = listToEdit.name;
+      const isColor = listToEdit.isColor.startsWith("rgb(")
+        ? listToEdit.isColor
+        : hexToRgb(listToEdit.isColor);
+
+      editColor.value = isColor;
+      editColor.style.backgroundColor = isColor;
+
+      window.newData = {
+        id: id,
+        name: listToEdit.name,
+        isColor: isColor,
+        element: element,
+        quantity: listToEdit.quantity,
+      };
+      updateList();
+    }
+  };
+};
 

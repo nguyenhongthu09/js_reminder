@@ -11,7 +11,5 @@ export const initState = async () => {
   state.listState = listsData;
   state.color = colorData;
   renderListOnUI();
-  console.log(state.reminderState, "notestate");
-  console.log(state.listState , "liststate");
-  console.log(state.color , "color");
+  
 };
