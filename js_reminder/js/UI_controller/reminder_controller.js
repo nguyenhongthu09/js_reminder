@@ -3,51 +3,64 @@ import { getListNoteById } from "../service/list_service.js";
 import { state } from "../global/state.js";
 import { updateReminderStatus } from "../apiFetch/apiREminder.js";
 import { removeReminder } from "../service/reminder_service.js";
-import { delReminder } from "../apiFetch/apiREminder.js";
+import { delReminder , updateReminderData } from "../apiFetch/apiREminder.js";
 import { renderListOnUI } from "./list_controller.js";
-export const renderReminderonUI = (listNoteId) =>{
-    const listNote = getListNoteById(listNoteId); 
-    const listName = listNote ? listNote.name : '';
-    const reminderState = state.reminderState;
-    const cartReminder = document.querySelector(".note");
-    // const falseReminders = [];
-   
+import { updateListNoteQuantity } from "../apiFetch/apiList.js";
+import { calculateListNoteQuantity } from "../service/list_service.js";
+import { updateListQuantity } from "./list_controller.js";
+import { findReminderById } from "../service/reminder_service.js";
+import { submitUpdateReminder } from "./reminder_form.js";
+import { resetUpdatedData } from "./reminder_form.js";
+export const renderReminderonUI = (listNoteId) => {
+  const listNote = getListNoteById(listNoteId);
+  const listName = listNote ? listNote.name : "";
+  const reminderState = state.reminderState;
+  const cartReminder = document.querySelector(".note");
+  // const falseReminders = [];
+
   // const trueReminders = [];
- 
-    const filteredReminders = reminderState.filter(reminder => reminder.idlist === listNoteId);
-      console.log(filteredReminders, "filteredReminders sau khi xoa");
-    // reminderState.forEach((reminder) => {
-    //   if (reminder.idlist === listNoteId) {
-    //     if (reminder.status) {
-    //       trueReminders.push(reminder);
-    //     } else {
-    //       falseReminders.push(reminder);
-    //     }
-    //   }
-    // });
+
+  const filteredReminders = state.reminderState.filter(
+    (reminder) => reminder.idlist === listNoteId
+  );
+
+  // reminderState.forEach((reminder) => {
+  //   if (reminder.idlist === listNoteId) {
+  //     if (reminder.status) {
+  //       trueReminders.push(reminder);
+  //     } else {
+  //       falseReminders.push(reminder);
+  //     }
+  //   }
+  // });
 
   //   cartReminder.innerHTML = `
   //   <h1 class="title-list">${listName}</h1>
   //   ${falseReminders.map((reminder, index) => {
-    
+
   //     return renderReminderItem(reminder);
   //   }).join(" ")}
   //   ${trueReminders.map((reminder, index) => {
-     
+
   //     return renderReminderItem(reminder);
   //   }).join(" ")}
   // `;
 
-    cartReminder.innerHTML="";
-    cartReminder.innerHTML=`
+  cartReminder.innerHTML = "";
+  cartReminder.innerHTML = `
     <h1 class="title-list">${listName}</h1>
-    ${filteredReminders.map((reminder, index) => {
-      return `
-        <div class="reminder__detail"  id=${reminder.id}   data-listnote-id=${reminder.id}>
+    ${filteredReminders
+      .map((reminder) => {
+        return `
+        <div class="reminder__detail"  id=${ reminder.id }   data-listnote-id=${reminder.idlist}>
           <div class="items-list-reminder">
-            <div class="form-check  item-reminder">
-              <input class="form-check-input thuthu" type="checkbox" id-input=${reminder.id} ${reminder?.status ? "checked" : ""}>
-              <input type="text" class="form-check-name"  data-reminder-id="${reminder.id}" value="${reminder.title}" placeholder="Add Note"></input>
+            <div class="form-check  item-reminder"  >
+              <input class="form-check-input thuthu" type="checkbox" id-input=${
+                reminder.id
+              } ${reminder?.status ? "checked" : ""}>
+              <input type="text" class="form-check-name"  data-reminder-id="${
+                reminder.id
+              }" value="${reminder.title}" placeholder="Add Note"></input>
             </div>
 
           </div>
@@ -75,15 +88,16 @@ export const renderReminderonUI = (listNoteId) =>{
         </div>
         </div>
       `;
-    }).join(" ")}
+      })
+      .join(" ")}
   `;
 
   // const reminderInputs = document.querySelectorAll('.thuthu');
   // checks(reminderInputs ,reminderState);
+  // initializeDeleteButtonsEvents();
   initializeDeleteButtonsEvents();
+  editReminderEvent();
 };
-
-
 
 // const renderReminderItem = (reminder) => {
 //   return `
@@ -101,7 +115,7 @@ export const renderReminderonUI = (listNoteId) =>{
 //   <span class="icon-next" >
 //   <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 //       <path fill-rule="evenodd" clip-rule="evenodd" d="M4.64645 1.64645C4.84171 1.45118 5.15829 1.45118 5.35355 1.64645L11.3536 7.64645C11.5488 7.84171 11.5488 8.15829 11.3536 8.35355L5.35355 14.3536C5.15829 14.5488 4.84171 14.5488 4.64645 14.3536C4.45118 14.1583 4.45118 13.8417 4.64645 13.6464L10.2929 8L4.64645 2.35355C4.45118 2.15829 4.45118 1.84171 4.64645 1.64645Z" fill="black"/>
-//       </svg>           
+//       </svg>
 //       </span>
 //   </button>
 //   <ul class="dropdown-menu width" aria-labelledby="dropdownMenuButton1" >
@@ -114,54 +128,113 @@ export const renderReminderonUI = (listNoteId) =>{
 //   </ul>
 //  </div>
 
-
 // </div>
 //     </div>
 //   `;
 
-  
 // };
 
-
-
-const checks = (reminderInputs , reminderState) =>{
-  reminderInputs.forEach(input => {
-    input.addEventListener("click", async (event) =>{
+const checks = (reminderInputs, reminderState) => {
+  reminderInputs.forEach((input) => {
+    input.addEventListener("click", async (event) => {
       const reminderId = event.currentTarget.getAttribute("id-input");
-      const listNoteId = event.currentTarget.closest('.reminder__detail').id;
-      const reminderToUpdate = reminderState.find(reminder => reminder.id === reminderId);
-  
+      const listNoteId = event.currentTarget.closest(".reminder__detail").id;
+      const reminderToUpdate = reminderState.find(
+        (reminder) => reminder.id === reminderId
+      );
+
       reminderToUpdate.status = !reminderToUpdate.status;
-        await updateReminderStatus(reminderId, reminderToUpdate.status);
-        const updatedReminderState = getReminders();
+      await updateReminderStatus(reminderId, reminderToUpdate.status);
+      const updatedReminderState = getReminders();
       renderReminderonUI(updatedReminderState);
-     
-      
     });
   });
-}
-
-
+};
 
 export const handleListClick = (listNoteId) => {
   renderReminderonUI(listNoteId);
 };
 
+let selectedListNoteId = null;
+export function getSelectedListNoteId() {
+  return selectedListNoteId;
+}
 
 const initializeDeleteButtonsEvents = () => {
   const deleteRenminder = document.querySelectorAll(".delete-icon-re");
   deleteRenminder.forEach((delReminders) => {
     delReminders.addEventListener("click", async (event) => {
-      console.log("del");
       const idReminder = event.currentTarget.getAttribute("del-id-note");
-      console.log(idReminder, "id xoa");
+
       if (idReminder) {
         await delReminder(idReminder);
         removeReminder(idReminder);
-        renderReminderonUI();
-      }
+        const listNoteId = event.target.parentNode.closest(".reminder__detail");
+        const idnote = listNoteId.getAttribute("data-listnote-id");
   
+        renderReminderonUI(idnote);
+        const updatedQuantity = calculateListNoteQuantity(idnote);
+        await updateListNoteQuantity(idnote);
+        updateListQuantity(idnote, updatedQuantity);
+      }
+    
     });
   });
 };
 
+
+const editReminderEvent = ()=>{
+  const editInputNameList = document.querySelectorAll(".form-check-name");
+  editInputNameList.forEach((editInput) =>{
+        editInput.addEventListener("click" , (event) =>{
+            const idInput = event.currentTarget.getAttribute("data-reminder-id");
+            handleEditReminder(idInput, event.currentTarget )
+        });
+  });
+}
+
+const handleEditReminder = (id, element) =>  {
+  const editInputName =element;
+  const reminderToEdit = findReminderById(id);
+    if(reminderToEdit){
+      editInputName.value = reminderToEdit.title;
+      window.newData = {
+        id: id,
+        title : reminderToEdit.title,
+        status : reminderToEdit.status,
+        idlist : reminderToEdit.idlist,
+        element: element,
+      };
+      
+      editInputName.addEventListener("blur", onBlurEvent);
+
+      submitUpdateReminder(onBlurEvent);
+     
+    }
+}
+
+const onBlurEvent = async() => {
+  const editName = window.newData.element.value;
+  const updatedData = window.newData;
+
+  if (updatedData.id) {
+    const noteToUpdate = findReminderById(updatedData.id);
+
+    if (noteToUpdate) {
+      noteToUpdate.title = updatedData.title;
+    }
+
+    await updateReminderData(updatedData.id, editName, updatedData.status, updatedData.idlist);
+
+    const listNoteId = updatedData.element.parentNode.closest(".reminder__detail");
+
+    if (listNoteId) {
+      const idnote = listNoteId.getAttribute("data-listnote-id");
+      renderReminderonUI(idnote);
+    }
+
+   
+    updatedData.element.removeEventListener("blur", onBlurEvent);
+    resetUpdatedData();
+  }
+};

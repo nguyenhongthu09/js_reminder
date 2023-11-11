@@ -181,14 +181,29 @@
     height:  100px !important;
   }
   .map-list{
-    background-color: antiquewhite;
     margin: 20px 10px;
     display: flex;
     justify-content: space-between;
+    border-radius: 5px;
+    flex-direction:column
+  }
+  .title-list-name-choose{
+    background-color: aquamarine;
+   display: flex;
+   justify-content: space-between;
     align-items: center;
     height: 40px;
-    border-radius: 5px;
-    padding-left: 10px;
+    border: 1px solid black;
+    border-radius: 10px;
+    
+  }
+  .tieude{
+    margin-left: 10px;
+    font-size: 22px;
+  }
+  .name-list-choose{
+    margin-right: 10px;
+    
   }
 .form--edit__notes{
     display: none;
@@ -250,7 +265,7 @@
   ul.dropdown-menu.width {
     width: 50px !important;
   }
-  .thuthu{
+  .thuthu , .form-check-input{
     border-radius: 50% !important;
   }
   .reminder__detail{
@@ -258,5 +273,8 @@
     align-items: center;
     justify-content: space-around;
   }
- 
+ .render{
+  margin: 10px;
+ }
+
 }

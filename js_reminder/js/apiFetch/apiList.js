@@ -1,6 +1,6 @@
 import { API_URL } from "../contans/apiUrl.js";
 import { getListState , getListNoteById , findListByIndex} from "../service/list_service.js";
-import { calculateListNoteQuantity } from "../service/list_service.js";
+import { calculateListNoteQuantity  } from "../service/list_service.js";
 import { state } from "../global/state.js";
 export  const fetchList = async () =>{
     try {
@@ -55,7 +55,7 @@ export async function delList(idList) {
 }
 
 
-export async function updateListNoteQuantity(idlist) {
+export async function updateListNoteQuantity(idlist ,updatedQuantity) {
   try {
 
     
@@ -81,7 +81,7 @@ export async function updateListNoteQuantity(idlist) {
     });
 
     if (response.status === 200) {
-   
+ 
       console.log("Cập nhật quantity của danh sách thành công.");
     } else {
       console.error("Lỗi khi cập nhật quantity của danh sách:", response.statusText);

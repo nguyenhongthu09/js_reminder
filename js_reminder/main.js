@@ -5,7 +5,7 @@ import { addNewReminderForm } from "./js/UI_controller/reminder_form.js";
 // import { renderReminderonUI } from "./js/UI_controller/reminder_controller.js";
     async   function main(){
     await      initState();
-            renderListOnUI();
+            renderListOnUI("renderlist-home");
             addNewReminderForm();
           // renderReminderonUI();
             formAddList();

@@ -1,4 +1,4 @@
-import { addNewReminder } from "../apiFetch/apiREminder.js";
+import { addNewReminder , updateReminderData } from "../apiFetch/apiREminder.js";
 import { renderReminderonUI } from "./reminder_controller.js";
 import { getSelectedListNoteId } from "./list_controller.js";
 import { updateListNoteQuantity } from "../apiFetch/apiList.js";
@@ -6,6 +6,8 @@ import { calculateListNoteQuantity } from "../service/list_service.js";
 import { getListState } from "../service/list_service.js";
 import { renderListOnUI } from "./list_controller.js";
 import { updateListQuantity } from "./list_controller.js";
+import { findReminderById } from "../service/reminder_service.js";
+import { state } from "../global/state.js";
 export const addNewReminderForm = () => {
   const newReminderForm = document.querySelector(".new-reminder");
   const btnAddNewReminder = document.getElementById("btnNewNote");
@@ -19,10 +21,15 @@ export const addNewReminderForm = () => {
   const reminderDetails = document.querySelectorAll(".reminder__detail");
 const formEdit = document.getElementById("form__edit__note");
   const listnote = document.querySelectorAll(".detail-list-note");
- 
+  const addSubmitFormNote = document.getElementById("submitform-addnote")
+  const addName = document.getElementById("add-note-name");
+  
+  let isBlurEvent = false;
   btnAddNewReminder.addEventListener("click", () => {
     inputNameReminder.value = "";
     newReminderForm.style.display = "block";
+    inputNameReminder.focus();
+    isBlurEvent = true;
   });
   btnbaclList.addEventListener("click", () => {
     newReminderForm.style.display = "none";
@@ -31,27 +38,18 @@ const formEdit = document.getElementById("form__edit__note");
   });
 
   btnSubmitNote.addEventListener("click", async () => {
-    const inputname = inputNameReminder.value;
-    const listNoteId = getSelectedListNoteId();
-    if (inputname && listNoteId) {
-      const newReminder = {
-        title: inputname,
-        idlist: listNoteId,
-      };
-      await addNewReminder(newReminder, listNoteId);
-    const   updatedQuantity = calculateListNoteQuantity(listNoteId);
-      await updateListNoteQuantity(listNoteId);
-      renderReminderonUI(listNoteId);
-      const listData = getListState();
-      renderListOnUI(listData);
-      updateListQuantity(listNoteId , updatedQuantity)
-    }
+    isBlurEvent = false;
+    await handleReminderLogic();
     newReminderForm.style.display = "none";
   });
-
+// mo form them moi 1 reminder
   openFormAdd.addEventListener("click" , () =>{
+    addName.value="";
       homeList.style.display = "none";
       formAddNote.style.display = "block";
+     
+      renderListOnUI("renderlist");
+
   });
   cancel.addEventListener("click" , ()=>{
     console.log("okok");
@@ -67,4 +65,94 @@ const formEdit = document.getElementById("form__edit__note");
     });
   });
   
+  inputNameReminder.addEventListener("blur", async () => {
+    if (isBlurEvent) {
+      await handleReminderLogic();
+  }
+  newReminderForm.style.display = "none";
+});
+
+const handleReminderLogic = async () => {
+  if (isBlurEvent) {
+    const inputname = inputNameReminder.value;
+    const listNoteId = getSelectedListNoteId();
+    if (inputname && listNoteId) {
+        const newReminder = {
+            title: inputname,
+            idlist: listNoteId,
+        };
+        await addNewReminder(newReminder, listNoteId);
+        const updatedQuantity = calculateListNoteQuantity(listNoteId);
+        await updateListNoteQuantity(listNoteId);
+        renderReminderonUI(listNoteId);
+        renderListOnUI("renderlist-home");
+        updateListQuantity(listNoteId, updatedQuantity);
+    }
+
+}
+};
+
+addSubmitFormNote.addEventListener("click", async() =>{
+  const inputname = addName.value;
+  const listNoteId = getSelectedListNoteId();
+  if (inputname && listNoteId) {
+      const newReminder = {
+          title: inputname,
+          idlist: listNoteId,
+      };
+      await addNewReminder(newReminder, listNoteId);
+      const updatedQuantity = calculateListNoteQuantity(listNoteId);
+      await updateListNoteQuantity(listNoteId);
+      renderReminderonUI(listNoteId);
+      renderListOnUI("renderlist-home");
+      updateListQuantity(listNoteId, updatedQuantity);
+    }
+    homeList.style.display = "block";
+    formAddNote.style.display = "none";
+});
+
+
+var defaultName = state.listState.length > 0 ? state.listState[0].name : "";
+var nameListChooseElement = document.querySelector(".name-list-choose");
+if (nameListChooseElement) {
+    nameListChooseElement.textContent = defaultName;
+}
+
+
+
+};
+
+
+document.body.addEventListener("click", function (event) {
+  var target = event.target.closest(".list-note");
+  if (target) {
+      var nameListElement = target.querySelector(".name-list");
+      if (nameListElement) {
+          var name = nameListElement.textContent;
+          var nameListChooseElement = document.querySelector(".name-list-choose");
+          if (nameListChooseElement) {
+              nameListChooseElement.textContent = name;
+          }
+      }
+  }
+});
+
+
+
+
+
+export const submitUpdateReminder = (handler) =>{
+  
+  const btnSubmitNote = document.getElementById("btnsubmit-note");
+  btnSubmitNote.removeEventListener("click", handler);
+  btnSubmitNote.addEventListener("click", handler);
+}
+ export const resetUpdatedData = () => {
+  window.newData = {
+    id: "",
+    title: "",
+    status: null,
+    idlist: null,
+    element: null,
+  };
 };

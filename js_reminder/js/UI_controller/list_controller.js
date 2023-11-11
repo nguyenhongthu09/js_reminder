@@ -11,10 +11,11 @@ import { renderColor } from "./showColor.js";
 import { updateListData } from "../apiFetch/apiList.js";
 import { rgbToHex, hexToRgb } from "./common.js";
 import { updateList } from "./list_form.js";
-export const renderListOnUI = () => {
+export const renderListOnUI = (targetElementId) => {
   const listData = getListState();
   const colorData = getColorState();
-  const cart = document.querySelector(".menu-list-note");
+  // const cart = document.querySelector(".menu-list-note");
+  const cart = document.getElementById(targetElementId);
 
   cart.innerHTML = listData
     .map((list, index) => {
@@ -166,7 +167,7 @@ const initializeDeleteButtonsEvent = () => {
       if (id) {
         await delList(id);
         removeList(id);
-        renderListOnUI();
+        renderListOnUI("renderlist-home");
       }
     });
   });

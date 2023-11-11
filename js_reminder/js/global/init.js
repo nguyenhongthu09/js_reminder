@@ -10,6 +10,6 @@ export const initState = async () => {
   state.reminderState = reminderData;
   state.listState = listsData;
   state.color = colorData;
-  renderListOnUI();
+  renderListOnUI("renderlist-home");
   
 };

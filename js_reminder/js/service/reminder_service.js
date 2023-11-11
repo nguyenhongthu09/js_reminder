@@ -8,3 +8,12 @@ export const removeReminder = (id) => {
     state.reminderState.splice(index, 1);
   }
 };
+
+
+export function findReminderByIndex(reminderId) {
+  return state.reminderState.findIndex(reminder => reminder.id === reminderId);
+}
+
+export function findReminderById(reminderId) {
+  return state.reminderState.find(reminder => reminder.id === reminderId);
+}

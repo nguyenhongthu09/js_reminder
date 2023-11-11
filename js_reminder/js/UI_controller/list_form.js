@@ -58,7 +58,7 @@ export const formAddList = () => {
         isColor: isColor,
       };
      await addNewList(newList);
-      renderListOnUI();
+      renderListOnUI("renderlist-home");
 
       homeList.style.display = "block";
       formAddList.style.display = "none";
@@ -129,7 +129,7 @@ btnSubEdit.addEventListener("click", async () => {
       }
     });
 
-    renderListOnUI();
+    renderListOnUI("renderlist-home");
 
     updatedData.id = "";
     updatedData.name = "";

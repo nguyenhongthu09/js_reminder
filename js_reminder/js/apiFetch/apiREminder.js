@@ -1,6 +1,7 @@
 import  {API_URL} from "../contans/apiUrl.js"
-import { getReminders } from "../service/reminder_service.js";
+import { getReminders, findReminderByIndex } from "../service/reminder_service.js";
 import { updateListQuantity } from "../UI_controller/list_controller.js";
+import { state } from "../global/state.js";
 export  const fetchReminder = async () =>{
     try {
         const response = await fetch(`${API_URL}/reminder`, {
@@ -8,7 +9,8 @@ export  const fetchReminder = async () =>{
         });
         if (response.status === 200) {
           const reminderData = await response.json();
-          return reminderData;
+           state.reminderState = reminderData;
+           return reminderData;
         }
       } catch (error) {
         console.error("Lỗi khi gửi GET request cho list:", error);
@@ -82,4 +84,37 @@ export async function delReminder(idReminder) {
     method: "DELETE",
   });
   return idReminder;
+}
+
+
+export const updateReminderData = (id, newName) =>{
+  return fetch(`${API_URL}/reminder/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ title: newName}),
+  })
+
+  .then((response) => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      console.error("Cập nhật reminder không thành công.");
+      throw new Error("Cập nhật không thành công");
+    }
+  })
+  .then((updatedReminder) => {
+    const reminderState = getReminders();
+    const appIndex = findReminderByIndex(id);
+    if (appIndex !== -1) {
+      reminderState[appIndex].title =updatedReminder.title ;
+  
+    
+    }
+  })
+  .catch((error) => {
+    console.error("Lỗi kết nối đến API: " + error);
+  });
+
 }

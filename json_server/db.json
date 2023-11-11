@@ -3,40 +3,46 @@
     {
       "name": "nguyễn",
       "isColor": "#0000FF",
-      "quantity": 2,
+      "quantity": 1,
       "id": "XdlhMkJ"
     },
     {
       "name": "mệt mỏi",
       "isColor": "#FFFF00",
-      "quantity": 3,
+      "quantity": 1,
       "id": "_AmROHC"
+    },
+    {
+      "name": "thử lại ",
+      "isColor": "#FF00FF",
+      "quantity": 1,
+      "id": "m-1Fwnp"
+    },
+    {
+      "name": "thu",
+      "isColor": "#00FF00",
+      "quantity": 0,
+      "id": "DeTuOKD"
     }
   ],
   "reminder": [
     {
-      "title": "zzzzz",
+      "title": "thu 111",
       "status": false,
       "idlist": "_AmROHC",
-      "id": "thuthuth"
+      "id": "thuthu"
     },
     {
-      "title": "zzdsrhgdfzzz",
-      "status": false,
-      "idlist": "_AmROHC",
-      "id": "ssss"
-    },
-    {
-      "title": "sfgsg",
+      "title": "rghsss",
       "status": false,
       "idlist": "XdlhMkJ",
-      "id": "eEnTwk9"
+      "id": "thu"
     },
     {
-      "title": "ưrgheh",
+      "title": "sửa lại",
       "status": false,
-      "idlist": "XdlhMkJ",
-      "id": "LCth_iI"
+      "idlist": "m-1Fwnp",
+      "id": "BXABtZm"
     }
   ],
   "color": [
