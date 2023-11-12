@@ -19,10 +19,10 @@
       "id": "m-1Fwnp"
     },
     {
-      "name": "thu",
-      "isColor": "#00FF00",
-      "quantity": 0,
-      "id": "DeTuOKD"
+      "name": "rgbfff",
+      "isColor": "#00FFFF",
+      "quantity": 1,
+      "id": "GL25TR9"
     }
   ],
   "reminder": [
@@ -43,6 +43,12 @@
       "status": false,
       "idlist": "m-1Fwnp",
       "id": "BXABtZm"
+    },
+    {
+      "title": "svdg",
+      "status": false,
+      "idlist": "GL25TR9",
+      "id": "BGKfB7v"
     }
   ],
   "color": [

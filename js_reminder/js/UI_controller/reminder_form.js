@@ -94,18 +94,21 @@ const handleReminderLogic = async () => {
 
 addSubmitFormNote.addEventListener("click", async() =>{
   const inputname = addName.value;
-  const listNoteId = getSelectedListNoteId();
-  if (inputname && listNoteId) {
+  console.log(inputname, "inputname");
+  const selectedListId = document.querySelector(".name-list-choose").dataset.selectedListId;
+  // const listNoteId = getSelectedListNoteId();
+  console.log(selectedListId, "selectedListId");
+  if (inputname && selectedListId) {
       const newReminder = {
           title: inputname,
-          idlist: listNoteId,
+          idlist: selectedListId,
       };
-      await addNewReminder(newReminder, listNoteId);
-      const updatedQuantity = calculateListNoteQuantity(listNoteId);
-      await updateListNoteQuantity(listNoteId);
-      renderReminderonUI(listNoteId);
+      await addNewReminder(newReminder, selectedListId);
+      const updatedQuantity = calculateListNoteQuantity(selectedListId);
+      await updateListNoteQuantity(selectedListId);
+      renderReminderonUI(selectedListId);
       renderListOnUI("renderlist-home");
-      updateListQuantity(listNoteId, updatedQuantity);
+      updateListQuantity(selectedListId, updatedQuantity);
     }
     homeList.style.display = "block";
     formAddNote.style.display = "none";
@@ -118,23 +121,24 @@ if (nameListChooseElement) {
     nameListChooseElement.textContent = defaultName;
 }
 
-
-
 };
 
 
 document.body.addEventListener("click", function (event) {
   var target = event.target.closest(".list-note");
-  if (target) {
-      var nameListElement = target.querySelector(".name-list");
-      if (nameListElement) {
-          var name = nameListElement.textContent;
-          var nameListChooseElement = document.querySelector(".name-list-choose");
-          if (nameListChooseElement) {
-              nameListChooseElement.textContent = name;
-          }
-      }
-  }
+    if (target) {
+        var nameListElement = target.querySelector(".name-list");
+        if (nameListElement) {
+            var name = nameListElement.textContent;
+            var listId = target.dataset.listid; 
+            var nameListChooseElement = document.querySelector(".name-list-choose");
+            if (nameListChooseElement) {
+                nameListChooseElement.textContent = name;
+                nameListChooseElement.dataset.selectedListId = listId; 
+            }
+
+        }
+    }
 });
 
 
