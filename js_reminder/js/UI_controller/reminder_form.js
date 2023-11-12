@@ -116,9 +116,11 @@ addSubmitFormNote.addEventListener("click", async() =>{
 
 
 var defaultName = state.listState.length > 0 ? state.listState[0].name : "";
+var defaultListId = state.listState.length > 0 ? state.listState[0].id : "";
 var nameListChooseElement = document.querySelector(".name-list-choose");
 if (nameListChooseElement) {
     nameListChooseElement.textContent = defaultName;
+    nameListChooseElement.dataset.selectedListId = defaultListId;
 }
 
 };
