@@ -1,41 +1,19 @@
-export const colorEvent = () =>{
-    const colorListIcon = document.querySelector(".color-list-icon");
+export const colorEvent = (fillIconSelector, colorListSelector) => {
+  const colorListIcon = document.querySelector(colorListSelector);
 
-    colorListIcon.addEventListener("click",  (event) =>{
-        console.log("mau a ahahaha");
-        if (event.target.classList.contains("color-swatch")) {
-            const backgroundColor = getComputedStyle(event.target).backgroundColor;
-    
-            const fillIconColor = document.querySelector(".fill-icon-color");
-            fillIconColor.style.backgroundColor = backgroundColor;
-    
-            const allColorSwatches = document.querySelectorAll(".color-swatch");
-            allColorSwatches.forEach((swatch) => {
-                swatch.classList.remove("selected");
-            });
-    
-            event.target.classList.add("selected");
-        }
-    });
+  colorListIcon.addEventListener("click", (event) => {
+    if (event.target.classList.contains("color-swatch")) {
+      const backgroundColor = getComputedStyle(event.target).backgroundColor;
+
+      const fillIconColor = document.querySelector(fillIconSelector);
+      fillIconColor.style.backgroundColor = backgroundColor;
+
+      const allColorSwatches = document.querySelectorAll(".color-swatch");
+      allColorSwatches.forEach((swatch) => {
+        swatch.classList.remove("selected");
+      });
+
+      event.target.classList.add("selected");
+    }
+  });
 };
-
-export const colorEventedit = () =>{
-    const colorListIcon = document.querySelector(".thu");
-
-    colorListIcon.addEventListener("click",  (event) =>{
-        if (event.target.classList.contains("color-swatch")) {
-            const backgroundColor = getComputedStyle(event.target).backgroundColor;
-    
-            const fillIconColor = document.querySelector(".thuthu");
-            fillIconColor.style.backgroundColor = backgroundColor;
-    
-            const allColorSwatches = document.querySelectorAll(".color-swatch");
-            allColorSwatches.forEach((swatch) => {
-                swatch.classList.remove("selected");
-            });
-    
-            event.target.classList.add("selected");
-        }
-    });
-};
-

@@ -1,14 +1,13 @@
-import { addNewList } from "../apiFetch/apiList.js";
+import { addNewList, updateListData } from "../apiFetch/apiList.js";
 import { renderListOnUI } from "./list_controller.js";
 import { renderReminderonUI } from "./reminder_controller.js";
 import { renderColor } from "./showColor.js";
-import { getColorState } from "../service/list_service.js";
-import { hexToRgb ,rgbToHex} from "./common.js";
-import { updateListData } from "../apiFetch/apiList.js";
+import { getColorState } from "../service/color_service.js";
+import { hexToRgb, rgbToHex } from "./common.js";
+
 export const formAddList = () => {
   const homeList = document.querySelector(".menu-list-notes");
   const formAddList = document.getElementById("form_add_list");
-  const formEditList = document.getElementById("form_edit_list");
   const btnAddList = document.querySelector(".add-list");
   const btnCancelList = document.getElementById("btn-cancel");
   const btnxoa = document.getElementById("btn-xoa");
@@ -20,23 +19,40 @@ export const formAddList = () => {
   const fillIconColor = document.querySelector(".fill-icon-color");
   const colorData = getColorState();
 
-  btnAddList.addEventListener("click", () => {
-    homeList.style.display = "none";
-    formAddList.style.display = "block";
-    renderColor("color-list");
+  const toggleDisplayList = (status) => {
+    if (status) {
+      homeList.style.display = "none";
+      formAddList.style.display = "block";
+    } else {
+      homeList.style.display = "block";
+      formAddList.style.display = "none";
+    }
+  };
 
+  const toggleDisplayDetailList = (status) => {
+    if (status) {
+      homeList.style.display = "none";
+      detailList.style.display = "block";
+    } else {
+      homeList.style.display = "block";
+      detailList.style.display = "none";
+    }
+  };
+
+  btnAddList.addEventListener("click", () => {
+    toggleDisplayList(true);
+    renderColor("color-list");
   });
 
-  btnxoa.addEventListener("click" , () =>{
-    formEditList.style.display = "none";
-    homeList.style.display = "block";
+  btnxoa.addEventListener("click", () => {
+    toggleDisplayEditList(false);
   });
 
   btnCancelList.addEventListener("click", () => {
-    homeList.style.display = "block";
-    formAddList.style.display = "none";
+    toggleDisplayList(false);
     nameError.style.display = "none";
   });
+
   btnDoneList.addEventListener("click", async () => {
     const nameAddList = document.getElementById("name_icon");
     const name = nameAddList.value;
@@ -45,11 +61,11 @@ export const formAddList = () => {
       nameError.style.display = "block";
     } else {
       nameError.style.display = "none";
-      const backgroundColor = getComputedStyle(fillIconColor).backgroundColor; 
-      console.log(backgroundColor, "backgroundColor"); 
+      const backgroundColor = getComputedStyle(fillIconColor).backgroundColor;
 
-      const listColor = colorData.find((color) => hexToRgb(color.color) === backgroundColor);
-      console.log(listColor, "listColor");
+      const listColor = colorData.find(
+        (color) => hexToRgb(color.color) === backgroundColor
+      );
       const isColor = listColor ? listColor.color : null;
 
       const newList = {
@@ -57,11 +73,10 @@ export const formAddList = () => {
         quantity: 0,
         isColor: isColor,
       };
-     await addNewList(newList);
+      await addNewList(newList);
       renderListOnUI("renderlist-home");
 
-      homeList.style.display = "block";
-      formAddList.style.display = "none";
+      toggleDisplayList(false);
 
       nameAddList.value = "";
       nameAddList.form.reset();
@@ -69,75 +84,88 @@ export const formAddList = () => {
   });
 
   backList.addEventListener("click", () => {
-    const newURL = window.location.protocol + '//' + window.location.host + window.location.pathname;
-  window.history.replaceState({ path: newURL }, '', newURL);
-    homeList.style.display = "block";
-    detailList.style.display = "none";
+    const newURL =
+      window.location.protocol +
+      "//" +
+      window.location.host +
+      window.location.pathname;
+    window.history.replaceState({ path: newURL }, "", newURL);
+    toggleDisplayDetailList(false);
   });
 
   menuListNote.addEventListener("click", (event) => {
     const listItem = event.target.closest(".list-note");
     if (listItem) {
-        const listNoteId = listItem.getAttribute("data-listId");
-        const listNoteNameElement = document.querySelector(".tieu-de");
-        if (listNoteNameElement) {
-          const listNoteName = listItem.querySelector(".name-list").innerText;
-
-          // Gán giá trị của listNoteName vào div có class="tieu-de"
-          listNoteNameElement.innerText = listNoteName;
+      const listNoteId = listItem.getAttribute("data-listId");
+      const listNoteNameElement = document.querySelector(".tieu-de");
+      if (listNoteNameElement) {
+        const listNoteName = listItem.querySelector(".name-list").innerText;
+        listNoteNameElement.innerText = listNoteName;
       }
-        renderReminderonUI(listNoteId);
-        homeList.style.display = "none";
-       detailList.style.display = "block";
+      renderReminderonUI(listNoteId);
+      toggleDisplayDetailList(true);
     }
-});
-
-
+  });
 };
 
-export const updateList = () =>{
+export const updateList = () => {
   const btnSubEdit = document.getElementById("btnsubedit");
-btnSubEdit.addEventListener("click", async () => {
-  const editedName = document.getElementById("name_edit-list").value;
-  const editedColorElement = document.getElementById("icon-color-edit");
-  const editedColor =
-    window.getComputedStyle(editedColorElement).backgroundColor;
+  btnSubEdit.addEventListener("click", async () => {
+    const editedName = document.getElementById("name_edit-list").value;
+    const editedColorElement = document.getElementById("icon-color-edit");
+    const editedColor =
+      window.getComputedStyle(editedColorElement).backgroundColor;
+
+    const updatedData = window.newData;
+
+    const editColorHex = editedColor.startsWith("#")
+      ? editedColor
+      : rgbToHex(editedColor);
+
+    if (updatedData.id) {
+      await updateListData(
+        updatedData.id,
+        editedName,
+        editColorHex,
+        updatedData.quantity
+      );
+      const listElement = updatedData.element;
+      const updatedListData = {
+        name: editedName,
+        color: editedColor,
+      };
+      Object.keys(updatedListData).forEach((property) => {
+        const selector = `.icon-list-note [data-${property}]`;
+        const elementToUpdate = listElement.querySelector(selector);
+        if (elementToUpdate) {
+          if (property === "color") {
+            elementToUpdate.style.backgroundColor = updatedListData[property];
+          } else if (property === "name") {
+            elementToUpdate.textContent = updatedListData[property];
+          }
+        }
+      });
+
+      renderListOnUI("renderlist-home");
+
+      updatedData.id = "";
+      updatedData.name = "";
+      updatedData.isColor = "";
+      updatedData.quantity = null;
+      toggleDisplayEditList(false);
+    }
+  });
+};
+
+export const toggleDisplayEditList = (status) => {
   const formEditList = document.getElementById("form_edit_list");
   const homeList = document.querySelector(".menu-list-notes");
-  const updatedData = window.newData;
 
-  const editColorHex = editedColor.startsWith("#")
-    ? editedColor
-    : rgbToHex(editedColor);
-
-  if (updatedData.id) {
-    await updateListData(updatedData.id, editedName, editColorHex, updatedData.quantity);
-    const listElement = updatedData.element;
-    const updatedListData = {
-      name: editedName,
-      color: editedColor,
-    };
-    Object.keys(updatedListData).forEach((property) => {
-      const selector = `.icon-list-note [data-${property}]`;
-      const elementToUpdate = listElement.querySelector(selector);
-      if (elementToUpdate) {
-        if (property === "color") {
-          elementToUpdate.style.backgroundColor = updatedListData[property];
-        } else if (property === "name") {
-          elementToUpdate.textContent = updatedListData[property];
-        }
-      }
-    });
-
-    renderListOnUI("renderlist-home");
-
-    updatedData.id = "";
-    updatedData.name = "";
-    updatedData.isColor = "";
-    updatedData.quantity = null;
+  if (status) {
+    formEditList.style.display = "block";
+    homeList.style.display = "none";
+  } else {
     formEditList.style.display = "none";
     homeList.style.display = "block";
   }
-});
-
-}
+};

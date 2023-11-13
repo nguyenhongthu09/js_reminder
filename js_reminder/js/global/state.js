@@ -1,7 +1,5 @@
 export const state = {
-    listState: [],
-   reminderState: [],
-   color: [],
-    idUrl: null,
-  };
-  
+  listState: [],
+  reminderState: [],
+  color: [],
+};

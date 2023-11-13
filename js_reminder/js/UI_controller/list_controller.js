@@ -1,25 +1,22 @@
 import {
   getListState,
-  isListIdValid,
-  getColorState,
   removeList,
   getListNoteById,
 } from "../service/list_service.js";
-import { renderReminderonUI } from "./reminder_controller.js";
 import { delList } from "../apiFetch/apiList.js";
 import { renderColor } from "./showColor.js";
-import { updateListData } from "../apiFetch/apiList.js";
-import { rgbToHex, hexToRgb } from "./common.js";
-import { updateList } from "./list_form.js";
+import { hexToRgb } from "./common.js";
+import { updateList, toggleDisplayEditList } from "./list_form.js";
+import { findColor, getColorState } from "../service/color_service.js";
+
 export const renderListOnUI = (targetElementId) => {
   const listData = getListState();
   const colorData = getColorState();
-  // const cart = document.querySelector(".menu-list-note");
   const cart = document.getElementById(targetElementId);
 
   cart.innerHTML = listData
-    .map((list, index) => {
-      const listColor = colorData.find((color) => color.color === list.isColor);
+    .map((list) => {
+      const listColor = findColor(colorData, list.isColor);
       const backgroundColor = listColor ? listColor.color : "rgb(192,192,192)";
       return `
            <div class="listnote" id=${list.id}>
@@ -93,28 +90,12 @@ export const renderListOnUI = (targetElementId) => {
                 `;
     })
     .join(" ");
-
-  getAttributeId();
   SearchParamsUrlId();
   initializeDeleteButtonsEvent();
   editListEvent();
 };
 
-function getAttributeId() {
-  const listNotes = document.querySelectorAll(".list-note");
-  listNotes.forEach((listNote) => {
-    listNote.addEventListener("click", () => {
-      selectedListNoteId = listNote.getAttribute("data-listId");
-    });
-  });
-}
-
-let selectedListNoteId = null;
-export function getSelectedListNoteId() {
-  return selectedListNoteId;
-}
-
-export function updateListQuantity(idlist, updatedQuantity) {
+export const updateListQuantity = (idlist, updatedQuantity) => {
   const listNote = document.querySelector(
     `.list-note[data-listId="${idlist}"]`
   );
@@ -124,46 +105,23 @@ export function updateListQuantity(idlist, updatedQuantity) {
       quantityElement.textContent = updatedQuantity;
     }
   }
-}
+};
 
-function SearchParamsUrlId() {
+const SearchParamsUrlId = () => {
   const listNotes = document.querySelectorAll(".list-note");
   listNotes.forEach((listNote) => {
     listNote.addEventListener("click", () => {
       const selectedListNoteId = listNote.getAttribute("data-listId");
-      updateURLWithListId(selectedListNoteId);
+      updateQueryParam(selectedListNoteId);
     });
   });
-}
-
-function updateURLWithListId(listNoteId) {
-  const newURL = `${window.location.protocol}//${window.location.host}${window.location.pathname}?listid=${listNoteId}`;
-  window.history.replaceState({ path: newURL }, "", newURL);
-  renderReminderBasedOnURL();
-}
-function renderReminderBasedOnURL() {
-  const listNoteId = getListIdFromURL();
-  if (isListIdValid(listNoteId)) {
-    renderReminderonUI(listNoteId);
-  }
-}
-
-export function getListIdFromURL() {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get("listid");
-}
-
-window.addEventListener("popstate", renderReminderBasedOnURL);
-
-renderReminderBasedOnURL();
+};
 
 const initializeDeleteButtonsEvent = () => {
   const deleteBtn = document.querySelectorAll(".delete-icon");
   deleteBtn.forEach((delLists) => {
     delLists.addEventListener("click", async (event) => {
-      console.log("del");
       const id = event.currentTarget.getAttribute("del-id");
-      console.log(id, "id xoa");
       if (id) {
         await delList(id);
         removeList(id);
@@ -175,18 +133,14 @@ const initializeDeleteButtonsEvent = () => {
 
 const editListEvent = () => {
   const editButtons = document.querySelectorAll(".edit-list");
-  const formEditList = document.getElementById("form_edit_list");
-  const homeList = document.querySelector(".menu-list-notes");
 
   editButtons.forEach((editButton) => {
-    editButton.addEventListener("click",  (event) => {
+    editButton.addEventListener("click", (event) => {
       event.preventDefault();
       const id = event.currentTarget.getAttribute("edit-id");
-      formEditList.style.display = "block";
-      homeList.style.display = "none";
+      toggleDisplayEditList(true);
       renderColor("color-list-add-list");
-
-       handleEditList(id, event.currentTarget);
+      handleEditList(id, event.currentTarget);
     });
   });
 
@@ -216,3 +170,14 @@ const editListEvent = () => {
   };
 };
 
+export const updateQueryParam = (listId) => {
+  const url = new URL(window.location.href);
+  url.searchParams.set("listId", listId);
+  window.history.replaceState({}, "", url);
+};
+
+export const getCurrentPageFromQueryParams = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const listNoteid = urlParams.get("listId");
+  return listNoteid;
+};

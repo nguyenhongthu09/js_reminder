@@ -1,16 +1,16 @@
-import { state } from "../global/state.js";
-import { colorEvent , colorEventedit } from "./colorEvent.js";
+import { getColorState } from "../service/color_service.js";
+import { colorEvent } from "./colorEvent.js";
+
 export const renderColor = (targetElementId) => {
-  const colorData = state.color;
+  const colorData = getColorState();
   const cartColor = document.getElementById(targetElementId);
   cartColor.innerHTML = colorData
-    .map((color, index) => {
+    .map((color) => {
       return `
         <div class="color-swatch" style="background-color: ${color.color};" ></div>
       `;
     })
     .join(" ");
-  colorEvent();
-  colorEventedit();
+  colorEvent(".fill-icon-color", ".color-list-icon");
+  colorEvent(".fill-color-edit", ".render-list-color-edit");
 };
-
