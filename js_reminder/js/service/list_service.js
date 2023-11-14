@@ -31,3 +31,4 @@ export const calculateListNoteQuantity = (idlist) => {
   return remindersForList.length;
 };
 
+export const getIdUrlState = () => state.idUrl;

@@ -5,7 +5,7 @@ import { renderColor } from "./showColor.js";
 import { getColorState } from "../service/color_service.js";
 import { hexToRgb, rgbToHex } from "./common.js";
 import { updateQueryParam } from "./common.js";
-import { state } from "../global/state.js";
+import { getIdUrlState } from "../service/list_service.js";
 export const formAddList = () => {
   const homeList = document.querySelector(".menu-list-notes");
   const formAddList = document.getElementById("form_add_list");
@@ -13,7 +13,6 @@ export const formAddList = () => {
   const btnCancelList = document.getElementById("btn-cancel");
   const btnxoa = document.getElementById("btn-xoa");
   const btnDoneList = document.getElementById("btnSubmit");
-  const detailList = document.querySelector(".detail-list-note");
   const backList = document.querySelector(".btn-back-list");
   const nameError = document.getElementById("name_error");
   const menuListNote = document.querySelector(".menu-list-note");
@@ -90,7 +89,8 @@ export const formAddList = () => {
     const listItem = event.target.closest(".list-note");
     if (listItem) {
       const listNoteId = listItem.getAttribute("data-listId");
-      state.idUrl = listNoteId;
+      let idUrlState = getIdUrlState();
+      idUrlState = listNoteId;
       updateQueryParam(listNoteId);
       renderReminderonUI(listNoteId);
       toggleDisplayDetailList(true);
