@@ -36,6 +36,7 @@ export const addNewReminder = async (reminder, idlist) => {
     const createdReminderData = await response.json();
     reminderData.push(createdReminderData);
     updateListQuantity(idlist);
+
     console.log("Thêm note thành công:", createdReminderData);
   }
 };

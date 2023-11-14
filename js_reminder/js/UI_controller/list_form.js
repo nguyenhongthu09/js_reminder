@@ -4,7 +4,8 @@ import { renderReminderonUI } from "./reminder_controller.js";
 import { renderColor } from "./showColor.js";
 import { getColorState } from "../service/color_service.js";
 import { hexToRgb, rgbToHex } from "./common.js";
-
+import { updateQueryParam } from "./list_controller.js";
+import { state } from "../global/state.js";
 export const formAddList = () => {
   const homeList = document.querySelector(".menu-list-notes");
   const formAddList = document.getElementById("form_add_list");
@@ -97,13 +98,17 @@ export const formAddList = () => {
     const listItem = event.target.closest(".list-note");
     if (listItem) {
       const listNoteId = listItem.getAttribute("data-listId");
-      const listNoteNameElement = document.querySelector(".tieu-de");
-      if (listNoteNameElement) {
-        const listNoteName = listItem.querySelector(".name-list").innerText;
-        listNoteNameElement.innerText = listNoteName;
-      }
+      state.currentListId = listNoteId;
+      console.log( state.currentListId, " state.currentListId");
+      // const listNoteNameElement = document.querySelector(".tieu-de");
+      // if (listNoteNameElement) {
+      //   const listNoteName = listItem.querySelector(".name-list").innerText;
+      //   listNoteNameElement.innerText = listNoteName;
+      // }
+      updateQueryParam(listNoteId);
       renderReminderonUI(listNoteId);
       toggleDisplayDetailList(true);
+      sessionStorage.setItem("lastVisitedListId", listNoteId);
     }
   });
 };

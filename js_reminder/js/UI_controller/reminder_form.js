@@ -21,6 +21,7 @@ export const addNewReminderForm = () => {
   const cancel = document.querySelector(".btn-back-note");
   const addSubmitFormNote = document.getElementById("submitform-addnote");
   const addName = document.getElementById("add-note-name");
+  const thongbao = document.querySelector(".thong-bao");
   let isBlurEvent = false;
 
   const toggleDisplayAddReminder = (status) => {
@@ -50,6 +51,7 @@ export const addNewReminderForm = () => {
 
   btnbaclList.addEventListener("click", () => {
     toggleDisplayAddReminder(false);
+    thongbao.style.display="none";
     inputNameReminder.value = "";
   });
 

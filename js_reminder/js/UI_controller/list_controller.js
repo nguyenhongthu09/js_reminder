@@ -8,7 +8,8 @@ import { renderColor } from "./showColor.js";
 import { hexToRgb } from "./common.js";
 import { updateList, toggleDisplayEditList } from "./list_form.js";
 import { findColor, getColorState } from "../service/color_service.js";
-
+import { renderReminderonUI } from "./reminder_controller.js";
+import { state } from "../global/state.js";
 export const renderListOnUI = (targetElementId) => {
   const listData = getListState();
   const colorData = getColorState();
@@ -65,7 +66,7 @@ export const renderListOnUI = (targetElementId) => {
                   </svg>           
                   </span>
               </button>
-              <ul class="dropdown-menu width" aria-labelledby="dropdownMenuButton1" >
+              <ul class="dropdown-menu width-drop" style="width: 50px !important;" aria-labelledby="dropdownMenuButton1" >
                 <li><a class="dropdown-item delete" href="#">
                 <span class="delete-icon" del-id=${list.id}>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -170,9 +171,23 @@ const editListEvent = () => {
   };
 };
 
+// export const updateQueryParam = (listId) => {
+//   const url = new URL(window.location.href);
+//   url.searchParams.set("listId", listId);
+//   window.history.replaceState({}, "", url);
+// };
+
+// export const getCurrentPageFromQueryParams = () => {
+//   const urlParams = new URLSearchParams(window.location.search);
+//   const listNoteid = urlParams.get("listId");
+//   return listNoteid;
+// };
+
+
 export const updateQueryParam = (listId) => {
   const url = new URL(window.location.href);
   url.searchParams.set("listId", listId);
+  url.hash = "";
   window.history.replaceState({}, "", url);
 };
 

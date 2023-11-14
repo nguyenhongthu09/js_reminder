@@ -1,16 +1,16 @@
 {
   "listNote": [
     {
-      "name": "nguyễn",
-      "isColor": "#0000FF",
+      "name": "list 2",
+      "isColor": "#FF00FF",
       "quantity": 1,
-      "id": "XdlhMkJ"
+      "id": "_AmROHC"
     },
     {
-      "name": "mệt mỏi",
-      "isColor": "#FFFF00",
-      "quantity": 2,
-      "id": "_AmROHC"
+      "name": "list 1",
+      "isColor": "#00FF00",
+      "quantity": 0,
+      "id": "_7lSsN8"
     }
   ],
   "reminder": [
@@ -21,58 +21,10 @@
       "id": "BXABtZm"
     },
     {
-      "title": "svdg",
-      "status": false,
-      "idlist": "GL25TR9",
-      "id": "BGKfB7v"
-    },
-    {
-      "title": "dfgdf",
-      "status": true,
-      "idlist": "NtnDDTr",
-      "id": "PBqvCWs"
-    },
-    {
-      "title": "ssss",
-      "status": true,
-      "idlist": "NtnDDTr",
-      "id": "-fBRP_a"
-    },
-    {
-      "title": "ffffbbb",
-      "status": false,
-      "idlist": "NtnDDTr",
-      "id": "Tpx8rsb"
-    },
-    {
-      "title": "ssssbbb",
-      "status": false,
-      "idlist": "Vz39CAV",
-      "id": "xxj-n-C"
-    },
-    {
-      "title": "rdtr",
-      "status": false,
-      "idlist": "Vz39CAV",
-      "id": "peHaPc4"
-    },
-    {
-      "title": "thêm thử nè",
-      "status": false,
-      "idlist": "XdlhMkJ",
-      "id": "0hOlSwg"
-    },
-    {
-      "title": "thu 1 a",
+      "title": "list 2",
       "status": false,
       "idlist": "_AmROHC",
-      "id": "yqpDxZF"
-    },
-    {
-      "title": "thuthu",
-      "status": false,
-      "idlist": "_AmROHC",
-      "id": "84TWu9A"
+      "id": "5Yvnyk7"
     }
   ],
   "color": [

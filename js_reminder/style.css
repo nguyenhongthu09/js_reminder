@@ -1,214 +1,235 @@
-@media screen and (max-width: 480px){
-    body {
-        background-repeat: no-repeat;
-        font-family: 'Urbanist', sans-serif;
-        font-size: 18px;
-        background-color: white;
-    }
-  .menu-list-notes{
+@media screen and (max-width: 480px) {
+  body {
+    background-repeat: no-repeat;
+    font-family: 'Urbanist', sans-serif;
+    font-size: 20px;
+    background-color: white;
+  }
+
+  .menu-list-notes {
     display: block;
   }
-  .listnote{
+
+  .listnote {
     display: flex;
     border-bottom: 1px solid black;
   }
-    .menu-list-note{
-        margin-top: 15px;
-        margin-right: 10px;
-        margin-left: 10px;
-        /* background-color: cadetblue; */
-    }
-    .list-note{
-        width: 300px;
-        height: 50px;
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    .delete-icon {
-        display: inline;
-      }
-      
-    .icon-home-list-del{
-        margin-top: 10px;
-        margin-left: 5px;
-    }
-    .item-list-none-left{
-        display: flex;
-        align-items: center;
-         justify-content: center;
-    }
-    .icon-list-note{
-        position: relative;
-        width: 35px;
-        height: 35px;
-        /* background-color: aqua; */
-        border-radius: 50%;
-    }
-   .icon-list{
-       position: absolute;
-       left: 5px;
-       top: 4px;
-   }
- .name-list{
-  padding-left: 10px;
-  border: none;
-  width: 230px;
-  font-size: 23px !important;
- }
-  
-   .button-home {
+
+  .menu-list-note {
+    margin-top: 15px;
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+
+  .list-note {
+    width: 300px;
+    height: 50px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .delete-icon {
+    display: inline;
+  }
+
+  .icon-home-list-del {
+    margin-top: 10px;
+    margin-left: 5px;
+  }
+
+  .item-list-none-left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .icon-list-note {
+    position: relative;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+  }
+
+  .icon-list {
+    position: absolute;
+    left: 5px;
+    top: 4px;
+  }
+
+  .name-list {
+    padding-left: 10px;
+    border: none;
+    width: 230px;
+    font-size: 23px !important;
+  }
+
+  .menu-list-notes .button-home {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
     text-align: center;
-    padding: 10px; 
-    box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.2); 
-}
+    padding: 10px;
+    box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.2);
+  }
 
-.form-add-list , .form-edit-list{
+  .form-add-list,
+  .form-edit-list {
     display: none;
     text-align: center;
     background-color: antiquewhite;
     width: 100%;
     height: 100vh;
     padding-top: 100px;
-}
-.form_add_list_name , .form_edit_list_name{
+  }
+
+  .form_add_list_name,
+  .form_edit_list_name {
     margin: 20px 10px;
     width: 95%;
     height: 150px;
     background-color: #ccc;
-}
-.form_add_list_name input {
+  }
+
+  .form_add_list_name input {
     width: 300px;
     height: 50px;
-   text-align: center;
-   border: none;
-   border-radius: 7px;
-}
+    text-align: center;
+    border: none;
+    border-radius: 7px;
+  }
 
-.form_edit_list_name input {
-  width: 300px;
-  height: 50px;
- text-align: center;
- border: none;
- border-radius: 7px;
-}
+  .form_edit_list_name input {
+    width: 300px;
+    height: 50px;
+    text-align: center;
+    border: none;
+    border-radius: 7px;
+  }
 
-.form__add__list , .button-detail-list , .form__edit__list{
+  .form__add__list,
+  .button-detail-list,
+  .form__edit__list {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    padding: 10px; 
+    padding: 10px;
     display: flex;
     justify-content: space-between;
-}
-.detail-list-note{
+  }
+
+  .detail-list-note {
     display: none;
-}
-.detail-list-note h1 {
-    padding-left: 20px;
+  }
+
+  .detail-list-note h1 {
     padding-top: 90px;
     text-align: center;
-}
-.detail-list-note .items-list-reminder{
+    font-size: 35px !important;
+  }
+
+  .detail-list-note .items-list-reminder {
     margin-left: 20px;
     margin-right: 10px;
-}
-.reminder__detail {
+  }
+
+  .detail-list-note .reminder__detail {
     border-bottom: 1px solid black;
-}
-.item-reminder{
+  }
+
+  .detail-list-note .item-reminder {
     margin-top: 20px;
-}
-.detail-list-note .form-check-name{
+  }
+
+  .detail-list-note .form-check-name {
     padding-left: 10px;
     border: none;
     margin-bottom: 10px;
     outline: none;
-}
-.button-detail-list{
+  }
+
+  .button-detail-list {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    padding: 10px; 
-}
-.add__reminders{
+    padding: 10px;
+  }
+
+  .detail-list-note .add__reminders {
     position: fixed;
     bottom: 0;
     left: 0;
     margin: 0px 0px 10px 10px;
-}
-.text-note{
-    font-size: 14px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.error-message{
+  }
+
+  .error-message {
     display: none;
-    color: rgb(123, 123, 209);
-}
-.new-reminder{
+    color: rgb(99, 99, 224);
+    font-size: 15px !important;
+  }
+
+  .detail-list-note .new-reminder {
     display: none;
     margin-left: 20px;
-    border-bottom: 1px solid black;
-}
+    margin-top: 10px;
+  }
 
-.text-note.hidden {
+  .form--add__notes {
     display: none;
+    margin-top: 90px;
   }
-  .form--add__notes{
-    display: none;
-  }
-  .form--add__notes h1{
+
+  .form--add__notes h1 {
     text-align: center;
     margin-top: 50px;
   }
-  .form--add__notes input{
-  padding-left: 10px;
+
+  .form--add__notes input {
+    padding-left: 10px;
     width: 90%;
     height: 50px;
-   margin: 20px 10px 0px 10px;
-   border-radius: 8px;
+    margin: 20px 10px 0px 10px;
+    border-radius: 8px;
   }
-  .input_add_note_description{
-    height:  100px !important;
-  }
-  .map-list{
+
+  .form--add__notes .map-list {
     margin: 20px 10px;
     display: flex;
     justify-content: space-between;
     border-radius: 5px;
-    flex-direction:column
+    flex-direction: column
   }
-  .title-list-name-choose{
+
+  .title-list-name-choose {
     background-color: aquamarine;
-   display: flex;
-   justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
     height: 40px;
     border: 1px solid black;
     border-radius: 10px;
-    
+
   }
-  .tieude{
+
+  .tieude {
     margin-left: 10px;
     font-size: 22px;
   }
-  .name-list-choose{
+
+  .name-list-choose {
     margin-right: 10px;
-    
+
   }
-.form--edit__notes{
+
+  .form--edit__notes {
     display: none;
-}
- .input_eidt_note{
+  }
+
+  .input_eidt_note {
     width: 90%;
     height: 30%;
     position: absolute;
@@ -216,42 +237,47 @@
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #fff;
-    padding: 20px; 
-    border: 1px solid #000; 
-    border-radius: 5px; 
- }
- .input_eidt_note input {
+    padding: 20px;
+    border: 1px solid #000;
+    border-radius: 5px;
+  }
+
+  .input_eidt_note input {
     margin: 5px 0;
     width: 100%;
     padding-left: 10px;
     border: 1px solid #ccc;
     border-radius: 3px;
   }
-  .input_edit_note_description{
+
+  .input_edit_note_description {
     height: 130px;
   }
+
   .color-list-icon {
     margin-top: 20px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-   grid-gap: 1px 7px;
+    grid-gap: 1px 7px;
     width: 100%;
-   background-color: rgb(63, 66, 66);
-   border-radius: 7px;
-  padding: 0px 10px;
+    background-color: rgb(63, 66, 66);
+    border-radius: 7px;
+    padding: 0px 10px;
   }
-  .color-swatch{
+
+  .color-swatch {
     margin: 10px 0px;
     width: 45px;
     height: 45px;
     border-radius: 50%;
   }
+
   .selected {
     border: 2px solid black;
     transform: scale(1.3);
-}
+  }
 
-  .fill-icon-color{
+  .fill-icon-color {
     background-color: antiquewhite;
     width: 50px;
     height: 50px;
@@ -259,25 +285,63 @@
     display: flex;
     align-items: center;
     justify-content: center;
-   margin: 0px 0px 20px 155px;
+    margin: 0px 0px 20px 155px;
 
   }
+
   ul.dropdown-menu.width {
     width: 50px !important;
   }
-  .thuthu , .form-check-input{
+
+  .thuthu,
+  .form-check-input {
     border-radius: 50% !important;
   }
-  .reminder__detail{
+
+  .reminder__detail {
     display: flex;
     align-items: center;
     justify-content: space-around;
   }
- .render{
-  margin: 10px;
- }
- .form-check-name {
-  transition: none !important; 
-}
 
+  .render {
+    margin: 10px;
+  }
+
+  .form-check-name {
+    transition: none !important;
+  }
+
+  .thong-bao {
+    color: rgb(137, 202, 202);
+    font-size: 25px;
+    display: none;
+    position: absolute;
+    left: 35%;
+    top: 41%;
+
+  }
+
+  .doimau.checked {
+    color: #C0C0C0;
+  }
+
+  .btn__add--reminder {
+    margin-right: 110px;
+  }
+
+  .width-drop {
+    width: 50px !important;
+    background-color: #C0C0C0;
+    margin: 0px;
+  }
+
+  .text-center {
+    margin-top: 30px;
+    font-size: 30px !important;
+  }
+  .dropdown-menu.width-drop {
+    width: 45px !important; /* Kích thước chiều rộng */
+    max-width: 50px !important; /* Giới hạn chiều rộng tối đa */
+  }
 }

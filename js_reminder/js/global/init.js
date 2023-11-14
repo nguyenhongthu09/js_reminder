@@ -3,6 +3,8 @@ import { fetchReminder } from "../apiFetch/apiREminder.js";
 import { state } from "./state.js";
 import { renderListOnUI } from "../UI_controller/list_controller.js";
 import { fetchColor } from "../apiFetch/apiColor.js";
+import { renderReminderonUI } from "../UI_controller/reminder_controller.js";
+
 
 export const initState = async () => {
   const listsData = await fetchList();
@@ -12,5 +14,6 @@ export const initState = async () => {
   state.listState = listsData;
   state.color = colorData;
   renderListOnUI("renderlist-home");
-  
+
 };
+

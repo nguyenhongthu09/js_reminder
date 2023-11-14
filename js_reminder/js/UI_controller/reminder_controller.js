@@ -16,12 +16,13 @@ import {
 import { updateListNoteQuantity } from "../apiFetch/apiList.js";
 import {
   updateListQuantity,
-  getCurrentPageFromQueryParams,
+  getCurrentPageFromQueryParams,updateQueryParam
 } from "./list_controller.js";
 import { submitUpdateReminder } from "./reminder_form.js";
-
+import { state } from "../global/state.js";
 export const renderReminderonUI = () => {
-  const listNoteId = getCurrentPageFromQueryParams();
+  const listNoteId = getCurrentPageFromQueryParams()|| state.currentListId;
+  console.log("listNoteId:", listNoteId);
   const listNote = getListNoteById(listNoteId);
   const listName = listNote ? listNote.name : "";
   const reminderState = getReminders();
@@ -29,6 +30,13 @@ export const renderReminderonUI = () => {
 
   const trueReminders = filterRemindersByStatus(listNoteId, true);
   const falseReminders = filterRemindersByStatus(listNoteId, false);
+  const hasReminders = trueReminders.length > 0 || falseReminders.length > 0;
+
+  const thongBaoElement = document.querySelector(".thong-bao");
+  if (thongBaoElement) {
+    thongBaoElement.style.display = hasReminders ? "none" : "block";
+  }
+
 
   falseReminders.sort((a, b) => a.status - b.status);
 
@@ -43,6 +51,7 @@ export const renderReminderonUI = () => {
   checkStatus(reminderInputs, reminderState);
   initializeDeleteButtonsEvents();
   editReminderEvent();
+  updateQueryParam(listNoteId);
 };
 
 const renderReminders = (reminders, status) => {
@@ -57,7 +66,7 @@ const renderReminders = (reminders, status) => {
               <input class="form-check-input " type="checkbox" id-input=${
                 reminder.id
               } ${reminder?.status ? "checked" : ""}>
-              <input type="text" class="form-check-name ${
+              <input type="text" class="form-check-name doimau ${
                 status ? "checked" : ""
               }" data-reminder-id="${reminder.id}" value="${
         reminder.title
@@ -113,11 +122,10 @@ const checkStatus = (reminderInputs, reminderState) => {
       const idnote = reminderDetail.getAttribute("data-listnote-id");
 
       renderReminderonUI(idnote);
-      const formCheckName = reminderDetail.querySelector(".form-check-name");
+      const formCheckName = reminderDetail.querySelector(".doimau");
 
       if (formCheckName) {
-        formCheckName.style.color = reminderToUpdate.status ? "#97FFFF" : "";
-        console.log("formCheckName classList: ", formCheckName.style.color);
+        formCheckName.classList.toggle("checked", reminderToUpdate.status);
       }
     });
   });
@@ -208,3 +216,4 @@ const onBlurEvent = async () => {
     };
   }
 };
+

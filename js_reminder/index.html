@@ -15,11 +15,11 @@
 
 <body>
     <div class="menu-list-notes">
-        <h1 class="text-center">Danh sách của tôi</h1>
+        <h1 class="text-center">My list</h1>
         <div class="menu-list-note" id="renderlist-home">
         </div>
         <div class="button-home">
-            <button type="button" class="btn btn-primary add-reminder">New Reminder</button>
+            <button type="button" class="btn btn-primary add-reminder btn__add--reminder">New Reminder</button>
             <button type=" button" class="btn btn-primary add-list">Add List</button>
 
         </div>
@@ -58,7 +58,7 @@
                 </span>
             </div>
             <input type="text" id="name_icon" placeholder="List Name ">
-            <p id="name_error" class="error-message">Vui lòng nhập tên list.</p>
+            <p id="name_error" class="error-message">Please enter a list name.</p>
         </div>
         <div class="color-list-icon" id="color-list">
         </div>
@@ -66,8 +66,8 @@
 
     <form id="form_edit_list" action="" class="form-edit-list">
         <div class="form__edit__list">
-            <button type="button" id="btn-xoa" class="btn btn-secondary button-cancel">Hủy</button>
-            <button type="button" id="btnsubedit" class="btn btn-primary button-done">Xong</button>
+            <button type="button" id="btn-xoa" class="btn btn-secondary button-cancel">Cancel</button>
+            <button type="button" id="btnsubedit" class="btn btn-primary button-done">Edit</button>
         </div>
         <h1>Edit List</h1>
 
@@ -97,19 +97,20 @@
                 </span>
             </div>
             <input type="text" id="name_edit-list" placeholder="Tên Danh Sách">
-            <p id="name_error" class="error-message">Vui lòng nhập tên danh sách.</p>
+            <p id="name_error" class="error-message">Please enter a list name.</p>
         </div>
         <div class="color-list-icon  render-list-color-edit" id="color-list-add-list">
         </div>
     </form>
 
-
+    <div class="thong-bao">Empty list !!!</div>
     <div class="detail-list-note">
         <div class="note">
             <div class="tieu-de"></div>
+            
         </div>
         <div class="new-reminder">
-            <div class="form-check  item-reminders">
+            <div class="form-check  item-reminders" >
                 <input class="form-check-input " type="checkbox">
                 <input type="text" class="form-check-name input-new-reminder" placeholder="Add Note" autofocus>
                 </input>
