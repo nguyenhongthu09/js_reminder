@@ -21,7 +21,6 @@ export const addNewReminderForm = () => {
   const addSubmitFormNote = document.getElementById("submitform-addnote");
   const addName = document.getElementById("add-note-name");
   const thongbao = document.querySelector(".thong-bao");
-  const detailList = document.querySelector(".detail-list-note");
   let isBlurEvent = false;
 
   const toggleDisplayAddReminder = (status) => {
@@ -37,7 +36,7 @@ export const addNewReminderForm = () => {
       homeList.style.display = "none";
       formAddNote.style.display = "block";
     } else {
-      detailList.style.display = "block";
+      homeList.style.display = "block";
       formAddNote.style.display = "none";
     }
   };

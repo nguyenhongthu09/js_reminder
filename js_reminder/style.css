@@ -185,12 +185,11 @@
 
   .form--add__notes h1 {
     text-align: center;
-    margin-top: 50px;
   }
 
   .form--add__notes input {
     padding-left: 10px;
-    width: 90%;
+    width: 95%;
     height: 50px;
     margin: 20px 10px 0px 10px;
     border-radius: 8px;
@@ -304,10 +303,6 @@
     justify-content: space-around;
   }
 
-  .render {
-    margin: 10px;
-  }
-
   .form-check-name {
     transition: none !important;
   }
@@ -337,7 +332,7 @@
   }
 
   .text-center {
-    margin-top: 30px;
+    margin-top: 10px;
     font-size: 30px !important;
   }
 
