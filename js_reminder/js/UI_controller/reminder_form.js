@@ -8,7 +8,7 @@ import {
 } from "./list_controller.js";
 import { getListState } from "../service/list_service.js";
 import { getCurrentPageFromQueryParams } from "./common.js";
-export const addNewReminderForm = () => {
+export const reminderActionEvents = () => {
   const newReminderForm = document.querySelector(".new-reminder");
   const btnAddNewReminder = document.getElementById("btnNewNote");
   const btnbaclList = document.querySelector(".btn-back-list");

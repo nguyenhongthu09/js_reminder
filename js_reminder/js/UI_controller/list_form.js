@@ -6,7 +6,7 @@ import { getColorState } from "../service/color_service.js";
 import { hexToRgb, rgbToHex } from "./common.js";
 import { updateQueryParam } from "./common.js";
 import { getIdUrlState } from "../service/list_service.js";
-export const formAddList = () => {
+export const listActionEvents = () => {
   const homeList = document.querySelector(".menu-list-notes");
   const formAddList = document.getElementById("form_add_list");
   const btnAddList = document.querySelector(".add-list");
