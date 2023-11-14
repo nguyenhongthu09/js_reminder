@@ -3,13 +3,13 @@
     {
       "name": "list 2",
       "isColor": "#FF00FF",
-      "quantity": 1,
+      "quantity": 3,
       "id": "_AmROHC"
     },
     {
       "name": "list 1",
       "isColor": "#00FF00",
-      "quantity": 0,
+      "quantity": 3,
       "id": "_7lSsN8"
     }
   ],
@@ -25,6 +25,42 @@
       "status": false,
       "idlist": "_AmROHC",
       "id": "5Yvnyk7"
+    },
+    {
+      "title": "rtyrty",
+      "status": false,
+      "idlist": "_AmROHC",
+      "id": "dDCwrq5"
+    },
+    {
+      "title": "ảytryu",
+      "status": false,
+      "idlist": "_AmROHC",
+      "id": "2-yzii1"
+    },
+    {
+      "title": "eeeee",
+      "status": true,
+      "idlist": "_7lSsN8",
+      "id": "XISe1nz"
+    },
+    {
+      "title": "errrr",
+      "status": false,
+      "idlist": "_7lSsN8",
+      "id": "T0Ce-_X"
+    },
+    {
+      "title": "ddđ",
+      "status": false,
+      "idlist": "_7lSsN8",
+      "id": "m85kQjl"
+    },
+    {
+      "title": "ddd",
+      "status": false,
+      "idlist": "9eQOCFA",
+      "id": "6o0Ifjf"
     }
   ],
   "color": [

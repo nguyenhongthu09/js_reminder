@@ -340,8 +340,9 @@
     margin-top: 30px;
     font-size: 30px !important;
   }
+
   .dropdown-menu.width-drop {
-    width: 45px !important; /* Kích thước chiều rộng */
-    max-width: 50px !important; /* Giới hạn chiều rộng tối đa */
+    width: 45px !important;
+    max-width: 50px !important;
   }
 }

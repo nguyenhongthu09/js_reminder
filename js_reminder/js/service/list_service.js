@@ -3,6 +3,13 @@ import { getReminders } from "./reminder_service.js";
 
 export const getListState = () => state.listState;
 
+export const removeList = (id) => {
+  const listState = getListState();
+  const index = listState.findIndex((list) => list.id === id);
+  if (index !== -1) {
+    listState.splice(index, 1);
+  }
+};
 export const getListNoteById = (listNoteId) => {
   const listNotes = getListState();
   return listNotes.find((listNote) => listNote.id === listNoteId);
@@ -24,10 +31,3 @@ export const calculateListNoteQuantity = (idlist) => {
   return remindersForList.length;
 };
 
-export const removeList = (id) => {
-  const listState = getListState();
-  const index = listState.findIndex((list) => list.id === id);
-  if (index !== -1) {
-    listState.splice(index, 1);
-  }
-};

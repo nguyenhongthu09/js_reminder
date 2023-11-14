@@ -5,10 +5,9 @@ import { calculateListNoteQuantity } from "../service/list_service.js";
 import {
   renderListOnUI,
   updateListQuantity,
-  getCurrentPageFromQueryParams,
 } from "./list_controller.js";
 import { getListState } from "../service/list_service.js";
-
+import { getCurrentPageFromQueryParams } from "./common.js";
 export const addNewReminderForm = () => {
   const newReminderForm = document.querySelector(".new-reminder");
   const btnAddNewReminder = document.getElementById("btnNewNote");
@@ -22,6 +21,7 @@ export const addNewReminderForm = () => {
   const addSubmitFormNote = document.getElementById("submitform-addnote");
   const addName = document.getElementById("add-note-name");
   const thongbao = document.querySelector(".thong-bao");
+  const detailList = document.querySelector(".detail-list-note");
   let isBlurEvent = false;
 
   const toggleDisplayAddReminder = (status) => {
@@ -37,7 +37,7 @@ export const addNewReminderForm = () => {
       homeList.style.display = "none";
       formAddNote.style.display = "block";
     } else {
-      homeList.style.display = "block";
+      detailList.style.display = "block";
       formAddNote.style.display = "none";
     }
   };
@@ -92,7 +92,6 @@ export const addNewReminderForm = () => {
         const updatedQuantity = calculateListNoteQuantity(listNoteId);
         await updateListNoteQuantity(listNoteId);
         renderReminderonUI(listNoteId);
-        renderListOnUI("renderlist-home");
         updateListQuantity(listNoteId, updatedQuantity);
       }
     }
@@ -111,7 +110,6 @@ export const addNewReminderForm = () => {
       const updatedQuantity = calculateListNoteQuantity(selectedListId);
       await updateListNoteQuantity(selectedListId);
       renderReminderonUI(selectedListId);
-      renderListOnUI("renderlist-home");
       updateListQuantity(selectedListId, updatedQuantity);
     }
     toggleDisplayFormAddReminder(false);

@@ -4,7 +4,7 @@ import { renderReminderonUI } from "./reminder_controller.js";
 import { renderColor } from "./showColor.js";
 import { getColorState } from "../service/color_service.js";
 import { hexToRgb, rgbToHex } from "./common.js";
-import { updateQueryParam } from "./list_controller.js";
+import { updateQueryParam } from "./common.js";
 import { state } from "../global/state.js";
 export const formAddList = () => {
   const homeList = document.querySelector(".menu-list-notes");
@@ -30,15 +30,7 @@ export const formAddList = () => {
     }
   };
 
-  const toggleDisplayDetailList = (status) => {
-    if (status) {
-      homeList.style.display = "none";
-      detailList.style.display = "block";
-    } else {
-      homeList.style.display = "block";
-      detailList.style.display = "none";
-    }
-  };
+ 
 
   btnAddList.addEventListener("click", () => {
     toggleDisplayList(true);
@@ -98,13 +90,7 @@ export const formAddList = () => {
     const listItem = event.target.closest(".list-note");
     if (listItem) {
       const listNoteId = listItem.getAttribute("data-listId");
-      state.currentListId = listNoteId;
-      console.log( state.currentListId, " state.currentListId");
-      // const listNoteNameElement = document.querySelector(".tieu-de");
-      // if (listNoteNameElement) {
-      //   const listNoteName = listItem.querySelector(".name-list").innerText;
-      //   listNoteNameElement.innerText = listNoteName;
-      // }
+      state.idUrl = listNoteId;
       updateQueryParam(listNoteId);
       renderReminderonUI(listNoteId);
       toggleDisplayDetailList(true);
@@ -174,3 +160,33 @@ export const toggleDisplayEditList = (status) => {
     homeList.style.display = "block";
   }
 };
+
+const toggleDisplayDetailList = (status) => {
+  const homeList = document.querySelector(".menu-list-notes");
+  const detailList = document.querySelector(".detail-list-note");
+  if (status) {
+    homeList.style.display = "none";
+    detailList.style.display = "block";
+    localStorage.setItem("displayDetailList", "block"); 
+  } else {
+    homeList.style.display = "block";
+    detailList.style.display = "none";
+    localStorage.setItem("displayDetailList", "none"); 
+  }
+};
+window.addEventListener('load', () => {
+  const savedDisplayState = localStorage.getItem("displayDetailList");
+  const homeList = document.querySelector(".menu-list-notes");
+  const detailList = document.querySelector(".detail-list-note");
+
+  if (savedDisplayState === "block") {
+    homeList.style.display = "none";
+    detailList.style.display = "block";
+    
+  } else {
+    homeList.style.display = "block";
+    detailList.style.display = "none";
+ 
+    
+  }
+});

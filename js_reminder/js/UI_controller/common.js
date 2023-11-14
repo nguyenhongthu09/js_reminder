@@ -27,3 +27,16 @@ export const rgbToHex = (rgb) => {
   });
   return "#" + hex.join("").toUpperCase();
 };
+
+export const updateQueryParam = (listId) => {
+  const url = new URL(window.location.href);
+  url.searchParams.set("listId", listId);
+  url.hash = "";
+  window.history.replaceState({}, "", url);
+};
+
+export const getCurrentPageFromQueryParams = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const listNoteid = urlParams.get("listId");
+  return listNoteid;
+};

@@ -15,14 +15,12 @@ import {
 } from "../apiFetch/apiREminder.js";
 import { updateListNoteQuantity } from "../apiFetch/apiList.js";
 import {
-  updateListQuantity,
-  getCurrentPageFromQueryParams,updateQueryParam
+  updateListQuantity
 } from "./list_controller.js";
 import { submitUpdateReminder } from "./reminder_form.js";
-import { state } from "../global/state.js";
+import { getCurrentPageFromQueryParams, updateQueryParam } from "./common.js";
 export const renderReminderonUI = () => {
-  const listNoteId = getCurrentPageFromQueryParams()|| state.currentListId;
-  console.log("listNoteId:", listNoteId);
+  const listNoteId = getCurrentPageFromQueryParams();
   const listNote = getListNoteById(listNoteId);
   const listName = listNote ? listNote.name : "";
   const reminderState = getReminders();
@@ -36,7 +34,6 @@ export const renderReminderonUI = () => {
   if (thongBaoElement) {
     thongBaoElement.style.display = hasReminders ? "none" : "block";
   }
-
 
   falseReminders.sort((a, b) => a.status - b.status);
 
@@ -52,6 +49,7 @@ export const renderReminderonUI = () => {
   initializeDeleteButtonsEvents();
   editReminderEvent();
   updateQueryParam(listNoteId);
+  
 };
 
 const renderReminders = (reminders, status) => {

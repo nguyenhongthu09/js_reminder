@@ -8,18 +8,20 @@ import { renderColor } from "./showColor.js";
 import { hexToRgb } from "./common.js";
 import { updateList, toggleDisplayEditList } from "./list_form.js";
 import { findColor, getColorState } from "../service/color_service.js";
-import { renderReminderonUI } from "./reminder_controller.js";
-import { state } from "../global/state.js";
+
 export const renderListOnUI = (targetElementId) => {
   const listData = getListState();
   const colorData = getColorState();
   const cart = document.getElementById(targetElementId);
 
-  cart.innerHTML = listData
+  cart.innerHTML = ` 
+  <h1 class="text-center">My list</h1>
+  ${listData
     .map((list) => {
       const listColor = findColor(colorData, list.isColor);
       const backgroundColor = listColor ? listColor.color : "rgb(192,192,192)";
       return `
+      
            <div class="listnote" id=${list.id}>
            <div class="list-note"  data-listId=${list.id} >
            <div class="item-list-none-left">
@@ -90,8 +92,7 @@ export const renderListOnUI = (targetElementId) => {
 
                 `;
     })
-    .join(" ");
-  SearchParamsUrlId();
+    .join(" ")}`;
   initializeDeleteButtonsEvent();
   editListEvent();
 };
@@ -106,16 +107,6 @@ export const updateListQuantity = (idlist, updatedQuantity) => {
       quantityElement.textContent = updatedQuantity;
     }
   }
-};
-
-const SearchParamsUrlId = () => {
-  const listNotes = document.querySelectorAll(".list-note");
-  listNotes.forEach((listNote) => {
-    listNote.addEventListener("click", () => {
-      const selectedListNoteId = listNote.getAttribute("data-listId");
-      updateQueryParam(selectedListNoteId);
-    });
-  });
 };
 
 const initializeDeleteButtonsEvent = () => {
@@ -171,28 +162,3 @@ const editListEvent = () => {
   };
 };
 
-// export const updateQueryParam = (listId) => {
-//   const url = new URL(window.location.href);
-//   url.searchParams.set("listId", listId);
-//   window.history.replaceState({}, "", url);
-// };
-
-// export const getCurrentPageFromQueryParams = () => {
-//   const urlParams = new URLSearchParams(window.location.search);
-//   const listNoteid = urlParams.get("listId");
-//   return listNoteid;
-// };
-
-
-export const updateQueryParam = (listId) => {
-  const url = new URL(window.location.href);
-  url.searchParams.set("listId", listId);
-  url.hash = "";
-  window.history.replaceState({}, "", url);
-};
-
-export const getCurrentPageFromQueryParams = () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const listNoteid = urlParams.get("listId");
-  return listNoteid;
-};
