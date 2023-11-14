@@ -186,7 +186,6 @@ window.addEventListener('load', () => {
   } else {
     homeList.style.display = "block";
     detailList.style.display = "none";
- 
     
   }
 });

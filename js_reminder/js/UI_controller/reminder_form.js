@@ -112,6 +112,7 @@ export const addNewReminderForm = () => {
       updateListQuantity(selectedListId, updatedQuantity);
     }
     toggleDisplayFormAddReminder(false);
+    thongbao.style.display="none";
   });
 };
 

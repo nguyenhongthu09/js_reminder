@@ -49,51 +49,43 @@ export const delList = async (idList) => {
 };
 
 export const updateListNoteQuantity = async (idlist) => {
-  const listNoteData = await fetch(`${API_URL}/listNote/${idlist}`);
-  const existingListNote = await listNoteData.json();
   const updatedQuantity = calculateListNoteQuantity(idlist);
-  const listState = getListState();
-  const update = listState.map((list) => {
-    if (list.id === idlist) {
-      return { ...list, quantity: updatedQuantity };
-    }
-    return list;
-  });
-  state.listState = update;
-  const updatedListNote = { ...existingListNote, quantity: updatedQuantity };
 
   const response = await fetch(`${API_URL}/listNote/${idlist}`, {
-    method: "PUT",
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(updatedListNote),
+    body: JSON.stringify({ quantity: updatedQuantity }),
   });
+
+  if (response.ok) {
+    const listState = getListState();
+    const update = listState.map((list) => {
+      if (list.id === idlist) {
+        return { ...list, quantity: updatedQuantity };
+      }
+      return list;
+    });
+    state.listState = update;
+  }
 };
 
-export const updateListData = (id, newName, newColor, quantity) => {
-  return fetch(`${API_URL}/listNote/${id}`, {
+export const updateListData = async (id, newName, newColor, quantity) => {
+  const response = await fetch(`${API_URL}/listNote/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ name: newName, isColor: newColor, quantity }),
-  })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        console.error("Cập nhật list không thành công.");
-        throw new Error("Cập nhật không thành công");
-      }
-    })
-    .then(() => {
-      const listState = getListState();
-      const appIndex = findListByIndex(id);
-      if (appIndex !== -1) {
-        listState[appIndex].name = newName;
-        listState[appIndex].isColor = newColor;
-        listState[appIndex].quantity = quantity;
-      }
-    });
+  });
+  if (response.ok) {
+    const listState = getListState();
+    const appIndex = findListByIndex(id);
+    if (appIndex !== -1) {
+      listState[appIndex].name = newName;
+      listState[appIndex].isColor = newColor;
+      listState[appIndex].quantity = quantity;
+    }
+  }
 };

@@ -41,13 +41,13 @@ export const addNewReminder = async (reminder, idlist) => {
   }
 };
 
-export const updateReminderStatus = (reminderId, newStatus) => {
+export const updateReminderStatus = async (reminderId, newStatus) => {
   const getReminder = getReminders();
   const reminderToUpdate = getReminder.find(
     (reminder) => reminder.id === reminderId
   );
 
-  return fetch(`${API_URL}/reminder/${reminderId}`, {
+  const response = await fetch(`${API_URL}/reminder/${reminderId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -57,17 +57,12 @@ export const updateReminderStatus = (reminderId, newStatus) => {
       status: newStatus,
       idlist: reminderToUpdate.idlist,
     }),
-  })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-    })
-
-    .then((updatedReminder) => {
-      const index = getReminder.findIndex((r) => r.id === reminderId);
-      getReminder[index] = updatedReminder;
-    });
+  });
+  if (response.ok) {
+    const updatedReminder = await response.json();
+    const index = getReminder.findIndex((r) => r.id === reminderId);
+    getReminder[index] = updatedReminder;
+  }
 };
 
 export const delReminder = async (idReminder) => {
@@ -77,24 +72,22 @@ export const delReminder = async (idReminder) => {
   return idReminder;
 };
 
-export const updateReminderData = (id, newName) => {
-  return fetch(`${API_URL}/reminder/${id}`, {
+export const updateReminderData = async (id, newName) => {
+  const response = await fetch(`${API_URL}/reminder/${id}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ title: newName }),
-  })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-    })
-    .then((updatedReminder) => {
-      const reminderState = getReminders();
-      const appIndex = findReminderByIndex(id);
-      if (appIndex !== -1) {
-        reminderState[appIndex].title = updatedReminder.title;
-      }
-    });
+  });
+
+  if (response.ok) {
+    const updatedReminder = await response.json();
+    const reminderState = getReminders();
+    const appIndex = findReminderByIndex(id);
+
+    if (appIndex !== -1) {
+      reminderState[appIndex].title = updatedReminder.title;
+    }
+  }
 };
