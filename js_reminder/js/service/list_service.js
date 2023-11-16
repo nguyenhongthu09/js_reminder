@@ -31,4 +31,12 @@ export const calculateListNoteQuantity = (idlist) => {
   return remindersForList.length;
 };
 
+export const calculateListNoteCheck = (listId) => {
+  const reminderState = getReminders();
+  const remindersForList = reminderState.filter(
+    (reminder) => reminder.idlist === listId && reminder.status
+  );
+  return remindersForList.length;
+};
+
 export const getIdUrlState = () => state.idUrl;

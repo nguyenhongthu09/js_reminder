@@ -26,11 +26,10 @@
     </div>
     <form id="form_add_list" action="" class="form-add-list">
         <div class="form__add__list">
-            <button type="button" id="btn-cancel" class="btn btn-secondary button-cancel">Cancel</button>
-            <button type="button" id="btnSubmit" class="btn btn-primary button-done">Done</button>
+            <button type="button" id="btn-cancel" class="btn btn-primary button-cancel">Cancel</button>
+            <button type="button" id="btnSubmit"   class="btn btn-primary button-done">Done</button>
         </div>
         <h1>New List</h1>
-
         <div class="form_add_list_name">
             <div class="fill-icon-color" id="icon-color">
                 <span class="fill-color">
@@ -66,8 +65,8 @@
 
     <form id="form_edit_list" action="" class="form-edit-list">
         <div class="form__edit__list">
-            <button type="button" id="btn-xoa" class="btn btn-secondary button-cancel">Cancel</button>
-            <button type="button" id="btnsubedit" class="btn btn-primary button-done">Edit</button>
+            <button type="button" id="btn-xoa" class="btn btn-primary button-cancel">Cancel</button>
+            <button type="button" id="btnsubedit"  class="btn btn-primary button-done">Edit</button>
         </div>
         <h1>Edit List</h1>
 
@@ -104,6 +103,8 @@
     </form>
 
     <div class="thong-bao">Empty list !!!</div>
+
+
     <div class="detail-list-note">
         <div class="note">
             <div class="tieu-de"></div>
@@ -118,7 +119,7 @@
         </div>
         <div class="button-detail-list">
             <button type="button" class="btn btn-primary btn-back-list">Lists</button>
-            <button type="button" class="btn btn-primary add-reminder" id="btnsubmit-note">Done</button>
+            <button type="button" class="btn btn-primary add-reminder"    id="btnsubmit-note">Done</button>
         </div>
         <button class="btn btn-primary add__reminders" id="btnNewNote">New Reminder</button>
     </div>
@@ -128,7 +129,8 @@
     <form action="" id="form__add__note" class="form--add__notes">
         <div class="button-detail-list">
             <button type="button" class="btn btn-primary btn-back-note">Cancel</button>
-            <button type="button" class="btn btn-primary add-reminder" id="submitform-addnote">Add</button>
+            <button type="button" class="btn btn-primary add-reminder"  disabled="true" id="submitform-addnote">Add</button>
+           
         </div>
 
         <h1>New reminder</h1>
@@ -143,11 +145,11 @@
            </div>
             <div class="render" id="renderlist">
         </div>
-      
-           
         </div>
+     
     </form>
-
+    <div class="loader  loader__page  loader__common "></div>
+    <div class="overlay  "></div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
     integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"

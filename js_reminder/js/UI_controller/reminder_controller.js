@@ -7,18 +7,25 @@ import {
 import {
   getListNoteById,
   calculateListNoteQuantity,
+  calculateListNoteCheck,
 } from "../service/list_service.js";
 import {
   delReminder,
   updateReminderData,
   updateReminderStatus,
 } from "../apiFetch/apiREminder.js";
-import { updateListNoteQuantity } from "../apiFetch/apiList.js";
 import {
-  updateListQuantity
+  updateListNoteQuantity,
+  updateListNoteChecks,
+} from "../apiFetch/apiList.js";
+import {
+  updateListQuantity,
+  renderListOnUI,
+  updateListCheckbox,
 } from "./list_controller.js";
-import { submitUpdateReminder } from "./reminder_form.js";
+import { submitUpdateReminder, checkdisabled } from "./reminder_form.js";
 import { getCurrentPageFromQueryParams, updateQueryParam } from "./common.js";
+
 export const renderReminderonUI = () => {
   const listNoteId = getCurrentPageFromQueryParams();
   const listNote = getListNoteById(listNoteId);
@@ -49,7 +56,7 @@ export const renderReminderonUI = () => {
   initializeDeleteButtonsEvents();
   editReminderEvent();
   updateQueryParam(listNoteId);
-  
+  checkdisabled();
 };
 
 const renderReminders = (reminders, status) => {
@@ -115,6 +122,7 @@ const checkStatus = (reminderInputs, reminderState) => {
 
       reminderToUpdate.status = !reminderToUpdate.status;
       await updateReminderStatus(reminderId, reminderToUpdate.status);
+
       const reminderDetail =
         event.target.parentNode.closest(".reminder__detail");
       const idnote = reminderDetail.getAttribute("data-listnote-id");
@@ -125,6 +133,10 @@ const checkStatus = (reminderInputs, reminderState) => {
       if (formCheckName) {
         formCheckName.classList.toggle("checked", reminderToUpdate.status);
       }
+      const updateChecks = calculateListNoteCheck(idnote);
+      await updateListNoteChecks(idnote);
+      updateListCheckbox(idnote, updateChecks);
+      renderListOnUI("renderlist-home");
     });
   });
 };
@@ -145,6 +157,10 @@ const initializeDeleteButtonsEvents = () => {
         const updatedQuantity = calculateListNoteQuantity(idnote);
         await updateListNoteQuantity(idnote);
         updateListQuantity(idnote, updatedQuantity);
+        const updatedCheckbox = calculateListNoteCheck(idnote);
+        await updateListNoteChecks(idnote);
+        updateListCheckbox(idnote, updatedCheckbox);
+        renderListOnUI("renderlist-home");
       }
     });
   });
@@ -214,4 +230,3 @@ const onBlurEvent = async () => {
     };
   }
 };
-

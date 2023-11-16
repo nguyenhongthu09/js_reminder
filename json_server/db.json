@@ -1,36 +1,25 @@
 {
   "listNote": [
     {
-      "name": "list 2",
-      "isColor": "#FF00FF",
-      "quantity": 1,
-      "id": "_AmROHC"
-    },
-    {
-      "name": "list 1",
-      "isColor": "#00FF00",
-      "quantity": 1,
-      "id": "_7lSsN8"
-    },
-    {
-      "name": "list 3",
-      "isColor": "#008000",
-      "quantity": 0,
-      "id": "oz7l2cL"
+      "name": "sas",
+      "isColor": "#0000FF",
+      "quantity": 2,
+      "numcheck": 1,
+      "id": "m1Ra7yH"
     }
   ],
   "reminder": [
     {
-      "title": "list 2",
+      "title": "aajjjjaaaa",
       "status": false,
-      "idlist": "_AmROHC",
-      "id": "5Yvnyk7"
+      "idlist": "m1Ra7yH",
+      "id": "80IYAVP"
     },
     {
-      "title": "list 1",
-      "status": false,
-      "idlist": "_7lSsN8",
-      "id": "hzeFXfl"
+      "title": "xxxxx",
+      "status": true,
+      "idlist": "m1Ra7yH",
+      "id": "LT7gF2b"
     }
   ],
   "color": [

@@ -53,7 +53,8 @@ export const renderListOnUI = (targetElementId) => {
                <span class="name-list" >${list.name}</span>
            </div>
            <div class="item-list-none-right">
-               <span class="number-items-note">${list.quantity}</span>
+           <span class="number-items-notes">${list.numcheck}</span>
+               <span class="number-items-note">/${list.quantity}</span>
              
            </div>
 
@@ -109,6 +110,18 @@ export const updateListQuantity = (idlist, updatedQuantity) => {
   }
 };
 
+export const updateListCheckbox = (numcheck, updatedCheck) => {
+  const listNote = document.querySelector(
+    `.list-note[data-listId="${numcheck}"]`
+  );
+  if (listNote) {
+    const quantityElement = listNote.querySelector(".number-items-notes");
+    if (quantityElement) {
+      quantityElement.textContent = updatedCheck;
+    }
+  }
+};
+
 const initializeDeleteButtonsEvent = () => {
   const deleteBtn = document.querySelectorAll(".delete-icon");
   deleteBtn.forEach((delLists) => {
@@ -125,40 +138,39 @@ const initializeDeleteButtonsEvent = () => {
 
 const editListEvent = () => {
   const editButtons = document.querySelectorAll(".edit-list");
-
   editButtons.forEach((editButton) => {
     editButton.addEventListener("click", (event) => {
-      event.preventDefault();
       const id = event.currentTarget.getAttribute("edit-id");
+      console.log("Edit ID:", id);
       toggleDisplayEditList(true);
       renderColor("color-list-add-list");
       handleEditList(id, event.currentTarget);
     });
   });
-
-  const handleEditList = (id, element) => {
-    const editInputName = document.getElementById("name_edit-list");
-    const editColor = document.getElementById("icon-color-edit");
-    const listToEdit = getListNoteById(id);
-
-    if (listToEdit) {
-      editInputName.value = listToEdit.name;
-      const isColor = listToEdit.isColor.startsWith("rgb(")
-        ? listToEdit.isColor
-        : hexToRgb(listToEdit.isColor);
-
-      editColor.value = isColor;
-      editColor.style.backgroundColor = isColor;
-
-      window.newData = {
-        id: id,
-        name: listToEdit.name,
-        isColor: isColor,
-        element: element,
-        quantity: listToEdit.quantity,
-      };
-      updateList();
-    }
-  };
 };
 
+const handleEditList = (id, element) => {
+  const editInputName = document.getElementById("name_edit-list");
+  const editColor = document.getElementById("icon-color-edit");
+  const listToEdit = getListNoteById(id);
+
+  if (listToEdit) {
+    editInputName.value = listToEdit.name;
+    const isColor = listToEdit.isColor.startsWith("rgb(")
+      ? listToEdit.isColor
+      : hexToRgb(listToEdit.isColor);
+
+    editColor.value = isColor;
+    editColor.style.backgroundColor = isColor;
+
+    window.newData = {
+      id: id,
+      name: listToEdit.name,
+      isColor: isColor,
+      element: element,
+      quantity: listToEdit.quantity,
+      numcheck: listToEdit.numcheck,
+    };
+    updateList();
+  }
+};

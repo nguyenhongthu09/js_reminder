@@ -40,3 +40,27 @@ export const getCurrentPageFromQueryParams = () => {
   const listNoteid = urlParams.get("listId");
   return listNoteid;
 };
+
+export const loading = (array, { status }) => {
+  const loaderElement = document.querySelector(".loader");
+  const overlayElement = document.querySelector(".overlay");
+  if (status) {
+    loaderElement?.classList.add("spin");
+    overlayElement?.classList.remove("loader-hidden");
+  } else {
+    loaderElement?.classList.remove("spin");
+    overlayElement?.classList.add("loader-hidden");
+  }
+
+  array.forEach((item) => {
+    const [className, animationName] = item;
+    const className_element = document.querySelector(`.${className}`);
+    if (status) {
+      className_element?.classList.add(animationName);
+      className_element?.classList.remove("loader-hidden");
+    } else {
+      className_element?.classList.remove(animationName);
+      className_element?.classList.add("loader-hidden");
+    }
+  });
+};

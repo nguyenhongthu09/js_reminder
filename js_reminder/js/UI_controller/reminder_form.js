@@ -2,10 +2,7 @@ import { addNewReminder } from "../apiFetch/apiREminder.js";
 import { renderReminderonUI } from "./reminder_controller.js";
 import { updateListNoteQuantity } from "../apiFetch/apiList.js";
 import { calculateListNoteQuantity } from "../service/list_service.js";
-import {
-  renderListOnUI,
-  updateListQuantity,
-} from "./list_controller.js";
+import { renderListOnUI, updateListQuantity } from "./list_controller.js";
 import { getListState } from "../service/list_service.js";
 import { getCurrentPageFromQueryParams } from "./common.js";
 export const reminderActionEvents = () => {
@@ -21,7 +18,18 @@ export const reminderActionEvents = () => {
   const addSubmitFormNote = document.getElementById("submitform-addnote");
   const addName = document.getElementById("add-note-name");
   const thongbao = document.querySelector(".thong-bao");
+
   let isBlurEvent = false;
+
+  addName.addEventListener("focus", () => {
+    addSubmitFormNote.disabled = false;
+    cancel.disabled = false;
+  });
+
+  addName.addEventListener("blur", () => {
+    addSubmitFormNote.disabled = true;
+    cancel.disabled = false;
+  });
 
   const toggleDisplayAddReminder = (status) => {
     if (status) {
@@ -46,11 +54,13 @@ export const reminderActionEvents = () => {
     toggleDisplayAddReminder(true);
     inputNameReminder.focus();
     isBlurEvent = true;
+    btnSubmitNote.disabled = false;
+    btnbaclList.disabled = true;
   });
 
   btnbaclList.addEventListener("click", () => {
     toggleDisplayAddReminder(false);
-    thongbao.style.display="none";
+    thongbao.style.display = "none";
     inputNameReminder.value = "";
   });
 
@@ -58,6 +68,8 @@ export const reminderActionEvents = () => {
     isBlurEvent = false;
     await handleAddReminderLogic();
     toggleDisplayAddReminder(false);
+    btnSubmitNote.disabled = true;
+    btnbaclList.disabled = false;
   });
 
   openFormAdd.addEventListener("click", () => {
@@ -76,6 +88,8 @@ export const reminderActionEvents = () => {
       await handleAddReminderLogic();
     }
     toggleDisplayAddReminder(false);
+    btnSubmitNote.disabled = true;
+    btnbaclList.disabled = false;
   });
 
   const handleAddReminderLogic = async () => {
@@ -92,11 +106,14 @@ export const reminderActionEvents = () => {
         await updateListNoteQuantity(listNoteId);
         renderReminderonUI(listNoteId);
         updateListQuantity(listNoteId, updatedQuantity);
+        renderListOnUI("renderlist-home");
       }
     }
   };
 
   addSubmitFormNote.addEventListener("click", async () => {
+    cancel.disabled = true;
+    addSubmitFormNote.disabled = true;
     const inputname = addName.value;
     const selectedListId =
       document.querySelector(".name-list-choose").dataset.selectedListId;
@@ -109,28 +126,36 @@ export const reminderActionEvents = () => {
       const updatedQuantity = calculateListNoteQuantity(selectedListId);
       await updateListNoteQuantity(selectedListId);
       renderReminderonUI(selectedListId);
-      updateListQuantity(selectedListId, updatedQuantity);
-    }
-    toggleDisplayFormAddReminder(false);
-    thongbao.style.display="none";
-  });
-};
 
-document.body.addEventListener("click", (event) => {
-  var target = event.target.closest(".list-note");
-  if (target) {
-    var nameListElement = target.querySelector(".name-list");
-    if (nameListElement) {
-      var name = nameListElement.textContent;
-      var listId = target.dataset.listid;
-      var nameListChooseElement = document.querySelector(".name-list-choose");
-      if (nameListChooseElement) {
-        nameListChooseElement.textContent = name;
-        nameListChooseElement.dataset.selectedListId = listId;
+      updateListQuantity(selectedListId, updatedQuantity);
+      renderListOnUI("renderlist-home");
+    }
+    cancel.disabled = false;
+    addSubmitFormNote.disabled = false;
+    toggleDisplayFormAddReminder(false);
+    thongbao.style.display = "none";
+  });
+
+  document.body.addEventListener("click", (event) => {
+    var target = event.target.closest(".list-note");
+    const btnAddReminder = document.getElementById("submitform-addnote");
+    const btnCancel = document.querySelector(".btn-back-note");
+    if (target) {
+      var nameListElement = target.querySelector(".name-list");
+      if (nameListElement) {
+        var name = nameListElement.textContent;
+        var listId = target.dataset.listid;
+        var nameListChooseElement = document.querySelector(".name-list-choose");
+        if (nameListChooseElement) {
+          nameListChooseElement.textContent = name;
+          nameListChooseElement.dataset.selectedListId = listId;
+          btnAddReminder.disabled = false;
+          btnCancel.disabled = false;
+        }
       }
     }
-  }
-});
+  });
+};
 
 export const submitUpdateReminder = (handler) => {
   const btnSubmitNote = document.getElementById("btnsubmit-note");
@@ -147,4 +172,22 @@ const getIdListFormAddReminder = () => {
     nameListChooseElement.textContent = defaultName;
     nameListChooseElement.dataset.selectedListId = defaultListId;
   }
+};
+
+export const checkdisabled = () => {
+  const formCheckNames = document.querySelectorAll(".form-check-name");
+  const btnSubmitNote = document.getElementById("btnsubmit-note");
+  formCheckNames.forEach((input) => {
+    input.addEventListener("blur", () => {
+      if (btnSubmitNote) {
+        btnSubmitNote.disabled = true;
+      }
+    });
+
+    input.addEventListener("click", () => {
+      if (btnSubmitNote) {
+        btnSubmitNote.disabled = false;
+      }
+    });
+  });
 };

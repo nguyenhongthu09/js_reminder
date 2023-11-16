@@ -13,19 +13,24 @@ export const findReminderByIndex = (reminderId) => {
   return state.reminderState.findIndex(
     (reminder) => reminder.id === reminderId
   );
-}
+};
 
 export const findReminderById = (reminderId) => {
   return state.reminderState.find((reminder) => reminder.id === reminderId);
-}
+};
 
 export const findReminderByFilter = (reminderId) => {
   return state.reminderState.filter(
     (reminder) => reminder.idlist === reminderId
   );
-}
+};
 
 export const filterRemindersByStatus = (reminderId, status) => {
   const filteredReminders = findReminderByFilter(reminderId);
   return filteredReminders.filter((reminder) => reminder.status === status);
-}
+};
+
+export const getReminderByListId = (idlist) => {
+  const reminderState = getReminders();
+  return reminderState.filter((reminder) => reminder.idlist === idlist);
+};
