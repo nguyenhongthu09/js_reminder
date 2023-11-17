@@ -5,6 +5,8 @@ import { renderColor } from "./showColor.js";
 import { getColorState } from "../service/color_service.js";
 import { hexToRgb, rgbToHex, updateQueryParam } from "./common.js";
 import { getIdUrlState } from "../service/list_service.js";
+import { fetchReminder } from "../apiFetch/apiREminder.js";
+import { fetchList } from "../apiFetch/apiList.js";
 export const listActionEvents = () => {
   const homeList = document.querySelector(".menu-list-notes");
   const formAddList = document.getElementById("form_add_list");
@@ -61,9 +63,7 @@ export const listActionEvents = () => {
 
       const newList = {
         name: name,
-        quantity: 0,
         isColor: isColor,
-        numcheck: 0,
       };
       await addNewList(newList);
       renderListOnUI("renderlist-home");
@@ -86,13 +86,15 @@ export const listActionEvents = () => {
     window.history.replaceState({ path: newURL }, "", newURL);
     toggleDisplayDetailList(false);
   });
-
-  menuListNote.addEventListener("click", (event) => {
+  const totalCountElement = document.getElementById('total-count');
+  menuListNote.addEventListener("click", async(event) => {
     const btnDone = document.querySelector("#btnsubmit-note");
     const listItem = event.target.closest(".list-note");
     btnDone.disabled = true;
     if (listItem) {
       const listNoteId = listItem.getAttribute("data-listId");
+      // console.log(listNoteId);
+        await fetchReminder(listNoteId);
       let idUrlState = getIdUrlState();
       idUrlState = listNoteId;
       updateQueryParam(listNoteId);
@@ -130,8 +132,6 @@ const submitFormEditList = async () => {
       updatedData.id,
       editedName,
       editColorHex,
-      updatedData.quantity,
-      updatedData.numcheck
     );
     const listElement = updatedData.element;
     const updatedListData = {
@@ -156,8 +156,6 @@ const submitFormEditList = async () => {
     updatedData.id = "";
     updatedData.name = "";
     updatedData.isColor = "";
-    updatedData.quantity = null;
-    updatedData.numcheck = null;
     toggleDisplayEditList(false);
   }
 };
@@ -181,23 +179,11 @@ const toggleDisplayDetailList = (status) => {
   if (status) {
     homeList.style.display = "none";
     detailList.style.display = "block";
-    localStorage.setItem("displayDetailList", "block");
+    // localStorage.setItem("displayDetailList", "block");
   } else {
     homeList.style.display = "block";
     detailList.style.display = "none";
-    localStorage.setItem("displayDetailList", "none");
+    // localStorage.setItem("displayDetailList", "none");
   }
 };
-window.addEventListener("load", () => {
-  const savedDisplayState = localStorage.getItem("displayDetailList");
-  const homeList = document.querySelector(".menu-list-notes");
-  const detailList = document.querySelector(".detail-list-note");
 
-  if (savedDisplayState === "block") {
-    homeList.style.display = "none";
-    detailList.style.display = "block";
-  } else {
-    homeList.style.display = "block";
-    detailList.style.display = "none";
-  }
-});

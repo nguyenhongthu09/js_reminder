@@ -3,7 +3,9 @@ import { fetchReminder } from "../apiFetch/apiREminder.js";
 import { state } from "./state.js";
 import { fetchColor } from "../apiFetch/apiColor.js";
 import { renderReminderonUI } from "../UI_controller/reminder_controller.js";
-import { updateQueryParam } from "../UI_controller/common.js";
+import { updateQueryParam , clearListIdQueryParam } from "../UI_controller/common.js";
+import { renderListOnUI } from "../UI_controller/list_controller.js";
+
 const getPageIdURL = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const listNoteid = urlParams.get("listId");
@@ -12,9 +14,7 @@ const getPageIdURL = () => {
 
 export const initState = async () => {
   const listsData = await fetchList();
-  const reminderData = await fetchReminder();
   const colorData = await fetchColor();
-  state.reminderState = reminderData;
   state.listState = listsData;
   state.color = colorData;
 
@@ -28,7 +28,10 @@ export const initState = async () => {
     if (isValidListId) {
       state.idUrl = listIdFromURL;
       updateQueryParam(listIdFromURL);
-      renderReminderonUI();
+      renderReminderonUI(listIdFromURL);
+    } else {
+      clearListIdQueryParam();
+      renderListOnUI("renderlist-home");
     }
   } else if (
     storedListId &&
@@ -36,5 +39,6 @@ export const initState = async () => {
   ) {
     state.idUrl = storedListId;
     updateQueryParam(storedListId);
+    renderReminderonUI(storedListId);
   }
 };

@@ -2,24 +2,31 @@ import {
   getListState,
   removeList,
   getListNoteById,
+  calculateListNoteCheck,
 } from "../service/list_service.js";
 import { delList } from "../apiFetch/apiList.js";
 import { renderColor } from "./showColor.js";
 import { hexToRgb } from "./common.js";
 import { updateList, toggleDisplayEditList } from "./list_form.js";
 import { findColor, getColorState } from "../service/color_service.js";
-
+import { fetchReminder } from "../apiFetch/apiREminder.js";
+import { state } from "../global/state.js";
+import { calculateListNoteQuantity } from "../service/list_service.js";
 export const renderListOnUI = (targetElementId) => {
+  
   const listData = getListState();
   const colorData = getColorState();
   const cart = document.getElementById(targetElementId);
-
+ 
   cart.innerHTML = ` 
   <h1 class="text-center">My list</h1>
   ${listData
     .map((list) => {
       const listColor = findColor(colorData, list.isColor);
       const backgroundColor = listColor ? listColor.color : "rgb(192,192,192)";
+      const totalCount = list.totalCount || 0;
+      const totalDone = list.totalDone || 0;
+    
       return `
       
            <div class="listnote" id=${list.id}>
@@ -53,8 +60,8 @@ export const renderListOnUI = (targetElementId) => {
                <span class="name-list" >${list.name}</span>
            </div>
            <div class="item-list-none-right">
-           <span class="number-items-notes">${list.numcheck}</span>
-               <span class="number-items-note">/${list.quantity}</span>
+           <span class="number-items-notes" id="total-done">${totalDone}</span>
+               <span class="number-items-note" id="total-count">/${totalCount}</span>
              
            </div>
 
@@ -96,29 +103,20 @@ export const renderListOnUI = (targetElementId) => {
     .join(" ")}`;
   initializeDeleteButtonsEvent();
   editListEvent();
+ 
 };
 
-export const updateListQuantity = (idlist, updatedQuantity) => {
-  const listNote = document.querySelector(
-    `.list-note[data-listId="${idlist}"]`
-  );
-  if (listNote) {
-    const quantityElement = listNote.querySelector(".number-items-note");
-    if (quantityElement) {
-      quantityElement.textContent = updatedQuantity;
-    }
+
+export const updateListCheckbox = (idlist, updatedQuantity) => {
+  const totalCountElement = document.querySelector(`.list-note[data-listId="${idlist}"] #total-done`);
+  if (totalCountElement) {
+    totalCountElement.textContent = `${updatedQuantity}`;
   }
 };
-
-export const updateListCheckbox = (numcheck, updatedCheck) => {
-  const listNote = document.querySelector(
-    `.list-note[data-listId="${numcheck}"]`
-  );
-  if (listNote) {
-    const quantityElement = listNote.querySelector(".number-items-notes");
-    if (quantityElement) {
-      quantityElement.textContent = updatedCheck;
-    }
+export const updateListTotalCount = (idlist, updatedQuantity) => {
+  const totalCountElement = document.querySelector(`.list-note[data-listId="${idlist}"] #total-count`);
+  if (totalCountElement) {
+    totalCountElement.textContent = `/${updatedQuantity}`;
   }
 };
 
@@ -168,9 +166,9 @@ const handleEditList = (id, element) => {
       name: listToEdit.name,
       isColor: isColor,
       element: element,
-      quantity: listToEdit.quantity,
-      numcheck: listToEdit.numcheck,
+     
     };
     updateList();
   }
 };
+

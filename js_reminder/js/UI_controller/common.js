@@ -64,3 +64,10 @@ export const loading = (array, { status }) => {
     }
   });
 };
+
+export const clearListIdQueryParam = () => {
+  const url = new URL(window.location.href);
+  url.searchParams.delete("listId");
+  url.hash = "";
+  window.history.replaceState({}, "", url);
+};

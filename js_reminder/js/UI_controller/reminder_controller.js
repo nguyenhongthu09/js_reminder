@@ -13,26 +13,28 @@ import {
   delReminder,
   updateReminderData,
   updateReminderStatus,
+  fetchReminder,
 } from "../apiFetch/apiREminder.js";
 import {
   updateListNoteQuantity,
   updateListNoteChecks,
 } from "../apiFetch/apiList.js";
 import {
-  updateListQuantity,
+  updateListTotalCount,
   renderListOnUI,
   updateListCheckbox,
 } from "./list_controller.js";
 import { submitUpdateReminder, checkdisabled } from "./reminder_form.js";
 import { getCurrentPageFromQueryParams, updateQueryParam } from "./common.js";
+import { state } from "../global/state.js";
+import { fetchList } from "../apiFetch/apiList.js";
 
-export const renderReminderonUI = () => {
+export const renderReminderonUI = async() => {
   const listNoteId = getCurrentPageFromQueryParams();
   const listNote = getListNoteById(listNoteId);
   const listName = listNote ? listNote.name : "";
   const reminderState = getReminders();
   const cartReminder = document.querySelector(".note");
-
   const trueReminders = filterRemindersByStatus(listNoteId, true);
   const falseReminders = filterRemindersByStatus(listNoteId, false);
   const hasReminders = trueReminders.length > 0 || falseReminders.length > 0;
@@ -59,7 +61,7 @@ export const renderReminderonUI = () => {
   checkdisabled();
 };
 
-const renderReminders = (reminders, status) => {
+ const renderReminders = (reminders, status) => {
   return reminders
     .map((reminder) => {
       return `
@@ -134,14 +136,16 @@ const checkStatus = (reminderInputs, reminderState) => {
         formCheckName.classList.toggle("checked", reminderToUpdate.status);
       }
       const updateChecks = calculateListNoteCheck(idnote);
-      await updateListNoteChecks(idnote);
-      updateListCheckbox(idnote, updateChecks);
+      const totalItemCount = calculateListNoteQuantity(idnote); 
+
+      updateListCheckbox(idnote, updateChecks, totalItemCount);
       renderListOnUI("renderlist-home");
+      await fetchList();
     });
   });
 };
 
-const initializeDeleteButtonsEvents = () => {
+const initializeDeleteButtonsEvents = async () => {
   const deleteRenminder = document.querySelectorAll(".delete-icon-re");
   deleteRenminder.forEach((delReminders) => {
     delReminders.addEventListener("click", async (event) => {
@@ -150,18 +154,15 @@ const initializeDeleteButtonsEvents = () => {
       if (idReminder) {
         await delReminder(idReminder);
         removeReminder(idReminder);
-        const listNoteId = event.target.parentNode.closest(".reminder__detail");
-        const idnote = listNoteId.getAttribute("data-listnote-id");
-
-        renderReminderonUI(idnote);
-        const updatedQuantity = calculateListNoteQuantity(idnote);
-        await updateListNoteQuantity(idnote);
-        updateListQuantity(idnote, updatedQuantity);
-        const updatedCheckbox = calculateListNoteCheck(idnote);
-        await updateListNoteChecks(idnote);
-        updateListCheckbox(idnote, updatedCheckbox);
+        const listNoteId = event.currentTarget ? event.currentTarget.getAttribute("del-id-note") : null;
+        // const idnote = listNoteId.getAttribute("data-listnote-id");
+        renderReminderonUI();
+        const updatedQuantity = calculateListNoteQuantity(listNoteId);
+        updateListTotalCount(listNoteId, updatedQuantity);
         renderListOnUI("renderlist-home");
-      }
+        await fetchReminder();
+    }
+  
     });
   });
 };
@@ -230,3 +231,4 @@ const onBlurEvent = async () => {
     };
   }
 };
+

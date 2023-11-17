@@ -2,9 +2,11 @@ import { addNewReminder } from "../apiFetch/apiREminder.js";
 import { renderReminderonUI } from "./reminder_controller.js";
 import { updateListNoteQuantity } from "../apiFetch/apiList.js";
 import { calculateListNoteQuantity } from "../service/list_service.js";
-import { renderListOnUI, updateListQuantity } from "./list_controller.js";
+import { renderListOnUI, updateListTotalCount } from "./list_controller.js";
 import { getListState } from "../service/list_service.js";
 import { getCurrentPageFromQueryParams } from "./common.js";
+import { fetchReminder } from "../apiFetch/apiREminder.js";
+import { fetchList } from "../apiFetch/apiList.js";
 export const reminderActionEvents = () => {
   const newReminderForm = document.querySelector(".new-reminder");
   const btnAddNewReminder = document.getElementById("btnNewNote");
@@ -101,12 +103,15 @@ export const reminderActionEvents = () => {
           title: inputname,
           idlist: listNoteId,
         };
-        await addNewReminder(newReminder, listNoteId);
+        const listItem = getListState();
+        console.log("listItem" , listItem);
+        await addNewReminder(newReminder, listNoteId, listItem);
         const updatedQuantity = calculateListNoteQuantity(listNoteId);
-        await updateListNoteQuantity(listNoteId);
+        updateListTotalCount(listNoteId, updatedQuantity);
         renderReminderonUI(listNoteId);
-        updateListQuantity(listNoteId, updatedQuantity);
         renderListOnUI("renderlist-home");
+        await fetchList();
+  
       }
     }
   };
@@ -122,46 +127,44 @@ export const reminderActionEvents = () => {
         title: inputname,
         idlist: selectedListId,
       };
-      await addNewReminder(newReminder, selectedListId);
+      const listItem = getListState();
+      console.log("listItem" , listItem);
+      await addNewReminder(newReminder, selectedListId , listItem);
       const updatedQuantity = calculateListNoteQuantity(selectedListId);
-      await updateListNoteQuantity(selectedListId);
+        updateListTotalCount(selectedListId, updatedQuantity);
       renderReminderonUI(selectedListId);
-
-      updateListQuantity(selectedListId, updatedQuantity);
       renderListOnUI("renderlist-home");
+      await fetchList();
     }
+   
     cancel.disabled = false;
     addSubmitFormNote.disabled = false;
     toggleDisplayFormAddReminder(false);
     thongbao.style.display = "none";
   });
 
-  document.body.addEventListener("click", (event) => {
-    var target = event.target.closest(".list-note");
-    const btnAddReminder = document.getElementById("submitform-addnote");
-    const btnCancel = document.querySelector(".btn-back-note");
-    if (target) {
-      var nameListElement = target.querySelector(".name-list");
-      if (nameListElement) {
-        var name = nameListElement.textContent;
-        var listId = target.dataset.listid;
-        var nameListChooseElement = document.querySelector(".name-list-choose");
-        if (nameListChooseElement) {
-          nameListChooseElement.textContent = name;
-          nameListChooseElement.dataset.selectedListId = listId;
-          btnAddReminder.disabled = false;
-          btnCancel.disabled = false;
-        }
-      }
-    }
-  });
+ 
 };
 
-export const submitUpdateReminder = (handler) => {
-  const btnSubmitNote = document.getElementById("btnsubmit-note");
-  btnSubmitNote.removeEventListener("click", handler);
-  btnSubmitNote.addEventListener("click", handler);
-};
+document.body.addEventListener("click", (event) => {
+  var target = event.target.closest(".list-note");
+  const btnAddReminder = document.getElementById("submitform-addnote");
+  const btnCancel = document.querySelector(".btn-back-note");
+  if (target) {
+    var nameListElement = target.querySelector(".name-list");
+    if (nameListElement) {
+      var name = nameListElement.textContent;
+      var listId = target.dataset.listid;
+      var nameListChooseElement = document.querySelector(".name-list-choose");
+      if (nameListChooseElement) {
+        nameListChooseElement.textContent = name;
+        nameListChooseElement.dataset.selectedListId = listId;
+        btnAddReminder.disabled = false;
+        btnCancel.disabled = false;
+      }
+    }
+  }
+});
 
 const getIdListFormAddReminder = () => {
   const getList = getListState();
@@ -173,6 +176,14 @@ const getIdListFormAddReminder = () => {
     nameListChooseElement.dataset.selectedListId = defaultListId;
   }
 };
+
+export const submitUpdateReminder = (handler) => {
+  const btnSubmitNote = document.getElementById("btnsubmit-note");
+  btnSubmitNote.removeEventListener("click", handler);
+  btnSubmitNote.addEventListener("click", handler);
+};
+
+
 
 export const checkdisabled = () => {
   const formCheckNames = document.querySelectorAll(".form-check-name");

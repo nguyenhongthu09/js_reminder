@@ -6,25 +6,21 @@ import {
   calculateListNoteCheck,
 } from "../service/list_service.js";
 import { state } from "../global/state.js";
+import { generateRandomStringId } from "../service/list_service.js";
+import {
+  updateListTotalCount,
+  updateListCheckbox,
+} from "../UI_controller/list_controller.js";
+import { fetchReminder, fetchReminderDone } from "./apiREminder.js";
 import { getReminderByListId } from "../service/reminder_service.js";
 
-export const fetchList = async () => {
-  const response = await fetch(`${API_URL}/listNote`, {
-    method: "GET",
-  });
-  if (response.status === 200) {
-    const listData = await response.json();
 
-    return listData;
-  }
-};
 
 export const addNewList = async (list) => {
   const newlist = {
     name: list.name,
     isColor: list.isColor,
-    quantity: 0,
-    numcheck: 0,
+    id: generateRandomStringId(),
   };
   const listStates = getListState();
   const response = await fetch(`${API_URL}/listNote`, {
@@ -59,57 +55,48 @@ export const delList = async (idList) => {
 };
 
 export const updateListNoteQuantity = async (idlist) => {
-  const updatedQuantity = calculateListNoteQuantity(idlist);
-
-  const response = await fetch(`${API_URL}/listNote/${idlist}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ quantity: updatedQuantity }),
-  });
-
-  if (response.ok) {
-    const listState = getListState();
-    const update = listState.map((list) => {
-      if (list.id === idlist) {
-        return { ...list, quantity: updatedQuantity };
-      }
-      return list;
-    });
-    state.listState = update;
-  }
+  // const updatedQuantity = calculateListNoteQuantity(idlist);
+  // const response = await fetch(`${API_URL}/listNote/${idlist}`, {
+  //   method: "PATCH",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify({ quantity: updatedQuantity }),
+  // });
+  // if (response.ok) {
+  //   const listState = getListState();
+  //   const update = listState.map((list) => {
+  //     if (list.id === idlist) {
+  //       return { ...list, quantity: updatedQuantity };
+  //     }
+  //     return list;
+  //   });
+  //   state.listState = update;
+  // }
 };
 
 export const updateListNoteChecks = async (numcheck) => {
-  const updatedCheckStatus = calculateListNoteCheck(numcheck);
-  const response = await fetch(`${API_URL}/listNote/${numcheck}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ numcheck: updatedCheckStatus }),
-  });
-
-  if (response.ok) {
-    const listState = getListState();
-    const update = listState.map((list) => {
-      if (list.id === numcheck) {
-        return { ...list, numcheck: updatedCheckStatus };
-      }
-      return list;
-    });
-    state.listState = update;
-  }
+  // const updatedCheckStatus = calculateListNoteCheck(numcheck);
+  // const response = await fetch(`${API_URL}/listNote/${numcheck}`, {
+  //   method: "PATCH",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify({ numcheck: updatedCheckStatus }),
+  // });
+  // if (response.ok) {
+  //   const listState = getListState();
+  //   const update = listState.map((list) => {
+  //     if (list.id === numcheck) {
+  //       return { ...list, numcheck: updatedCheckStatus };
+  //     }
+  //     return list;
+  //   });
+  //   state.listState = update;
+  // }
 };
 
-export const updateListData = async (
-  id,
-  newName,
-  newColor,
-  quantity,
-  numcheck
-) => {
+export const updateListData = async (id, newName, newColor) => {
   const response = await fetch(`${API_URL}/listNote/${id}`, {
     method: "PUT",
     headers: {
@@ -118,8 +105,6 @@ export const updateListData = async (
     body: JSON.stringify({
       name: newName,
       isColor: newColor,
-      quantity,
-      numcheck,
     }),
   });
   if (response.ok) {
@@ -128,8 +113,43 @@ export const updateListData = async (
     if (appIndex !== -1) {
       listState[appIndex].name = newName;
       listState[appIndex].isColor = newColor;
-      listState[appIndex].quantity = quantity;
-      listState[appIndex].numcheck = numcheck;
     }
+  }
+};
+
+export const fetchList = async () => {
+  const response = await fetch(`${API_URL}/listNote?_page=1&_limit=50`, {
+    method: "GET",
+  });
+
+  if (response.status === 200) {
+    const listData = await response.json();
+    console.log(listData, "listData");
+    const listWithReminders = await Promise.all(
+      listData.map(async (listItem) => {
+        const { reminderData, totalCount } = await fetchReminder(listItem.id);
+        const { reminderDatas, totalDone } = await fetchReminderDone(
+          listItem.id
+        );
+        if (reminderData && totalCount) {
+          listItem.reminders = reminderData;
+          listItem.totalCount = totalCount;
+          if (reminderDatas) {
+            listItem.remindersDone = reminderDatas;
+          }
+          listItem.totalDone = totalDone;
+          updateListTotalCount(listItem.id, totalCount);
+          updateListCheckbox(listItem.id, totalDone);
+        } else {
+          listItem.reminders = [];
+          listItem.remindersDone = [];
+          listItem.totalCount = 0;
+          listItem.totalDone = 0;
+        }
+
+        return listItem;
+      })
+    );
+    return listWithReminders;
   }
 };

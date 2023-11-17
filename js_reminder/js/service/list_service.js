@@ -28,6 +28,7 @@ export const calculateListNoteQuantity = (idlist) => {
   const remindersForList = reminderState.filter(
     (reminder) => reminder.idlist === idlist
   );
+  console.log("calculateListNoteQuantity:", remindersForList.length);
   return remindersForList.length;
 };
 
@@ -40,3 +41,15 @@ export const calculateListNoteCheck = (listId) => {
 };
 
 export const getIdUrlState = () => state.idUrl;
+
+export const generateRandomStringId = (length = 8) => {
+  const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let result = '';
+  const charactersLength = characters.length;
+
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+
+  return result;
+};

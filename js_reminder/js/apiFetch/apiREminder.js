@@ -3,21 +3,73 @@ import {
   getReminders,
   findReminderByIndex,
 } from "../service/reminder_service.js";
-import { updateListQuantity } from "../UI_controller/list_controller.js";
 import { state } from "../global/state.js";
+import { calculateListNoteQuantity } from "../service/list_service.js";
 
-export const fetchReminder = async () => {
-  const response = await fetch(`${API_URL}/reminder`, {
+export const fetchReminder = async (listId) => {
+  const response = await fetch(`${API_URL}/reminder?idlist=${listId}&_page=1&_limit=50`, {
     method: "GET",
   });
+
   if (response.status === 200) {
     const reminderData = await response.json();
     state.reminderState = reminderData;
-    return reminderData;
+    const totalCount = response.headers.get('X-Total-Count');
+    console.log(totalCount, "totalCount");
+    return { reminderData, totalCount  };
+   
+  }
+};
+// export const fetchReminder = async (listId, status = "") => {
+//   const response = await fetch(
+//     `${API_URL}/reminder?idlist=${listId}&status=${status}&_page=1&_limit=20`,
+//     {
+//       method: "GET",
+//     }
+//   );
+
+//   if (response.status === 200) {
+//     const reminderData = await response.json();
+//     const totalCount = response.headers.get('X-Total-Count');
+//     console.log(totalCount, "totalCount");
+//     return { reminderData, totalCount };
+//   }
+// };
+
+
+// export const fetchReminderTotal = async (listId) => {
+//   const { reminderData, total } = await fetchReminder(listId);
+//   state.reminderState = reminderData;
+//   console.log(total, "total");
+//   return { reminderData, total };
+// };
+
+// export const fetchReminderDone = async (listId) => {
+//   const { reminderDatas, totalDone } = await fetchReminder(listId, true);
+//   state.reminderState = reminderDatas;
+//   console.log(totalDone, "totalDone");
+//   return { reminderDatas, totalDone };
+// };
+
+export const fetchReminderDone = async (listId) => {
+  const response = await fetch(
+    `${API_URL}/reminder?idlist=${listId}&status=true&_page=1&_limit=50`,
+    {
+      method: "GET",
+    }
+  );
+
+  if (response.status === 200) {
+    const reminderDatas = await response.json();
+    state.reminderState = reminderDatas;
+    const totalDone = response.headers.get("X-Total-Count");
+    console.log(totalDone, "totalDone");
+    return { reminderDatas, totalDone };
   }
 };
 
-export const addNewReminder = async (reminder, idlist) => {
+
+export const addNewReminder = async (reminder, idlist ,listItem) => {
   const newreminder = {
     title: reminder.title,
     status: false,
@@ -35,11 +87,15 @@ export const addNewReminder = async (reminder, idlist) => {
   if (response.status === 201) {
     const createdReminderData = await response.json();
     reminderData.push(createdReminderData);
-    updateListQuantity(idlist);
-
-    console.log("Thêm note thành công:", createdReminderData);
+    const updatedQuantity = calculateListNoteQuantity(idlist);
+    listItem.totalCount = updatedQuantity;
+    listItem.reminders = reminderData;
+    return listItem;
   }
 };
+
+
+
 
 export const updateReminderStatus = async (reminderId, newStatus) => {
   const getReminder = getReminders();
