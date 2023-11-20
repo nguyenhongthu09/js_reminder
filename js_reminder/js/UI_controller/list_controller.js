@@ -11,12 +11,14 @@ import { updateList, toggleDisplayEditList } from "./list_form.js";
 import { findColor, getColorState } from "../service/color_service.js";
 
 import { getListTotals } from "../apiFetch/apiList.js";
+
+
 export const renderListOnUI = async (targetElementId) => {
   const listDatas = getListState();
   const colorData = getColorState();
   const cart = document.getElementById(targetElementId);
   // const { totalCount, totalDone } = await getListTotals();
-  
+
   // cart.innerHTML = `
   // <h1 class="text-center">My list</h1>
   // ${listDatas

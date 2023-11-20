@@ -22,8 +22,8 @@ import {
 } from "./list_controller.js";
 import { submitUpdateReminder } from "./reminder_form.js";
 import { getCurrentPageFromQueryParams, updateQueryParam } from "./common.js";
-
-
+import { state } from "../global/state.js";
+import { fetchList } from "../apiFetch/apiList.js";
 export const renderReminderonUI = async () => {
   const listNoteId = getCurrentPageFromQueryParams();
   const listNote = getListNoteById(listNoteId);
@@ -145,14 +145,17 @@ const initializeDeleteButtonsEvents = async () => {
 
       if (idReminder) {
         await delReminder(idReminder);
-        removeReminder(idReminder);
+      await  removeReminder(idReminder);
+      await fetchList();
         const listNoteId = event.currentTarget
           ? event.currentTarget.getAttribute("del-id-note")
           : null;
 
-        renderReminderonUI();
-        updateListTotalCount(listNoteId);
-        updateListCheckbox(listNoteId);
+     await   renderReminderonUI();
+     console.log("dnh sahc sau khi xoa", state.listState);
+     console.log("danh sacxh sau khi xoa", state.reminderState);
+    await    updateListTotalCount(listNoteId);
+    await    updateListCheckbox(listNoteId);
         renderListOnUI("renderlist-home");
       }
     });

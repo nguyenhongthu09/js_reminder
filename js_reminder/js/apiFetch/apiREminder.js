@@ -112,6 +112,7 @@ export const delReminder = async (idReminder) => {
   await fetch(`${API_URL}/reminder/${idReminder}`, {
     method: "DELETE",
   });
+  console.log(state.reminderState, "reminder vua bi xoa");
   return idReminder;
 };
 

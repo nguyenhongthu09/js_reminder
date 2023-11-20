@@ -5,40 +5,39 @@ import { generateRandomStringId } from "../service/list_service.js";
 
 import { fetchReminder } from "./apiREminder.js";
 import { getReminderByListId } from "../service/reminder_service.js";
-
+import { state } from "../global/state.js";
 
 export const fetchList = async () => {
-  const response = await fetch(`${API_URL}/listNote`, {
-    method: "GET",
-  });
+  try {
+    const response = await fetch(`${API_URL}/listNote`, {
+      method: "GET",
+    });
 
-  if (response.status === 200) {
-    const listData = await response.json();
-    console.log(listData, "listData");
+    if (response.status === 200) {
+      const listData = await response.json();
+      console.log(listData, "listData");
 
-    const listWithReminders = await Promise.all(
-      listData.map(async (listItem) => {
-        const { reminderData, totalCount, totalDone } = await fetchReminder(listItem.id);
+      const listWithReminders = await Promise.all(
+        listData.map(async (listItem) => {
+          const { reminderData, totalCount, totalDone } = await fetchReminder(listItem.id);
 
-        if (reminderData !== undefined && totalCount !== undefined && totalDone !== undefined) {
-          listItem.reminders = reminderData;
-          listItem.totalCount = totalCount;
-          listItem.remindersDone = reminderData;  
-          listItem.totalDone = totalDone;
-        } else {
-          listItem.reminders = [];
-          listItem.remindersDone = [];
-          listItem.totalCount = 0;
-          listItem.totalDone = 0;
-        }
+          listItem.reminders = reminderData || [];
+          listItem.totalCount = totalCount || 0;
+          listItem.remindersDone = reminderData.filter((reminder) => reminder.status === true) || [];
+          listItem.totalDone = totalDone || 0;
 
-        return listItem;
-      })
-    );
+          return listItem;
+        })
+      );
+      state.reminderState = listWithReminders.reduce((acc, listItem) => [...acc, ...listItem.reminders], []);
 
-    return listWithReminders;
-  } else {
-    return []; 
+      return listWithReminders;
+    } else {
+      return [];
+    }
+  } catch (error) {
+    console.error("Error fetching list:", error);
+    return [];
   }
 };
 
