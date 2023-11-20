@@ -6,30 +6,25 @@ import {
 } from "../service/reminder_service.js";
 import {
   getListNoteById,
-  calculateListNoteQuantity,
-  calculateListNoteCheck,
+ 
 } from "../service/list_service.js";
 import {
   delReminder,
   updateReminderData,
   updateReminderStatus,
-  fetchReminder,
+
 } from "../apiFetch/apiREminder.js";
-import {
-  updateListNoteQuantity,
-  updateListNoteChecks,
-} from "../apiFetch/apiList.js";
+
 import {
   updateListTotalCount,
   renderListOnUI,
   updateListCheckbox,
 } from "./list_controller.js";
-import { submitUpdateReminder, checkdisabled } from "./reminder_form.js";
+import { submitUpdateReminder } from "./reminder_form.js";
 import { getCurrentPageFromQueryParams, updateQueryParam } from "./common.js";
-import { state } from "../global/state.js";
-import { fetchList } from "../apiFetch/apiList.js";
 
-export const renderReminderonUI = async() => {
+
+export const renderReminderonUI = async () => {
   const listNoteId = getCurrentPageFromQueryParams();
   const listNote = getListNoteById(listNoteId);
   const listName = listNote ? listNote.name : "";
@@ -57,11 +52,11 @@ export const renderReminderonUI = async() => {
   checkStatus(reminderInputs, reminderState);
   initializeDeleteButtonsEvents();
   editReminderEvent();
-  updateQueryParam(listNoteId);
-  checkdisabled();
+  // updateQueryParam(listNoteId);
+
 };
 
- const renderReminders = (reminders, status) => {
+const renderReminders = (reminders, status) => {
   return reminders
     .map((reminder) => {
       return `
@@ -135,12 +130,9 @@ const checkStatus = (reminderInputs, reminderState) => {
       if (formCheckName) {
         formCheckName.classList.toggle("checked", reminderToUpdate.status);
       }
-      const updateChecks = calculateListNoteCheck(idnote);
-      const totalItemCount = calculateListNoteQuantity(idnote); 
-
-      updateListCheckbox(idnote, updateChecks, totalItemCount);
-      renderListOnUI("renderlist-home");
-      await fetchList();
+  
+      updateListCheckbox(idnote);
+      
     });
   });
 };
@@ -154,15 +146,15 @@ const initializeDeleteButtonsEvents = async () => {
       if (idReminder) {
         await delReminder(idReminder);
         removeReminder(idReminder);
-        const listNoteId = event.currentTarget ? event.currentTarget.getAttribute("del-id-note") : null;
-        // const idnote = listNoteId.getAttribute("data-listnote-id");
+        const listNoteId = event.currentTarget
+          ? event.currentTarget.getAttribute("del-id-note")
+          : null;
+
         renderReminderonUI();
-        const updatedQuantity = calculateListNoteQuantity(listNoteId);
-        updateListTotalCount(listNoteId, updatedQuantity);
+        updateListTotalCount(listNoteId);
+        updateListCheckbox(listNoteId);
         renderListOnUI("renderlist-home");
-        await fetchReminder();
-    }
-  
+      }
     });
   });
 };
@@ -231,4 +223,3 @@ const onBlurEvent = async () => {
     };
   }
 };
-

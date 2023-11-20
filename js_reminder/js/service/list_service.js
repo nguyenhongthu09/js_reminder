@@ -23,22 +23,6 @@ export const findListByIndex = (listid) => {
   return state.listState.findIndex((list) => list.id === listid);
 };
 
-export const calculateListNoteQuantity = (idlist) => {
-  const reminderState = getReminders();
-  const remindersForList = reminderState.filter(
-    (reminder) => reminder.idlist === idlist
-  );
-  console.log("calculateListNoteQuantity:", remindersForList.length);
-  return remindersForList.length;
-};
-
-export const calculateListNoteCheck = (listId) => {
-  const reminderState = getReminders();
-  const remindersForList = reminderState.filter(
-    (reminder) => reminder.idlist === listId && reminder.status
-  );
-  return remindersForList.length;
-};
 
 export const getIdUrlState = () => state.idUrl;
 

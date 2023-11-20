@@ -4,10 +4,10 @@ import {
   findReminderByIndex,
 } from "../service/reminder_service.js";
 import { state } from "../global/state.js";
-import { calculateListNoteQuantity } from "../service/list_service.js";
 
-export const fetchReminder = async (listId) => {
-  const response = await fetch(`${API_URL}/reminder?idlist=${listId}&_page=1&_limit=50`, {
+
+export const fetchReminder = async (listId, page , limit ) => {
+  const response = await fetch(`${API_URL}/reminder?idlist=${listId}&_page=${page}&_limit=${limit}`, {
     method: "GET",
   });
 
@@ -15,9 +15,15 @@ export const fetchReminder = async (listId) => {
     const reminderData = await response.json();
     state.reminderState = reminderData;
     const totalCount = response.headers.get('X-Total-Count');
+
+    const completedReminders = reminderData.filter((reminder) => reminder.status === true);
+
+    const totalDone = completedReminders.length;
+
     console.log(totalCount, "totalCount");
-    return { reminderData, totalCount  };
-   
+    console.log(totalDone, "totalDone thu");
+
+    return { reminderData, totalCount, totalDone };
   }
 };
 // export const fetchReminder = async (listId, status = "") => {
@@ -51,25 +57,9 @@ export const fetchReminder = async (listId) => {
 //   return { reminderDatas, totalDone };
 // };
 
-export const fetchReminderDone = async (listId) => {
-  const response = await fetch(
-    `${API_URL}/reminder?idlist=${listId}&status=true&_page=1&_limit=50`,
-    {
-      method: "GET",
-    }
-  );
-
-  if (response.status === 200) {
-    const reminderDatas = await response.json();
-    state.reminderState = reminderDatas;
-    const totalDone = response.headers.get("X-Total-Count");
-    console.log(totalDone, "totalDone");
-    return { reminderDatas, totalDone };
-  }
-};
 
 
-export const addNewReminder = async (reminder, idlist ,listItem) => {
+export const addNewReminder = async (reminder, idlist) => {
   const newreminder = {
     title: reminder.title,
     status: false,
@@ -87,10 +77,7 @@ export const addNewReminder = async (reminder, idlist ,listItem) => {
   if (response.status === 201) {
     const createdReminderData = await response.json();
     reminderData.push(createdReminderData);
-    const updatedQuantity = calculateListNoteQuantity(idlist);
-    listItem.totalCount = updatedQuantity;
-    listItem.reminders = reminderData;
-    return listItem;
+    
   }
 };
 
