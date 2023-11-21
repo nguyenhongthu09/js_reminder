@@ -5,13 +5,11 @@ import { reminderActionEvents } from "./js/UI_controller/reminder_form.js";
 import { loading } from "./js/UI_controller/common.js";
 
 const main = async () => {
-  loading([['loader__page']], true);
+  loading([["loader__page"]], true);
   await initState();
-
-  loading([['loader__page']], false);
+  loading([["loader__page"]], false);
   renderListOnUI("renderlist-home");
   reminderActionEvents();
   listActionEvents();
-  
 };
 main();

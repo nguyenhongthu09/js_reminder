@@ -5,8 +5,8 @@ import { renderColor } from "./showColor.js";
 import { getColorState } from "../service/color_service.js";
 import { hexToRgb, rgbToHex, updateQueryParam } from "./common.js";
 import { getIdUrlState } from "../service/list_service.js";
-import { fetchReminder } from "../apiFetch/apiREminder.js";
-import { fetchList } from "../apiFetch/apiList.js";
+import { clearListIdQueryParam } from "./common.js";
+
 export const listActionEvents = () => {
   const homeList = document.querySelector(".menu-list-notes");
   const formAddList = document.getElementById("form_add_list");
@@ -78,29 +78,21 @@ export const listActionEvents = () => {
   });
 
   backList.addEventListener("click", () => {
-    const newURL =
-      window.location.protocol +
-      "//" +
-      window.location.host +
-      window.location.pathname;
-    window.history.replaceState({ path: newURL }, "", newURL);
+    clearListIdQueryParam();
     toggleDisplayDetailList(false);
   });
-  const totalCountElement = document.getElementById('total-count');
-  menuListNote.addEventListener("click", async(event) => {
+
+  menuListNote.addEventListener("click", async (event) => {
     const btnDone = document.querySelector("#btnsubmit-note");
     const listItem = event.target.closest(".list-note");
     btnDone.disabled = true;
     if (listItem) {
       const listNoteId = listItem.getAttribute("data-listId");
-      // console.log(listNoteId);
-        await fetchReminder(listNoteId);
       let idUrlState = getIdUrlState();
       idUrlState = listNoteId;
       updateQueryParam(listNoteId);
       renderReminderonUI(listNoteId);
       toggleDisplayDetailList(true);
-      sessionStorage.setItem("lastVisitedListId", listNoteId);
     }
   });
 };
@@ -128,11 +120,7 @@ const submitFormEditList = async () => {
     : rgbToHex(editedColor);
 
   if (updatedData.id) {
-    await updateListData(
-      updatedData.id,
-      editedName,
-      editColorHex,
-    );
+    await updateListData(updatedData.id, editedName, editColorHex);
     const listElement = updatedData.element;
     const updatedListData = {
       name: editedName,
@@ -160,6 +148,21 @@ const submitFormEditList = async () => {
   }
 };
 
+const handleDOMContentLoaded = () => {
+  const isListNoteIdValid = (listNoteId) => {
+    return true;
+  };
+  const displayDetailList = localStorage.getItem("displayDetailList");
+  toggleDisplayDetailList(displayDetailList === "block");
+
+  const listNoteIdFromUrl = getIdUrlState();
+  if (!isListNoteIdValid(listNoteIdFromUrl)) {
+    toggleDisplayDetailList(false);
+  } else {
+    renderReminderonUI(listNoteIdFromUrl);
+  }
+};
+document.addEventListener("DOMContentLoaded", handleDOMContentLoaded);
 export const toggleDisplayEditList = (status) => {
   const formEditList = document.getElementById("form_edit_list");
   const homeList = document.querySelector(".menu-list-notes");
@@ -173,17 +176,16 @@ export const toggleDisplayEditList = (status) => {
   }
 };
 
-const toggleDisplayDetailList = (status) => {
+export const toggleDisplayDetailList = (status) => {
   const homeList = document.querySelector(".menu-list-notes");
   const detailList = document.querySelector(".detail-list-note");
   if (status) {
     homeList.style.display = "none";
     detailList.style.display = "block";
-    // localStorage.setItem("displayDetailList", "block");
+    localStorage.setItem("displayDetailList", "block");
   } else {
     homeList.style.display = "block";
     detailList.style.display = "none";
-    // localStorage.setItem("displayDetailList", "none");
+    localStorage.setItem("displayDetailList", "none");
   }
 };
-

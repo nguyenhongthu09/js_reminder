@@ -1,5 +1,4 @@
 import { state } from "../global/state.js";
-import { getReminders } from "./reminder_service.js";
 
 export const getListState = () => state.listState;
 
@@ -23,12 +22,12 @@ export const findListByIndex = (listid) => {
   return state.listState.findIndex((list) => list.id === listid);
 };
 
-
 export const getIdUrlState = () => state.idUrl;
 
 export const generateRandomStringId = (length = 8) => {
-  const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  let result = '';
+  const characters =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let result = "";
   const charactersLength = characters.length;
 
   for (let i = 0; i < length; i++) {

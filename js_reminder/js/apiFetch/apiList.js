@@ -19,17 +19,23 @@ export const fetchList = async () => {
 
       const listWithReminders = await Promise.all(
         listData.map(async (listItem) => {
-          const { reminderData, totalCount, totalDone } = await fetchReminder(listItem.id);
+          const { reminderData, totalCount, totalDone } = await fetchReminder(
+            listItem.id
+          );
 
           listItem.reminders = reminderData || [];
           listItem.totalCount = totalCount || 0;
-          listItem.remindersDone = reminderData.filter((reminder) => reminder.status === true) || [];
+          listItem.remindersDone =
+            reminderData.filter((reminder) => reminder.status === true) || [];
           listItem.totalDone = totalDone || 0;
 
           return listItem;
         })
       );
-      state.reminderState = listWithReminders.reduce((acc, listItem) => [...acc, ...listItem.reminders], []);
+      state.reminderState = listWithReminders.reduce(
+        (acc, listItem) => [...acc, ...listItem.reminders],
+        []
+      );
 
       return listWithReminders;
     } else {
@@ -40,7 +46,6 @@ export const fetchList = async () => {
     return [];
   }
 };
-
 
 export const addNewList = async (list) => {
   const newlist = {
@@ -100,7 +105,6 @@ export const updateListData = async (id, newName, newColor) => {
     }
   }
 };
-
 
 export const getListTotals = async (listId) => {
   const listWithReminders = await fetchList();

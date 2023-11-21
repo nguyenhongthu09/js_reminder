@@ -5,18 +5,22 @@ import {
 } from "../service/reminder_service.js";
 import { state } from "../global/state.js";
 
-
-export const fetchReminder = async (listId, page , limit ) => {
-  const response = await fetch(`${API_URL}/reminder?idlist=${listId}&_page=${page}&_limit=${limit}`, {
-    method: "GET",
-  });
+export const fetchReminder = async (listId, page, limit) => {
+  const response = await fetch(
+    `${API_URL}/reminder?idlist=${listId}&_page=${page}&_limit=${limit}`,
+    {
+      method: "GET",
+    }
+  );
 
   if (response.status === 200) {
     const reminderData = await response.json();
     state.reminderState = reminderData;
-    const totalCount = response.headers.get('X-Total-Count');
+    const totalCount = response.headers.get("X-Total-Count");
 
-    const completedReminders = reminderData.filter((reminder) => reminder.status === true);
+    const completedReminders = reminderData.filter(
+      (reminder) => reminder.status === true
+    );
 
     const totalDone = completedReminders.length;
 
@@ -42,7 +46,6 @@ export const fetchReminder = async (listId, page , limit ) => {
 //   }
 // };
 
-
 // export const fetchReminderTotal = async (listId) => {
 //   const { reminderData, total } = await fetchReminder(listId);
 //   state.reminderState = reminderData;
@@ -56,8 +59,6 @@ export const fetchReminder = async (listId, page , limit ) => {
 //   console.log(totalDone, "totalDone");
 //   return { reminderDatas, totalDone };
 // };
-
-
 
 export const addNewReminder = async (reminder, idlist) => {
   const newreminder = {
@@ -77,12 +78,8 @@ export const addNewReminder = async (reminder, idlist) => {
   if (response.status === 201) {
     const createdReminderData = await response.json();
     reminderData.push(createdReminderData);
-    
   }
 };
-
-
-
 
 export const updateReminderStatus = async (reminderId, newStatus) => {
   const getReminder = getReminders();

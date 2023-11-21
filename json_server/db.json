@@ -4,11 +4,6 @@
       "name": "ddđ",
       "isColor": "#00FFFF",
       "id": "P597K0iR"
-    },
-    {
-      "name": "fffff",
-      "isColor": "#00FF00",
-      "id": "DRtbRHIU"
     }
   ],
   "reminder": [
@@ -19,28 +14,16 @@
       "id": "oI_h5fG"
     },
     {
-      "title": "1",
-      "status": false,
-      "idlist": "P597K0iR",
-      "id": "NJXnZiI"
-    },
-    {
-      "title": "1",
-      "status": false,
-      "idlist": "DRtbRHIU",
-      "id": "JUtQ_8Q"
-    },
-    {
       "title": "2",
       "status": false,
-      "idlist": "DRtbRHIU",
-      "id": "YRIdmv9"
+      "idlist": "P597K0iR",
+      "id": "7H_A7Ma"
     },
     {
-      "title": "4",
+      "title": "3",
       "status": false,
-      "idlist": "DRtbRHIU",
-      "id": "DmvNSQF"
+      "idlist": "P597K0iR",
+      "id": "adLOES_"
     }
   ],
   "color": [

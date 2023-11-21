@@ -4,26 +4,19 @@ import {
   findReminderById,
   getReminders,
 } from "../service/reminder_service.js";
-import {
-  getListNoteById,
- 
-} from "../service/list_service.js";
+import { getListNoteById } from "../service/list_service.js";
 import {
   delReminder,
   updateReminderData,
   updateReminderStatus,
-
 } from "../apiFetch/apiREminder.js";
-
 import {
   updateListTotalCount,
-  renderListOnUI,
   updateListCheckbox,
 } from "./list_controller.js";
 import { submitUpdateReminder } from "./reminder_form.js";
-import { getCurrentPageFromQueryParams, updateQueryParam } from "./common.js";
-import { state } from "../global/state.js";
-import { fetchList } from "../apiFetch/apiList.js";
+import { getCurrentPageFromQueryParams } from "./common.js";
+
 export const renderReminderonUI = async () => {
   const listNoteId = getCurrentPageFromQueryParams();
   const listNote = getListNoteById(listNoteId);
@@ -50,10 +43,8 @@ export const renderReminderonUI = async () => {
 
   const reminderInputs = document.querySelectorAll(".form-check-input");
   checkStatus(reminderInputs, reminderState);
-  initializeDeleteButtonsEvents();
+  deleteReminderEvent();
   editReminderEvent();
-  // updateQueryParam(listNoteId);
-
 };
 
 const renderReminders = (reminders, status) => {
@@ -130,14 +121,13 @@ const checkStatus = (reminderInputs, reminderState) => {
       if (formCheckName) {
         formCheckName.classList.toggle("checked", reminderToUpdate.status);
       }
-  
+
       updateListCheckbox(idnote);
-      
     });
   });
 };
 
-const initializeDeleteButtonsEvents = async () => {
+const deleteReminderEvent = async () => {
   const deleteRenminder = document.querySelectorAll(".delete-icon-re");
   deleteRenminder.forEach((delReminders) => {
     delReminders.addEventListener("click", async (event) => {
@@ -145,18 +135,14 @@ const initializeDeleteButtonsEvents = async () => {
 
       if (idReminder) {
         await delReminder(idReminder);
-      await  removeReminder(idReminder);
-      await fetchList();
+        removeReminder(idReminder);
         const listNoteId = event.currentTarget
           ? event.currentTarget.getAttribute("del-id-note")
           : null;
 
-     await   renderReminderonUI();
-     console.log("dnh sahc sau khi xoa", state.listState);
-     console.log("danh sacxh sau khi xoa", state.reminderState);
-    await    updateListTotalCount(listNoteId);
-    await    updateListCheckbox(listNoteId);
-        renderListOnUI("renderlist-home");
+        renderReminderonUI();
+        updateListTotalCount(listNoteId);
+        updateListCheckbox(listNoteId);
       }
     });
   });
