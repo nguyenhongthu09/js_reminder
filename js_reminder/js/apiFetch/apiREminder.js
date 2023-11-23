@@ -5,11 +5,9 @@ import {
 } from "../service/reminder_service.js";
 import { state } from "../global/state.js";
 
-export const fetchReminder = async (listId, page) => {
-  if (!Number.isInteger(page) || page < 1) {
-    page = 1;
-  }
+export const fetchReminder = async (listId) => {
   const url = new URL(`${API_URL}/reminder?idlist=${listId}`);
+  const page = url.searchParams.get("_page") || 1;
   url.searchParams.append("_page", page);
 
   const response = await fetch(url, {
