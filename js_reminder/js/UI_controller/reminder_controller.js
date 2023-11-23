@@ -56,7 +56,7 @@ const renderReminders = (reminders, status) => {
               <input class="form-check-input " type="checkbox" id-input=${
                 reminder.id
               } ${reminder?.status ? "checked" : ""}>
-              <input type="text" class="form-check-name doimau ${
+              <input  type="text" class="form-check-name doimau ${
                 status ? "checked" : ""
               }" data-reminder-id="${reminder.id}" value="${
         reminder.title
@@ -150,12 +150,14 @@ const editReminderEvent = () => {
   editInputNameList.forEach((editInput) => {
     editInput.addEventListener("click", (event) => {
       const idInput = event.currentTarget.getAttribute("data-reminder-id");
+
       handleEditReminder(idInput, event.currentTarget);
     });
   });
 };
 
 const handleEditReminder = (id, element) => {
+  const btnSubmitNote = document.getElementById("btnsubmit-note");
   const editInputName = element;
   const reminderToEdit = findReminderById(id);
   if (reminderToEdit) {
@@ -167,13 +169,17 @@ const handleEditReminder = (id, element) => {
       idlist: reminderToEdit.idlist,
       element: element,
     };
-
+    editInputName.addEventListener("input", () => {
+      btnSubmitNote.disabled = editInputName.value.trim() === "";
+    });
     editInputName.addEventListener("blur", onBlurEvent);
     submitUpdateReminder(onBlurEvent);
   }
 };
 
 const onBlurEvent = async () => {
+  const btnSubmitNote = document.getElementById("btnsubmit-note");
+  btnSubmitNote.disabled = true;
   const editName = window.newData.element.value;
   const updatedData = window.newData;
 

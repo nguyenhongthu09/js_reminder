@@ -184,6 +184,8 @@ const handleDOMContentLoaded = () => {
   if (!isListNoteIdValid(listNoteIdFromUrl)) {
     toggleDisplayDetailList(false);
   } else {
+    const btnSubmitNote = document.getElementById("btnsubmit-note");
+    btnSubmitNote.disabled = true;
     renderReminderonUI(listNoteIdFromUrl);
   }
 };

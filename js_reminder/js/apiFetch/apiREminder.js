@@ -7,9 +7,12 @@ import { state } from "../global/state.js";
 
 export const fetchReminder = async (listId) => {
   const url = new URL(`${API_URL}/reminder?idlist=${listId}`);
-  const page = url.searchParams.get("_page") || 1;
-  url.searchParams.append("_page", page);
+  let page = parseInt(url.searchParams.get("_page"));
+  if (!Number.isInteger(page) || page <= 0) {
+    page = 1;
+  }
 
+  url.searchParams.append("_page", page);
   const response = await fetch(url, {
     method: "GET",
   });
