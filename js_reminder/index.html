@@ -20,14 +20,14 @@
         </div>
         <div class="button-home">
             <button type="button" class="btn btn-primary add-reminder btn__add--reminder">New Reminder</button>
-            <button type=" button" class="btn btn-primary add-list">Add List</button>
+            <button type=" button" class="btn btn-primary add-list" id="add-list-new">Add List</button>
 
         </div>
     </div>
     <form id="form_add_list" action="" class="form-add-list">
         <div class="form__add__list">
             <button type="button" id="btn-cancel" class="btn btn-primary button-cancel">Cancel</button>
-            <button type="button" id="btnSubmit"   class="btn btn-primary button-done">Done</button>
+            <button type="button" id="btnSubmit"   class="btn btn-primary button-done" disabled >Done</button>
         </div>
         <h1>New List</h1>
         <div class="form_add_list_name">
@@ -66,7 +66,7 @@
     <form id="form_edit_list" action="" class="form-edit-list">
         <div class="form__edit__list">
             <button type="button" id="btn-xoa" class="btn btn-primary button-cancel">Cancel</button>
-            <button type="button" id="btnsubedit"  class="btn btn-primary button-done">Edit</button>
+            <button type="button" id="btnsubedit"  class="btn btn-primary button-done" disabled="true">Edit</button>
         </div>
         <h1>Edit List</h1>
 
@@ -120,7 +120,7 @@
         </div>
         <div class="button-detail-list">
             <button type="button" class="btn btn-primary btn-back-list">Lists</button>
-            <button type="button" class="btn btn-primary add-reminder"    id="btnsubmit-note">Done</button>
+            <button type="button" class="btn btn-primary add-reminder"    id="btnsubmit-note">Add</button>
         </div>
         <button class="btn btn-primary add__reminders" id="btnNewNote">New Reminder</button>
     </div>

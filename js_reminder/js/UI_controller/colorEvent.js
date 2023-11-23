@@ -1,7 +1,9 @@
 export const colorEvent = (fillIconSelector, colorListSelector) => {
+  const btnSubEdit = document.getElementById("btnsubedit");
   const colorListIcon = document.querySelector(colorListSelector);
 
   colorListIcon.addEventListener("click", (event) => {
+    btnSubEdit.disabled = false;
     if (event.target.classList.contains("color-swatch")) {
       const backgroundColor = getComputedStyle(event.target).backgroundColor;
 

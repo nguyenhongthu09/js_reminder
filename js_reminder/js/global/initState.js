@@ -17,14 +17,14 @@ const getPageIdURL = () => {
 export const initState = async () => {
   const listsData = await fetchList();
   const colorData = await fetchColor();
-  state.listState = listsData;
+  state.listState.items = listsData;
   state.color = colorData;
 
   const listIdFromURL = getPageIdURL();
   const storedListId = localStorage.getItem("idUrl");
 
   if (listIdFromURL) {
-    const isValidListId = state.listState.some(
+    const isValidListId = state.listState.items.some(
       (list) => list.id === listIdFromURL
     );
     if (isValidListId) {

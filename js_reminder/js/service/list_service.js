@@ -1,6 +1,6 @@
 import { state } from "../global/state.js";
 
-export const getListState = () => state.listState;
+export const getListState = () => state.listState.items;
 
 export const removeList = (id) => {
   const listState = getListState();
@@ -15,11 +15,11 @@ export const getListNoteById = (listNoteId) => {
 };
 
 export const isListIdValid = (listid) => {
-  return state.listState.some((list) => list.id === listid);
+  return state.listState.items.some((list) => list.id === listid);
 };
 
 export const findListByIndex = (listid) => {
-  return state.listState.findIndex((list) => list.id === listid);
+  return state.listState.items.findIndex((list) => list.id === listid);
 };
 
 export const getIdUrlState = () => state.idUrl;
@@ -35,4 +35,17 @@ export const generateRandomStringId = (length = 8) => {
   }
 
   return result;
+};
+
+export const getListTotals = (listId) => {
+  const selectedList = state.listState.items.find(
+    (listItem) => listItem.id === listId
+  );
+
+  if (selectedList) {
+    const { totalCount, totalDone } = selectedList;
+    return { totalCount, totalDone };
+  } else {
+    return { totalCount: 0, totalDone: 0 };
+  }
 };

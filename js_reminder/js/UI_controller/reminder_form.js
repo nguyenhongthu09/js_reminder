@@ -17,17 +17,32 @@ export const reminderActionEvents = () => {
   const addSubmitFormNote = document.getElementById("submitform-addnote");
   const addName = document.getElementById("add-note-name");
   const thongbao = document.querySelector(".thong-bao");
-
   let isBlurEvent = false;
 
+  const disabledAddFormReminder = (status) => {
+    if (status) {
+      addSubmitFormNote.disabled = false;
+      cancel.disabled = false;
+    } else {
+      addSubmitFormNote.disabled = true;
+      cancel.disabled = false;
+    }
+  };
+
+  addName.addEventListener("input", () => {
+    addSubmitFormNote.disabled = addName.value.trim() === "";
+  });
+
   addName.addEventListener("focus", () => {
-    addSubmitFormNote.disabled = false;
-    cancel.disabled = false;
+    disabledAddFormReminder(true);
   });
 
   addName.addEventListener("blur", () => {
-    addSubmitFormNote.disabled = true;
-    cancel.disabled = false;
+    if (addName.value.trim() !== "") {
+      disabledAddFormReminder(true);
+    } else {
+      disabledAddFormReminder(false);
+    }
   });
 
   const toggleDisplayAddReminder = (status) => {
@@ -48,13 +63,22 @@ export const reminderActionEvents = () => {
     }
   };
 
+  const disabledAddReminder = (status) => {
+    if (status) {
+      btnSubmitNote.disabled = false;
+      btnbaclList.disabled = true;
+    } else {
+      btnSubmitNote.disabled = true;
+      btnbaclList.disabled = false;
+    }
+  };
+
   btnAddNewReminder.addEventListener("click", () => {
     inputNameReminder.value = "";
     toggleDisplayAddReminder(true);
     inputNameReminder.focus();
     isBlurEvent = true;
-    btnSubmitNote.disabled = false;
-    btnbaclList.disabled = true;
+    disabledAddReminder(true);
   });
 
   btnbaclList.addEventListener("click", () => {
@@ -67,8 +91,7 @@ export const reminderActionEvents = () => {
     isBlurEvent = false;
     await handleAddReminderLogic();
     toggleDisplayAddReminder(false);
-    btnSubmitNote.disabled = true;
-    btnbaclList.disabled = false;
+    disabledAddReminder(false);
   });
 
   openFormAdd.addEventListener("click", () => {
@@ -87,8 +110,7 @@ export const reminderActionEvents = () => {
       await handleAddReminderLogic();
     }
     toggleDisplayAddReminder(false);
-    btnSubmitNote.disabled = true;
-    btnbaclList.disabled = false;
+    disabledAddReminder(false);
   });
 
   const handleAddReminderLogic = async () => {
@@ -125,8 +147,7 @@ export const reminderActionEvents = () => {
       renderListOnUI("renderlist-home");
     }
 
-    cancel.disabled = false;
-    addSubmitFormNote.disabled = false;
+    disabledAddFormReminder(true);
     toggleDisplayFormAddReminder(false);
     thongbao.style.display = "none";
   });
@@ -136,16 +157,23 @@ document.body.addEventListener("click", (event) => {
   var target = event.target.closest(".list-note");
   const btnAddReminder = document.getElementById("submitform-addnote");
   const btnCancel = document.querySelector(".btn-back-note");
+  const addName = document.getElementById("add-note-name");
+  const nameListChooseElement = document.querySelector(".name-list-choose");
   if (target) {
     var nameListElement = target.querySelector(".name-list");
     if (nameListElement) {
       var name = nameListElement.textContent;
       var listId = target.dataset.listid;
-      var nameListChooseElement = document.querySelector(".name-list-choose");
       if (nameListChooseElement) {
-        nameListChooseElement.textContent = name;
-        nameListChooseElement.dataset.selectedListId = listId;
-        btnAddReminder.disabled = false;
+        const isNameListChooseClicked =
+          event.target.matches(".name-list-choose");
+        if (isNameListChooseClicked) {
+          btnAddReminder.disabled = true;
+        } else {
+          nameListChooseElement.textContent = name;
+          nameListChooseElement.dataset.selectedListId = listId;
+          btnAddReminder.disabled = addName.value.trim() === "";
+        }
         btnCancel.disabled = false;
       }
     }
@@ -168,4 +196,3 @@ export const submitUpdateReminder = (handler) => {
   btnSubmitNote.removeEventListener("click", handler);
   btnSubmitNote.addEventListener("click", handler);
 };
-

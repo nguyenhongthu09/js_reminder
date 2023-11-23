@@ -10,10 +10,7 @@ import {
   updateReminderData,
   updateReminderStatus,
 } from "../apiFetch/apiREminder.js";
-import {
-  updateListTotalCount,
-  updateListCheckbox,
-} from "./list_controller.js";
+import { updateListTotalCount, updateListCheckbox } from "./list_controller.js";
 import { submitUpdateReminder } from "./reminder_form.js";
 import { getCurrentPageFromQueryParams } from "./common.js";
 

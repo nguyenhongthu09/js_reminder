@@ -1,8 +1,9 @@
 import { API_URL } from "../contans/apiUrl.js";
-import { getListState, findListByIndex } from "../service/list_service.js";
-
-import { generateRandomStringId } from "../service/list_service.js";
-
+import {
+  getListState,
+  findListByIndex,
+  generateRandomStringId,
+} from "../service/list_service.js";
 import { fetchReminder } from "./apiREminder.js";
 import { getReminderByListId } from "../service/reminder_service.js";
 import { state } from "../global/state.js";
@@ -15,8 +16,6 @@ export const fetchList = async () => {
 
     if (response.status === 200) {
       const listData = await response.json();
-      console.log(listData, "listData");
-
       const listWithReminders = await Promise.all(
         listData.map(async (listItem) => {
           const { reminderData, totalCount, totalDone } = await fetchReminder(
@@ -32,18 +31,16 @@ export const fetchList = async () => {
           return listItem;
         })
       );
+      state.listState.items = listWithReminders;
       state.reminderState = listWithReminders.reduce(
         (acc, listItem) => [...acc, ...listItem.reminders],
         []
       );
 
-      return listWithReminders;
-    } else {
-      return [];
+      return listData;
     }
   } catch (error) {
     console.error("Error fetching list:", error);
-    return [];
   }
 };
 
@@ -53,7 +50,6 @@ export const addNewList = async (list) => {
     isColor: list.isColor,
     id: generateRandomStringId(),
   };
-  const listStates = getListState();
   const response = await fetch(`${API_URL}/listNote`, {
     method: "POST",
     headers: {
@@ -63,9 +59,13 @@ export const addNewList = async (list) => {
   });
 
   if (response.status === 201) {
-    const createdListData = await response.json();
-    newlist.id = createdListData.id.toString();
-    listStates.push(newlist);
+    const createdListNote = await response.json();
+    createdListNote.totalCount = 0;
+    createdListNote.totalDone = 0;
+    createdListNote.reminders = [];
+    createdListNote.remindersDone = [];
+
+    state.listState.items.push(createdListNote);
   }
 };
 
@@ -76,11 +76,12 @@ export const delList = async (idList) => {
     method: "DELETE",
   });
 
-  for (const reminder of reminderToDele) {
-    await fetch(`${API_URL}/reminder/${reminder.id}`, {
-      method: "DELETE",
-    });
-  }
+  state.reminderState = state.reminderState.filter(
+    (reminder) => !reminderToDele.find((r) => r.id === reminder.id)
+  );
+  state.listState.items = state.listState.items.filter(
+    (listItem) => listItem.id !== idList
+  );
 
   return idList;
 };
@@ -103,20 +104,5 @@ export const updateListData = async (id, newName, newColor) => {
       listState[appIndex].name = newName;
       listState[appIndex].isColor = newColor;
     }
-  }
-};
-
-export const getListTotals = async (listId) => {
-  const listWithReminders = await fetchList();
-
-  const selectedList = listWithReminders.find(
-    (listItem) => listItem.id === listId
-  );
-
-  if (selectedList) {
-    const { totalCount, totalDone } = selectedList;
-    return { totalCount, totalDone };
-  } else {
-    return { totalCount: 0, totalDone: 0 };
   }
 };

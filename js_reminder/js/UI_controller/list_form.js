@@ -3,9 +3,14 @@ import { renderListOnUI } from "./list_controller.js";
 import { renderReminderonUI } from "./reminder_controller.js";
 import { renderColor } from "./showColor.js";
 import { getColorState } from "../service/color_service.js";
-import { hexToRgb, rgbToHex, updateQueryParam } from "./common.js";
+import {
+  hexToRgb,
+  rgbToHex,
+  updateQueryParam,
+  clearListIdQueryParam,
+} from "./common.js";
 import { getIdUrlState } from "../service/list_service.js";
-import { clearListIdQueryParam } from "./common.js";
+import { getReminder } from "../apiFetch/apiREminder.js";
 
 export const listActionEvents = () => {
   const homeList = document.querySelector(".menu-list-notes");
@@ -18,6 +23,7 @@ export const listActionEvents = () => {
   const nameError = document.getElementById("name_error");
   const menuListNote = document.querySelector(".menu-list-note");
   const fillIconColor = document.querySelector(".fill-icon-color");
+  const nameAddList = document.getElementById("name_icon");
   const colorData = getColorState();
 
   const toggleDisplayList = (status) => {
@@ -31,6 +37,7 @@ export const listActionEvents = () => {
   };
 
   btnAddList.addEventListener("click", () => {
+    btnDoneList.disabled = true;
     toggleDisplayList(true);
     renderColor("color-list");
   });
@@ -42,12 +49,30 @@ export const listActionEvents = () => {
   btnCancelList.addEventListener("click", () => {
     toggleDisplayList(false);
     nameError.style.display = "none";
+    nameAddList.value = "";
+  });
+
+  const disabledFormAddList = (status) => {
+    if (status) {
+      btnDoneList.disabled = false;
+      btnCancelList.disabled = false;
+    } else {
+      btnDoneList.disabled = true;
+      btnCancelList.disabled = true;
+    }
+  };
+
+  nameAddList.addEventListener("focus", () => {
+    disabledFormAddList(true);
+  });
+
+  nameAddList.addEventListener("input", () => {
+    btnDoneList.disabled = nameAddList.value.trim() === "";
   });
 
   btnDoneList.addEventListener("click", async () => {
-    btnDoneList.disabled = true;
-    btnCancelList.disabled = true;
-    const nameAddList = document.getElementById("name_icon");
+    disabledFormAddList(false);
+
     const name = nameAddList.value;
 
     if (name === "") {
@@ -69,8 +94,7 @@ export const listActionEvents = () => {
       renderListOnUI("renderlist-home");
 
       toggleDisplayList(false);
-      btnDoneList.disabled = false;
-      btnCancelList.disabled = false;
+      disabledFormAddList(true);
       nameAddList.value = "";
       fillIconColor.style.backgroundColor = "";
       nameAddList.form.reset();
@@ -91,6 +115,7 @@ export const listActionEvents = () => {
       let idUrlState = getIdUrlState();
       idUrlState = listNoteId;
       updateQueryParam(listNoteId);
+      await getReminder(listNoteId);
       renderReminderonUI(listNoteId);
       toggleDisplayDetailList(true);
     }
