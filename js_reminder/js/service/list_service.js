@@ -1,8 +1,15 @@
 import { state } from "../global/state.js";
-
+import { delList } from "../apiFetch/apiList.js";
+import { addNewList } from "../apiFetch/apiList.js";
+import { hexToRgb } from "../UI_controller/common.js";
+import { getColorState } from "./color_service.js";
+import { renderListOnUI } from "../UI_controller/list_controller.js";
+import { fetchList } from "../apiFetch/apiList.js";
+import { fetchColor } from "../apiFetch/apiColor.js";
 export const getListState = () => state.listState.items;
 
-export const removeList = (id) => {
+export const removeList = async (id) => {
+  await delList(id);
   const listState = getListState();
   const index = listState.findIndex((list) => list.id === id);
   if (index !== -1) {
@@ -50,6 +57,29 @@ export const getListTotals = (listId) => {
   }
 };
 
+export const renderHomeList = async () => {
+  const listsData = await fetchList();
+  const colorData = await fetchColor();
+  state.listState.items = listsData;
+  state.color = colorData;
+  renderListOnUI("renderlist-home");
+};
+
 export function setListState(newItems) {
   state.listState.items = newItems;
 }
+
+export const addNewListToService = async (name, backgroundColor) => {
+  const colorData = getColorState();
+  const listColor = colorData.find(
+    (color) => hexToRgb(color.color) === backgroundColor
+  );
+  const isColor = listColor ? listColor.color : null;
+
+  const newList = {
+    name: name,
+    isColor: isColor,
+  };
+
+  await addNewList(newList);
+};

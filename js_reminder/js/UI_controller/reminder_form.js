@@ -1,13 +1,9 @@
-import { addNewReminder } from "../apiFetch/apiREminder.js";
 import { renderReminderonUI } from "./reminder_controller.js";
-import { renderListOnUI, updateListTotalCount } from "./list_controller.js";
+import { renderListOnUI } from "./list_controller.js";
 import { getListState } from "../service/list_service.js";
 import { getCurrentPageFromQueryParams } from "./common.js";
-import { fetchColor } from "../apiFetch/apiColor.js";
-import { fetchList } from "../apiFetch/apiList.js";
-import { setListState } from "../service/list_service.js";
-import { setColorState } from "../service/color_service.js";
-
+import { addReminderService } from "../service/reminder_service.js";
+import { renderHomeList } from "../service/list_service.js";
 export const reminderActionEvents = () => {
   const newReminderForm = document.querySelector(".new-reminder");
   const btnAddNewReminder = document.getElementById("btnNewNote");
@@ -85,15 +81,11 @@ export const reminderActionEvents = () => {
     disabledAddReminder(true);
   });
 
-  btnbaclList.addEventListener("click", async() => {
+  btnbaclList.addEventListener("click", async () => {
     toggleDisplayAddReminder(false);
     thongbao.style.display = "none";
     inputNameReminder.value = "";
-    const listsData = await fetchList(); 
-    const colorData = await fetchColor(); 
-    setListState(listsData); 
-    setColorState(colorData); 
-    renderListOnUI("renderlist-home");
+    await renderHomeList();
   });
 
   btnSubmitNote.addEventListener("click", async () => {
@@ -127,15 +119,8 @@ export const reminderActionEvents = () => {
       const inputname = inputNameReminder.value;
       const listNoteId = getCurrentPageFromQueryParams();
       if (inputname && listNoteId) {
-        const newReminder = {
-          title: inputname,
-          idlist: listNoteId,
-        };
-
-        await addNewReminder(newReminder, listNoteId);
-        updateListTotalCount(listNoteId);
+        await addReminderService(inputname, listNoteId);
         renderReminderonUI(listNoteId);
-
       }
     }
   };
@@ -147,13 +132,7 @@ export const reminderActionEvents = () => {
     const selectedListId =
       document.querySelector(".name-list-choose").dataset.selectedListId;
     if (inputname && selectedListId) {
-      const newReminder = {
-        title: inputname,
-        idlist: selectedListId,
-      };
-
-      await addNewReminder(newReminder, selectedListId);
-      updateListTotalCount(selectedListId);
+      await addReminderService(inputname, selectedListId);
       renderListOnUI("renderlist-home");
     }
 

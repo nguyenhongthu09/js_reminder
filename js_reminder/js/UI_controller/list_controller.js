@@ -2,9 +2,8 @@ import {
   removeList,
   getListNoteById,
   getListTotals,
-  getListState
+  getListState,
 } from "../service/list_service.js";
-import { delList } from "../apiFetch/apiList.js";
 import { renderColor } from "./showColor.js";
 import { hexToRgb } from "./common.js";
 import { updateList, toggleDisplayEditList } from "./list_form.js";
@@ -17,12 +16,15 @@ export const renderListOnUI = async (targetElementId) => {
 
   cart.innerHTML = `
     <h1 class="text-center">My list</h1>
-    ${listDatas.map((list) => {
-      const listColor = findColor(colorData, list.isColor);
-      const backgroundColor = listColor ? listColor.color : "rgb(192,192,192)";
-      const { totalCount, totalDone } = getListTotals(list.id);
+    ${listDatas
+      .map((list) => {
+        const listColor = findColor(colorData, list.isColor);
+        const backgroundColor = listColor
+          ? listColor.color
+          : "rgb(192,192,192)";
+        const { totalCount, totalDone } = getListTotals(list.id);
 
-      return `
+        return `
         <div class="listnote" id=${list.id}>
           <div class="list-note" data-listId=${list.id}>
             <div class="item-list-none-left">
@@ -87,7 +89,8 @@ export const renderListOnUI = async (targetElementId) => {
 </div>
          
         </div>`;
-    }).join('')}
+      })
+      .join("")}
   `;
 
   deleteListNoteEvent();
@@ -120,8 +123,7 @@ const deleteListNoteEvent = () => {
     delLists.addEventListener("click", async (event) => {
       const id = event.currentTarget.getAttribute("del-id");
       if (id) {
-        await delList(id);
-        removeList(id);
+        await removeList(id);
         renderListOnUI("renderlist-home");
       }
     });

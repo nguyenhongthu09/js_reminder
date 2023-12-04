@@ -1,6 +1,7 @@
 import { renderListOnUI } from "./list_controller.js";
-import { fetchColor } from "../apiFetch/apiColor.js";
-import { fetchList } from "../apiFetch/apiList.js";
+import { renderReminderonUI } from "./reminder_controller.js";
+import { toggleDisplayDetailList } from "./list_form.js";
+
 export const hexToRgb = (hex) => {
   hex = hex.replace(/^#/, "");
   if (!/^(?:[0-9a-fA-F]{3}){1,2}$/.test(hex)) {
@@ -36,6 +37,11 @@ export const updateQueryParam = (listId) => {
   url.searchParams.set("listId", listId);
   url.hash = "";
   window.history.replaceState({}, "", url);
+};
+
+export const renderUiReminder = async (listId) => {
+  await renderReminderonUI(listId);
+  toggleDisplayDetailList(true);
 };
 
 export const getCurrentPageFromQueryParams = () => {

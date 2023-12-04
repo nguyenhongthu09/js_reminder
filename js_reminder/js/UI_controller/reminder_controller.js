@@ -6,14 +6,12 @@ import {
 } from "../service/reminder_service.js";
 import { getListNoteById } from "../service/list_service.js";
 import {
-  delReminder,
   updateReminderData,
   updateReminderStatus,
 } from "../apiFetch/apiREminder.js";
-import { updateListTotalCount, updateListCheckbox } from "./list_controller.js";
 import { submitUpdateReminder } from "./reminder_form.js";
 import { getCurrentPageFromQueryParams } from "./common.js";
-import { state } from "../global/state.js";
+
 export const renderReminderonUI = async () => {
   const listNoteId = getCurrentPageFromQueryParams();
   const listNote = getListNoteById(listNoteId);
@@ -45,7 +43,7 @@ export const renderReminderonUI = async () => {
   cartReminder.innerHTML += remindersContent;
 
   const reminderInputs = document.querySelectorAll(".form-check-input");
-  localStorage.setItem('listName', listName);
+  localStorage.setItem("listName", listName);
   checkStatus(reminderInputs, reminderState);
   deleteReminderEvent();
   editReminderEvent();
@@ -125,8 +123,6 @@ const checkStatus = (reminderInputs, reminderState) => {
       if (formCheckName) {
         formCheckName.classList.toggle("checked", reminderToUpdate.status);
       }
-
-      updateListCheckbox(idnote);
     });
   });
 };
@@ -138,16 +134,8 @@ const deleteReminderEvent = async () => {
       const idReminder = event.currentTarget.getAttribute("del-id-note");
 
       if (idReminder) {
-        await delReminder(idReminder);
-        removeReminder(idReminder);
-        const listNoteId = event.currentTarget
-          ? event.currentTarget.getAttribute("del-id-note")
-          : null;
-
+        await removeReminder(idReminder);
         renderReminderonUI();
-        updateListTotalCount(listNoteId);
-        updateListCheckbox(listNoteId);
-       
       }
     });
   });
@@ -158,7 +146,6 @@ const editReminderEvent = () => {
   editInputNameList.forEach((editInput) => {
     editInput.addEventListener("click", (event) => {
       const idInput = event.currentTarget.getAttribute("data-reminder-id");
-
       handleEditReminder(idInput, event.currentTarget);
     });
   });

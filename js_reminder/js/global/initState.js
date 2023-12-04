@@ -1,14 +1,9 @@
-import { fetchList } from "../apiFetch/apiList.js";
 import { state } from "./state.js";
-import { fetchColor } from "../apiFetch/apiColor.js";
-import { renderReminderonUI } from "../UI_controller/reminder_controller.js";
-import {
-  updateQueryParam,
-  clearListIdQueryParam,
-} from "../UI_controller/common.js";
-import { renderListOnUI } from "../UI_controller/list_controller.js";
-import { toggleDisplayDetailList } from "../UI_controller/list_form.js";
+import { clearListIdQueryParam } from "../UI_controller/common.js";
+import { renderUiReminder } from "../UI_controller/common.js";
 import { getReminder } from "../apiFetch/apiREminder.js";
+import { renderHomeList } from "../service/list_service.js";
+
 export const getPageIdURL = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const listNoteid = urlParams.get("listId");
@@ -21,8 +16,7 @@ export const initState = async () => {
   if (listIdFromURL) {
     state.idUrl = listIdFromURL;
     await getReminder(listIdFromURL);
-    await   renderReminderonUI(listIdFromURL);
-    toggleDisplayDetailList(true);
+    await renderUiReminder(listIdFromURL);
   } else {
     const storedListId = localStorage.getItem("idUrl");
 
@@ -34,33 +28,14 @@ export const initState = async () => {
       if (isValidListId) {
         state.idUrl = storedListId;
         await getReminder(storedListId);
-        renderReminderonUI(storedListId);
-        toggleDisplayDetailList(true);
+        await renderUiReminder(storedListId);
       } else {
         clearListIdQueryParam();
-        const listsData = await fetchList();
-        const colorData = await fetchColor();
-        state.listState.items = listsData;
-        state.color = colorData;
-        renderListOnUI("renderlist-home");
+        await renderHomeList();
       }
     } else {
       clearListIdQueryParam();
-      const listsData = await fetchList();
-      const colorData = await fetchColor();
-      state.listState.items = listsData;
-      state.color = colorData;
-      renderListOnUI("renderlist-home");
-    }
-  }
-  const storedListName = localStorage.getItem("listName");
-  if (storedListName) {
-    const titleElement = document.querySelector(".title-list");
-    if (titleElement) {
-      titleElement.textContent = storedListName;
+      await renderHomeList();
     }
   }
 };
-
-
-

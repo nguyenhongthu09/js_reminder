@@ -1,18 +1,14 @@
-import { addNewList, updateListData } from "../apiFetch/apiList.js";
+import { updateListData } from "../apiFetch/apiList.js";
 import { renderListOnUI } from "./list_controller.js";
 import { renderReminderonUI } from "./reminder_controller.js";
 import { renderColor } from "./showColor.js";
-import { getColorState } from "../service/color_service.js";
 import {
-  hexToRgb,
   rgbToHex,
   updateQueryParam,
   clearListIdQueryParam,
 } from "./common.js";
 import { getReminder } from "../apiFetch/apiREminder.js";
-import { state } from "../global/state.js";
-import { getPageIdURL } from "../global/initState.js";
-
+import { addNewListToService } from "../service/list_service.js";
 export const listActionEvents = () => {
   const homeList = document.querySelector(".menu-list-notes");
   const formAddList = document.getElementById("form_add_list");
@@ -25,7 +21,6 @@ export const listActionEvents = () => {
   const menuListNote = document.querySelector(".menu-list-note");
   const fillIconColor = document.querySelector(".fill-icon-color");
   const nameAddList = document.getElementById("name_icon");
-  const colorData = getColorState();
 
   const toggleDisplayList = (status) => {
     if (status) {
@@ -81,19 +76,8 @@ export const listActionEvents = () => {
     } else {
       nameError.style.display = "none";
       const backgroundColor = getComputedStyle(fillIconColor).backgroundColor;
-
-      const listColor = colorData.find(
-        (color) => hexToRgb(color.color) === backgroundColor
-      );
-      const isColor = listColor ? listColor.color : null;
-
-      const newList = {
-        name: name,
-        isColor: isColor,
-      };
-      await addNewList(newList);
+      await addNewListToService(name, backgroundColor);
       renderListOnUI("renderlist-home");
-
       toggleDisplayList(false);
       disabledFormAddList(true);
       nameAddList.value = "";
@@ -113,24 +97,16 @@ export const listActionEvents = () => {
     btnDone.disabled = true;
     if (listItem) {
       const listNoteId = listItem.getAttribute("data-listId");
-      state.idUrl = listNoteId; 
       updateQueryParam(listNoteId);
       await getReminder(listNoteId);
       renderReminderonUI(listNoteId);
       toggleDisplayDetailList(true);
     }
   });
+
+
 };
 
-window.addEventListener("load", () => {
-  const listIdFromURL = getPageIdURL();
-  if (listIdFromURL) {
-    toggleDisplayDetailList(true);
-  } else {
-    toggleDisplayDetailList(false);
-    renderListOnUI("renderlist-home");
-  }
-});
 
 export const updateList = () => {
   const btnSubEdit = document.getElementById("btnsubedit");
@@ -183,13 +159,12 @@ const submitFormEditList = async () => {
   }
 };
 
-export const toggleDisplayDetailList =  (status) => {
+export const toggleDisplayDetailList = (status) => {
   const homeList = document.querySelector(".menu-list-notes");
   const detailList = document.querySelector(".detail-list-note");
   if (status) {
     homeList.style.display = "none";
     detailList.style.display = "block";
-  
   } else {
     homeList.style.display = "block";
     detailList.style.display = "none";
@@ -208,4 +183,3 @@ export const toggleDisplayEditList = (status) => {
     homeList.style.display = "block";
   }
 };
-
