@@ -87,7 +87,7 @@ export const renderListOnUI = async (targetElementId) => {
 </div>
          
         </div>`;
-    })}
+    }).join('')}
   `;
 
   deleteListNoteEvent();

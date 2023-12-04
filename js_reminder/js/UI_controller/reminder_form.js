@@ -3,6 +3,10 @@ import { renderReminderonUI } from "./reminder_controller.js";
 import { renderListOnUI, updateListTotalCount } from "./list_controller.js";
 import { getListState } from "../service/list_service.js";
 import { getCurrentPageFromQueryParams } from "./common.js";
+import { fetchColor } from "../apiFetch/apiColor.js";
+import { fetchList } from "../apiFetch/apiList.js";
+import { setListState } from "../service/list_service.js";
+import { setColorState } from "../service/color_service.js";
 
 export const reminderActionEvents = () => {
   const newReminderForm = document.querySelector(".new-reminder");
@@ -81,10 +85,15 @@ export const reminderActionEvents = () => {
     disabledAddReminder(true);
   });
 
-  btnbaclList.addEventListener("click", () => {
+  btnbaclList.addEventListener("click", async() => {
     toggleDisplayAddReminder(false);
     thongbao.style.display = "none";
     inputNameReminder.value = "";
+    const listsData = await fetchList(); 
+    const colorData = await fetchColor(); 
+    setListState(listsData); 
+    setColorState(colorData); 
+    renderListOnUI("renderlist-home");
   });
 
   btnSubmitNote.addEventListener("click", async () => {
@@ -126,6 +135,7 @@ export const reminderActionEvents = () => {
         await addNewReminder(newReminder, listNoteId);
         updateListTotalCount(listNoteId);
         renderReminderonUI(listNoteId);
+
       }
     }
   };

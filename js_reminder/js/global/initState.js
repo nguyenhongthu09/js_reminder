@@ -8,40 +8,59 @@ import {
 } from "../UI_controller/common.js";
 import { renderListOnUI } from "../UI_controller/list_controller.js";
 import { toggleDisplayDetailList } from "../UI_controller/list_form.js";
-const getPageIdURL = () => {
+import { getReminder } from "../apiFetch/apiREminder.js";
+export const getPageIdURL = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const listNoteid = urlParams.get("listId");
   return listNoteid;
 };
 
 export const initState = async () => {
-  const listsData = await fetchList();
-  const colorData = await fetchColor();
-  state.listState.items = listsData;
-  state.color = colorData;
-
   const listIdFromURL = getPageIdURL();
-  const storedListId = localStorage.getItem("idUrl");
 
   if (listIdFromURL) {
-    const isValidListId = state.listState.items.some(
-      (list) => list.id === listIdFromURL
-    );
-    if (isValidListId) {
-      state.idUrl = listIdFromURL;
-      updateQueryParam(listIdFromURL);
-      renderReminderonUI(listIdFromURL);
+    state.idUrl = listIdFromURL;
+    await getReminder(listIdFromURL);
+    await   renderReminderonUI(listIdFromURL);
+    toggleDisplayDetailList(true);
+  } else {
+    const storedListId = localStorage.getItem("idUrl");
+
+    if (storedListId) {
+      const isValidListId = state.listState.items.some(
+        (list) => list.id === storedListId
+      );
+
+      if (isValidListId) {
+        state.idUrl = storedListId;
+        await getReminder(storedListId);
+        renderReminderonUI(storedListId);
+        toggleDisplayDetailList(true);
+      } else {
+        clearListIdQueryParam();
+        const listsData = await fetchList();
+        const colorData = await fetchColor();
+        state.listState.items = listsData;
+        state.color = colorData;
+        renderListOnUI("renderlist-home");
+      }
     } else {
       clearListIdQueryParam();
-      toggleDisplayDetailList(false);
+      const listsData = await fetchList();
+      const colorData = await fetchColor();
+      state.listState.items = listsData;
+      state.color = colorData;
       renderListOnUI("renderlist-home");
     }
-  } else if (
-    storedListId &&
-    state.listState.some((list) => list.id === storedListId)
-  ) {
-    state.idUrl = storedListId;
-    updateQueryParam(storedListId);
-    renderReminderonUI(storedListId);
+  }
+  const storedListName = localStorage.getItem("listName");
+  if (storedListName) {
+    const titleElement = document.querySelector(".title-list");
+    if (titleElement) {
+      titleElement.textContent = storedListName;
+    }
   }
 };
+
+
+

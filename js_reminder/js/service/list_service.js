@@ -49,3 +49,7 @@ export const getListTotals = (listId) => {
     return { totalCount: 0, totalDone: 0 };
   }
 };
+
+export function setListState(newItems) {
+  state.listState.items = newItems;
+}

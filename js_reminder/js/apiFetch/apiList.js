@@ -4,44 +4,45 @@ import {
   findListByIndex,
   generateRandomStringId,
 } from "../service/list_service.js";
-import { fetchReminder } from "./apiREminder.js";
+import { fetchReminder , getReminderDone} from "./apiREminder.js";
 import { getReminderByListId } from "../service/reminder_service.js";
 import { state } from "../global/state.js";
 
 export const fetchList = async () => {
   try {
+  
     const response = await fetch(`${API_URL}/listNote`, {
       method: "GET",
     });
 
+
     if (response.status === 200) {
       const listData = await response.json();
-      const listWithReminders = await Promise.all(
+      const listWithTotals = await Promise.all(
         listData.map(async (listItem) => {
-          const { reminderData, totalCount, totalDone } = await fetchReminder(
-            listItem.id
-          );
-
+          const { reminderData, totalCount, totalDone ,reminderDataDone } = await fetchTotals(listItem.id);
           listItem.reminders = reminderData || [];
           listItem.totalCount = totalCount || 0;
-          listItem.remindersDone =
-            reminderData.filter((reminder) => reminder.status === true) || [];
           listItem.totalDone = totalDone || 0;
-
+          listItem.remindersDone = reminderDataDone || [];
           return listItem;
         })
       );
-      state.listState.items = listWithReminders;
-      state.reminderState = listWithReminders.reduce(
+      state.listState.items = listWithTotals;
+      state.reminderState = listWithTotals.reduce(
         (acc, listItem) => [...acc, ...listItem.reminders],
         []
       );
-
       return listData;
     }
   } catch (error) {
     console.error("Error fetching list:", error);
   }
+};
+export const fetchTotals = async (listId) => {
+  const {reminderData, totalCount } = await fetchReminder(listId);
+  const { reminderDataDone ,totalDone } = await getReminderDone(listId);
+  return {reminderData, totalCount, totalDone ,reminderDataDone};
 };
 
 export const addNewList = async (list) => {

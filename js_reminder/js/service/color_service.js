@@ -5,3 +5,7 @@ export const findColor = (colorData, colorId) => {
 }
 
 export const getColorState = () => state.color;
+
+export function setColorState(newColor) {
+  state.color = newColor;
+}

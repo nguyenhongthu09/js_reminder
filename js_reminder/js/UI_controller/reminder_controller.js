@@ -13,7 +13,7 @@ import {
 import { updateListTotalCount, updateListCheckbox } from "./list_controller.js";
 import { submitUpdateReminder } from "./reminder_form.js";
 import { getCurrentPageFromQueryParams } from "./common.js";
-
+import { state } from "../global/state.js";
 export const renderReminderonUI = async () => {
   const listNoteId = getCurrentPageFromQueryParams();
   const listNote = getListNoteById(listNoteId);
@@ -31,14 +31,21 @@ export const renderReminderonUI = async () => {
 
   falseReminders.sort((a, b) => a.status - b.status);
 
+  const titleElement = document.createElement("h1");
+  titleElement.classList.add("title-list");
+  titleElement.textContent = listName;
+
+  const remindersContent = `
+  ${renderReminders(falseReminders, false)}
+  ${renderReminders(trueReminders, true)}
+`;
+
   cartReminder.innerHTML = "";
-  cartReminder.innerHTML = `
-    <h1 class="title-list">${listName}</h1>
-    ${renderReminders(falseReminders, false)}
-    ${renderReminders(trueReminders, true)}
-  `;
+  cartReminder.appendChild(titleElement);
+  cartReminder.innerHTML += remindersContent;
 
   const reminderInputs = document.querySelectorAll(".form-check-input");
+  localStorage.setItem('listName', listName);
   checkStatus(reminderInputs, reminderState);
   deleteReminderEvent();
   editReminderEvent();
@@ -140,6 +147,7 @@ const deleteReminderEvent = async () => {
         renderReminderonUI();
         updateListTotalCount(listNoteId);
         updateListCheckbox(listNoteId);
+       
       }
     });
   });

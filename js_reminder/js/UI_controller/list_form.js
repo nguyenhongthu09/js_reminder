@@ -9,8 +9,9 @@ import {
   updateQueryParam,
   clearListIdQueryParam,
 } from "./common.js";
-import { getIdUrlState } from "../service/list_service.js";
 import { getReminder } from "../apiFetch/apiREminder.js";
+import { state } from "../global/state.js";
+import { getPageIdURL } from "../global/initState.js";
 
 export const listActionEvents = () => {
   const homeList = document.querySelector(".menu-list-notes");
@@ -112,8 +113,7 @@ export const listActionEvents = () => {
     btnDone.disabled = true;
     if (listItem) {
       const listNoteId = listItem.getAttribute("data-listId");
-      let idUrlState = getIdUrlState();
-      idUrlState = listNoteId;
+      state.idUrl = listNoteId; 
       updateQueryParam(listNoteId);
       await getReminder(listNoteId);
       renderReminderonUI(listNoteId);
@@ -121,6 +121,16 @@ export const listActionEvents = () => {
     }
   });
 };
+
+window.addEventListener("load", () => {
+  const listIdFromURL = getPageIdURL();
+  if (listIdFromURL) {
+    toggleDisplayDetailList(true);
+  } else {
+    toggleDisplayDetailList(false);
+    renderListOnUI("renderlist-home");
+  }
+});
 
 export const updateList = () => {
   const btnSubEdit = document.getElementById("btnsubedit");
@@ -173,23 +183,19 @@ const submitFormEditList = async () => {
   }
 };
 
-const handleDOMContentLoaded = () => {
-  const isListNoteIdValid = (listNoteId) => {
-    return true;
-  };
-  const displayDetailList = localStorage.getItem("displayDetailList");
-  toggleDisplayDetailList(displayDetailList === "block");
-
-  const listNoteIdFromUrl = getIdUrlState();
-  if (!isListNoteIdValid(listNoteIdFromUrl)) {
-    toggleDisplayDetailList(false);
+export const toggleDisplayDetailList =  (status) => {
+  const homeList = document.querySelector(".menu-list-notes");
+  const detailList = document.querySelector(".detail-list-note");
+  if (status) {
+    homeList.style.display = "none";
+    detailList.style.display = "block";
+  
   } else {
-    const btnSubmitNote = document.getElementById("btnsubmit-note");
-    btnSubmitNote.disabled = true;
-    renderReminderonUI(listNoteIdFromUrl);
+    homeList.style.display = "block";
+    detailList.style.display = "none";
   }
 };
-document.addEventListener("DOMContentLoaded", handleDOMContentLoaded);
+
 export const toggleDisplayEditList = (status) => {
   const formEditList = document.getElementById("form_edit_list");
   const homeList = document.querySelector(".menu-list-notes");
@@ -203,16 +209,3 @@ export const toggleDisplayEditList = (status) => {
   }
 };
 
-export const toggleDisplayDetailList = (status) => {
-  const homeList = document.querySelector(".menu-list-notes");
-  const detailList = document.querySelector(".detail-list-note");
-  if (status) {
-    homeList.style.display = "none";
-    detailList.style.display = "block";
-    localStorage.setItem("displayDetailList", "block");
-  } else {
-    homeList.style.display = "block";
-    detailList.style.display = "none";
-    localStorage.setItem("displayDetailList", "none");
-  }
-};
