@@ -1,6 +1,6 @@
 import { state } from "./state.js";
 import { clearListIdQueryParam } from "../UI_controller/common.js";
-import { renderUiReminder } from "../UI_controller/common.js";
+import { renderUiReminder } from "../UI_controller/list_form.js";
 import { getReminder } from "../apiFetch/apiREminder.js";
 import { renderHomeList } from "../service/list_service.js";
 

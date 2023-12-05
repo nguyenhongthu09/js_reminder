@@ -2,11 +2,7 @@ import { updateListData } from "../apiFetch/apiList.js";
 import { renderListOnUI } from "./list_controller.js";
 import { renderReminderonUI } from "./reminder_controller.js";
 import { renderColor } from "./showColor.js";
-import {
-  rgbToHex,
-  updateQueryParam,
-  clearListIdQueryParam,
-} from "./common.js";
+import { rgbToHex, updateQueryParam, clearListIdQueryParam } from "./common.js";
 import { getReminder } from "../apiFetch/apiREminder.js";
 import { addNewListToService } from "../service/list_service.js";
 export const listActionEvents = () => {
@@ -103,10 +99,7 @@ export const listActionEvents = () => {
       toggleDisplayDetailList(true);
     }
   });
-
-
 };
-
 
 export const updateList = () => {
   const btnSubEdit = document.getElementById("btnsubedit");
@@ -157,6 +150,11 @@ const submitFormEditList = async () => {
     updatedData.isColor = "";
     toggleDisplayEditList(false);
   }
+};
+
+export const renderUiReminder = async (listId) => {
+  await renderReminderonUI(listId);
+  toggleDisplayDetailList(true);
 };
 
 export const toggleDisplayDetailList = (status) => {

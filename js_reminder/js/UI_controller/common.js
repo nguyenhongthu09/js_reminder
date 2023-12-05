@@ -1,6 +1,4 @@
 import { renderListOnUI } from "./list_controller.js";
-import { renderReminderonUI } from "./reminder_controller.js";
-import { toggleDisplayDetailList } from "./list_form.js";
 
 export const hexToRgb = (hex) => {
   hex = hex.replace(/^#/, "");
@@ -39,11 +37,6 @@ export const updateQueryParam = (listId) => {
   window.history.replaceState({}, "", url);
 };
 
-export const renderUiReminder = async (listId) => {
-  await renderReminderonUI(listId);
-  toggleDisplayDetailList(true);
-};
-
 export const getCurrentPageFromQueryParams = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const listNoteid = urlParams.get("listId");
@@ -80,4 +73,30 @@ export const clearListIdQueryParam = () => {
   url.hash = "";
   window.history.replaceState({}, "", url);
   renderListOnUI("renderlist-home");
+};
+
+export const toggleLoading = ( status) => {
+  const loadingOverlay = document.getElementById("loadingOverlay");
+
+  const overlay = document.createElement("div");
+  overlay.classList.add("overlay");
+
+  const startLoading = () => {
+    loadingOverlay.classList.add("show");
+    loadingOverlay.appendChild(overlay);
+  };
+
+  const stopLoading = () => {
+    loadingOverlay.classList.remove("show");
+    const existingOverlay = loadingOverlay.querySelector(".overlay");
+    if (existingOverlay) {
+      loadingOverlay.removeChild(existingOverlay);
+    }
+  };
+
+  if (status) {
+    startLoading();
+  } else {
+    stopLoading();
+  }
 };

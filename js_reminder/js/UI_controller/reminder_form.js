@@ -1,9 +1,10 @@
 import { renderReminderonUI } from "./reminder_controller.js";
 import { renderListOnUI } from "./list_controller.js";
 import { getListState } from "../service/list_service.js";
-import { getCurrentPageFromQueryParams } from "./common.js";
+import { getCurrentPageFromQueryParams, toggleLoading } from "./common.js";
 import { addReminderService } from "../service/reminder_service.js";
 import { renderHomeList } from "../service/list_service.js";
+import { addNewReminder } from "../apiFetch/apiREminder.js";
 export const reminderActionEvents = () => {
   const newReminderForm = document.querySelector(".new-reminder");
   const btnAddNewReminder = document.getElementById("btnNewNote");
@@ -88,13 +89,6 @@ export const reminderActionEvents = () => {
     await renderHomeList();
   });
 
-  btnSubmitNote.addEventListener("click", async () => {
-    isBlurEvent = false;
-    await handleAddReminderLogic();
-    toggleDisplayAddReminder(false);
-    disabledAddReminder(false);
-  });
-
   openFormAdd.addEventListener("click", () => {
     addName.value = "";
     toggleDisplayFormAddReminder(true);
@@ -106,6 +100,12 @@ export const reminderActionEvents = () => {
     toggleDisplayFormAddReminder(false);
   });
 
+  btnSubmitNote.addEventListener("click", async () => {
+    isBlurEvent = false;
+    await handleAddReminderLogic();
+    toggleDisplayAddReminder(false);
+    disabledAddReminder(false);
+  });
   inputNameReminder.addEventListener("blur", async () => {
     if (isBlurEvent) {
       await handleAddReminderLogic();
@@ -119,7 +119,9 @@ export const reminderActionEvents = () => {
       const inputname = inputNameReminder.value;
       const listNoteId = getCurrentPageFromQueryParams();
       if (inputname && listNoteId) {
+        toggleLoading(true);
         await addReminderService(inputname, listNoteId);
+        toggleLoading(false);
         renderReminderonUI(listNoteId);
       }
     }
