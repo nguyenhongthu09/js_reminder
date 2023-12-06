@@ -1,10 +1,10 @@
 import { renderReminderonUI } from "./reminder_controller.js";
 import { renderListOnUI } from "./list_controller.js";
 import { getListState } from "../service/list_service.js";
-import { getCurrentPageFromQueryParams, toggleLoading } from "./common.js";
+import { getCurrentPageFromQueryParams, loading } from "./common.js";
 import { addReminderService } from "../service/reminder_service.js";
 import { renderHomeList } from "../service/list_service.js";
-import { addNewReminder } from "../apiFetch/apiREminder.js";
+
 export const reminderActionEvents = () => {
   const newReminderForm = document.querySelector(".new-reminder");
   const btnAddNewReminder = document.getElementById("btnNewNote");
@@ -86,7 +86,9 @@ export const reminderActionEvents = () => {
     toggleDisplayAddReminder(false);
     thongbao.style.display = "none";
     inputNameReminder.value = "";
+    loading([["loader__page"]], { status: true });
     await renderHomeList();
+    loading([["loader__page"]], { status: false });
   });
 
   openFormAdd.addEventListener("click", () => {
@@ -119,9 +121,9 @@ export const reminderActionEvents = () => {
       const inputname = inputNameReminder.value;
       const listNoteId = getCurrentPageFromQueryParams();
       if (inputname && listNoteId) {
-        toggleLoading(true);
+        loading([["loader__reminder"]], { status: true });
         await addReminderService(inputname, listNoteId);
-        toggleLoading(false);
+        loading([["loader__reminder"]], { status: false });
         renderReminderonUI(listNoteId);
       }
     }

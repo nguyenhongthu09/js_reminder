@@ -10,7 +10,7 @@ import {
   updateReminderStatus,
 } from "../apiFetch/apiREminder.js";
 import { submitUpdateReminder } from "./reminder_form.js";
-import { getCurrentPageFromQueryParams , toggleLoading} from "./common.js";
+import { getCurrentPageFromQueryParams, loading } from "./common.js";
 
 export const renderReminderonUI = async () => {
   const listNoteId = getCurrentPageFromQueryParams();
@@ -109,7 +109,7 @@ const checkStatus = (reminderInputs, reminderState) => {
       const reminderToUpdate = reminderState.find(
         (reminder) => reminder.id === reminderId
       );
-      toggleLoading(true);
+      loading([["loader__reminder"]], { status: true });
       reminderToUpdate.status = !reminderToUpdate.status;
       await updateReminderStatus(reminderId, reminderToUpdate.status);
 
@@ -118,7 +118,7 @@ const checkStatus = (reminderInputs, reminderState) => {
       const idnote = reminderDetail.getAttribute("data-listnote-id");
 
       renderReminderonUI(idnote);
-      toggleLoading(false); 
+      loading([["loader__reminder"]], { status: false });
       const formCheckName = reminderDetail.querySelector(".doimau");
 
       if (formCheckName) {
@@ -135,10 +135,10 @@ const deleteReminderEvent = async () => {
       const idReminder = event.currentTarget.getAttribute("del-id-note");
 
       if (idReminder) {
-        toggleLoading(true);
+        loading([["loader__reminder"]], { status: true });
         await removeReminder(idReminder);
         renderReminderonUI();
-        toggleLoading(false);
+        loading([["loader__reminder"]], { status: false });
       }
     });
   });
@@ -187,7 +187,7 @@ const onBlurEvent = async () => {
     if (noteToUpdate) {
       noteToUpdate.title = updatedData.title;
     }
-    toggleLoading(true);
+    loading([["loader__reminder"]], { status: true });
     await updateReminderData(
       updatedData.id,
       editName,
@@ -202,7 +202,7 @@ const onBlurEvent = async () => {
       const idnote = listNoteId.getAttribute("data-listnote-id");
       renderReminderonUI(idnote);
     }
-    toggleLoading(false); 
+    loading([["loader__reminder"]], { status: false });
     updatedData.element.removeEventListener("blur", onBlurEvent);
     window.newData = {
       id: "",

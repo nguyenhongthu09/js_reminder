@@ -44,25 +44,26 @@ export const getCurrentPageFromQueryParams = () => {
 };
 
 export const loading = (array, { status }) => {
-  const loaderElement = document.querySelector(".loader");
-  const overlayElement = document.querySelector(".overlay");
-  if (status) {
-    loaderElement?.classList.add("spin");
-    overlayElement?.classList.remove("loader-hidden");
-  } else {
-    loaderElement?.classList.remove("spin");
-    overlayElement?.classList.add("loader-hidden");
-  }
-
   array.forEach((item) => {
     const [className, animationName] = item;
-    const className_element = document.querySelector(`.${className}`);
-    if (status) {
-      className_element?.classList.add(animationName);
-      className_element?.classList.remove("loader-hidden");
-    } else {
-      className_element?.classList.remove(animationName);
-      className_element?.classList.add("loader-hidden");
+    const classNameElement = document.querySelector(`.${className}`);
+
+    if (classNameElement) {
+      const overlayElement = classNameElement.parentElement;
+
+      if (status) {
+        classNameElement.classList.add(animationName);
+        classNameElement.classList.remove("loader-hidden");
+        if (overlayElement) {
+          overlayElement.classList.add("overlay");
+        }
+      } else {
+        classNameElement.classList.remove(animationName);
+        classNameElement.classList.add("loader-hidden");
+        if (overlayElement) {
+          overlayElement.classList.remove("overlay");
+        }
+      }
     }
   });
 };
@@ -73,30 +74,4 @@ export const clearListIdQueryParam = () => {
   url.hash = "";
   window.history.replaceState({}, "", url);
   renderListOnUI("renderlist-home");
-};
-
-export const toggleLoading = ( status) => {
-  const loadingOverlay = document.getElementById("loadingOverlay");
-
-  const overlay = document.createElement("div");
-  overlay.classList.add("overlay");
-
-  const startLoading = () => {
-    loadingOverlay.classList.add("show");
-    loadingOverlay.appendChild(overlay);
-  };
-
-  const stopLoading = () => {
-    loadingOverlay.classList.remove("show");
-    const existingOverlay = loadingOverlay.querySelector(".overlay");
-    if (existingOverlay) {
-      loadingOverlay.removeChild(existingOverlay);
-    }
-  };
-
-  if (status) {
-    startLoading();
-  } else {
-    stopLoading();
-  }
 };

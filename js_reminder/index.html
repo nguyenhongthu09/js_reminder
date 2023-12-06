@@ -14,8 +14,10 @@
 </head>
 
 <body>
+    <div class="loader  loader__page  loader__common "></div>
+
     <div class="menu-list-notes">
-        <!-- <h1 class="text-center">My list</h1> -->
+
         <div class="menu-list-note" id="renderlist-home">
         </div>
         <div class="button-home">
@@ -27,7 +29,7 @@
     <form id="form_add_list" action="" class="form-add-list">
         <div class="form__add__list">
             <button type="button" id="btn-cancel" class="btn btn-primary button-cancel">Cancel</button>
-            <button type="button" id="btnSubmit"   class="btn btn-primary button-done" disabled >Done</button>
+            <button type="button" id="btnSubmit" class="btn btn-primary button-done" disabled>Done</button>
         </div>
         <h1>New List</h1>
         <div class="form_add_list_name">
@@ -66,7 +68,7 @@
     <form id="form_edit_list" action="" class="form-edit-list">
         <div class="form__edit__list">
             <button type="button" id="btn-xoa" class="btn btn-primary button-cancel">Cancel</button>
-            <button type="button" id="btnsubedit"  class="btn btn-primary button-done" disabled="true">Edit</button>
+            <button type="button" id="btnsubedit" class="btn btn-primary button-done" disabled="true">Edit</button>
         </div>
         <h1>Edit List</h1>
 
@@ -102,18 +104,18 @@
         </div>
     </form>
 
-   
+    <div class="detail-list-note">
+        <div>
+            <div class="loader  loader__reminder  loader-hidden  loader__common  "></div>
 
-
-    <div class="detail-list-note"> 
-        <!-- <div class="overlay"></div> -->
+        </div>
         <div class="thong-bao">Empty list !!!</div>
         <div class="note">
             <div class="tieu-de"></div>
-          
+
         </div>
         <div class="new-reminder">
-            <div class="form-check  item-reminders" >
+            <div class="form-check  item-reminders">
                 <input class="form-check-input " type="checkbox">
                 <input type="text" class="form-check-name input-new-reminder" placeholder="Add Note" autofocus>
                 </input>
@@ -123,9 +125,7 @@
             <button type="button" class="btn btn-primary btn-back-list">Lists</button>
             <button type="button" class="btn btn-primary add-reminder" id="btnsubmit-note">Add
             </button>
-            <div class="loading-overlay" id="loadingOverlay">
-                <div class="loading-icon"></div>
-              </div>
+
         </div>
         <button class="btn btn-primary add__reminders" id="btnNewNote">New Reminder</button>
     </div>
@@ -135,27 +135,28 @@
     <form action="" id="form__add__note" class="form--add__notes">
         <div class="button-detail-list">
             <button type="button" class="btn btn-primary btn-back-note">Cancel</button>
-            <button type="button" class="btn btn-primary add-reminder"  disabled="true" id="submitform-addnote">Add</button>
-           
+            <button type="button" class="btn btn-primary add-reminder" disabled="true"
+                id="submitform-addnote">Add</button>
+
         </div>
 
         <h1>New reminder</h1>
         <input type="text" id="add-note-name" class="input_add_note_name" placeholder="Add name reminder">
 
         <div class="map-list">
-           <div class="title-list-name-choose">
-         <div class="tieude">
-            <span >Choose list</span>
-         </div>
-           <div> <span class="name-list-choose"></span></div>
-           </div>
+            <div class="title-list-name-choose">
+                <div class="tieude">
+                    <span>Choose list</span>
+                </div>
+                <div> <span class="name-list-choose"></span></div>
+            </div>
             <div class="render" id="renderlist">
+            </div>
         </div>
-        </div>
-     
+
     </form>
-    <div class="loader  loader__page  loader__common "></div>
-    <div class="overlay"></div>
+
+
 </body>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
     integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"

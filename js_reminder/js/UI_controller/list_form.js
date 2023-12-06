@@ -2,7 +2,12 @@ import { updateListData } from "../apiFetch/apiList.js";
 import { renderListOnUI } from "./list_controller.js";
 import { renderReminderonUI } from "./reminder_controller.js";
 import { renderColor } from "./showColor.js";
-import { rgbToHex, updateQueryParam, clearListIdQueryParam } from "./common.js";
+import {
+  rgbToHex,
+  updateQueryParam,
+  clearListIdQueryParam,
+  loading,
+} from "./common.js";
 import { getReminder } from "../apiFetch/apiREminder.js";
 import { addNewListToService } from "../service/list_service.js";
 export const listActionEvents = () => {
@@ -92,9 +97,11 @@ export const listActionEvents = () => {
     const listItem = event.target.closest(".list-note");
     btnDone.disabled = true;
     if (listItem) {
+      loading([["loader__page"]], { status: true });
       const listNoteId = listItem.getAttribute("data-listId");
       updateQueryParam(listNoteId);
       await getReminder(listNoteId);
+      loading([["loader__page"]], { status: false });
       renderReminderonUI(listNoteId);
       toggleDisplayDetailList(true);
     }

@@ -178,6 +178,11 @@
     margin-top: 10px;
   }
 
+  .item-list-none-right {
+    width: 45px;
+    display: inline-flex;
+  }
+
   .form--add__notes {
     display: none;
     margin-top: 90px;
@@ -348,19 +353,9 @@
     transition: opacity 0.75s, visibility 0.75s;
   }
 
-
-  .loadingg {
-    z-index: 9999;
-    position: fixed;
-    top: 45%;
-    left: 45%;
-    transition: opacity 0.75s, visibility 0.75s;
-  }
-
   .loader-hidden {
-    /* opacity: 0;
-    visibility: hidden; */
-    display: none;
+    opacity: 0;
+    visibility: hidden;
 
   }
 
@@ -399,50 +394,11 @@
 
   .overlay {
     position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.3); 
-  z-index: 1;
-  }
-
-  .item-list-none-right {
-    width: 45px;
-    display: inline-flex;
-  }
-  .loading-overlay {
-    display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 999;
-  }
-  
-  .loading-icon {
-    position: absolute; 
-    top: 50%; 
-    left: 45%;
-    transform: translate(-50%, -50%); 
-    z-index: 2; 
-    border: 8px solid #f3f3f3;
-    border-top: 8px solid #3498db;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
- 
-  }
-  .loading-overlay.show {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 999;
   }
 }
